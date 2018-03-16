@@ -23,7 +23,7 @@ var gameArea = {
     clear : function() {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
-}
+};
 
 function component(width, height, color, x, y) {
     this.width = width;
@@ -33,7 +33,7 @@ function component(width, height, color, x, y) {
     this.y = y;
 
     this.update = function(){
-        ctx = myGameArea.context;
+        ctx = gameArea.context;
         ctx.fillStyle = color;
         ctx.fillRect(this.x, this.y, this.width, this.height);
     }
