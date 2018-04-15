@@ -52,7 +52,17 @@ function component(width, height, color, x, y) {
     };
 
     this.newPos = function () {
-        this.x += this.speedX;
+        var tempX = this.x + this.speedX;
+        var rightBorder = gameArea.canvas.width / 2;
+        
+        if (tempX < 0) {
+            this.x = 0;
+        } else if (tempX > rightBorder) {
+            this.x = rightBorder;
+        } else {
+            this.x += this.speedX;
+        }
+
         this.y += this.speedY;
     }
 
@@ -85,17 +95,17 @@ function updateGameArea() {
     gameArea.clear();
     player.speedX = 0;
     player.speedY = 0;
-    if (gameArea.key && gameArea.key === 37) {player.speedX = -1; }
-    if (gameArea.key && gameArea.key === 39) {player.speedX = 1; }
+    if (gameArea.key && gameArea.key === 37) {player.speedX = -2; }
+    if (gameArea.key && gameArea.key === 39) {player.speedX = 2; }
 
     gameArea.frameNo += 1;
     if (gameArea.frameNo === 1 || everyinterval(150)) {
         x = gameArea.canvas.width;
-        minHeight = 20;
-        maxHeight = 200;
+        minHeight = 100;
+        maxHeight = 110;
         height = Math.floor(Math.random() * (maxHeight - minHeight + 1) + minHeight);
-        minGap = 50;
-        maxGap = 200;
+        minGap = 200;
+        maxGap = 250;
         gap = Math.floor(Math.random() * (maxGap - minGap + 1) + minGap);
         myObstacles.push(new component(10, height, "green", x, 0));
         myObstacles.push(new component(10, x - height - gap, "green", x, height + gap));
