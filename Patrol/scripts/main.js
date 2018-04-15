@@ -83,6 +83,11 @@ function updateGameArea() {
         }
     }
     gameArea.clear();
+    player.speedX = 0;
+    player.speedY = 0;
+    if (gameArea.key && gameArea.key === 37) {player.speedX = -1; }
+    if (gameArea.key && gameArea.key === 39) {player.speedX = 1; }
+
     gameArea.frameNo += 1;
     if (gameArea.frameNo === 1 || everyinterval(150)) {
         x = gameArea.canvas.width;
