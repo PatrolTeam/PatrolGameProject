@@ -2,12 +2,14 @@ var player;
 var myObstacles = [];
 var score;
 var gameOver;
+var background;
 
 function startGame() {
     gameArea.start();
     player = new component(30, 30, "red", 10, 120);
-    score = new component("30px", "Consolas", "black", 380, 40, "text");
-    gameOver = new component("30px", "Consolas", "black", 250, 240, "text")
+    score = new component("30px", "Consolas", "white", 380, 40, "text");
+    gameOver = new component("30px", "Consolas", "white ", 250, 240, "text");
+    background = new component(960, 480, "resources/images/background/background.png", 0, 0, "background");
 }
 
 var gameArea = {
@@ -45,6 +47,10 @@ var gameArea = {
 
 function component(width, height, color, x, y, type) {
     this.type = type;
+    if (type === "image" || type === "background") {
+        this.image = new Image();
+        this.image.src = color;
+    }
     this.width = width;
     this.height = height;
     this.speedX = 0;
@@ -60,13 +66,23 @@ function component(width, height, color, x, y, type) {
             ctx.font = this.width + " " + this.height;
             ctx.fillStyle = color;
             ctx.fillText(this.text, this.x, this.y);
+        } else if (this.type === "image" || type === "background") {
+            ctx.drawImage(this.image,
+                this.x,
+                this.y,
+                this.width,
+                this.height);
+            if (type === "background"){
+                ctx.drawImage(this.image,
+                    this.x + this.width, this.y, this.width, this.height);
+            }
         } else {
             ctx.fillStyle = color;
             ctx.fillRect(this.x, this.y, this.width, this.height);
         }
     };
 
-    this.newPos = function () {
+    this.movePlayer = function () {
         this.gravitySpeed += this.gravity;
 
         var tempX = this.x + this.speedX;
@@ -83,6 +99,17 @@ function component(width, height, color, x, y, type) {
         this.y += this.speedY + this.gravitySpeed;
 
         this.hitBottom();
+    }
+
+    this.newPos = function () {
+
+        this.x += this.speedX;
+        this.y += this.speedY + this.gravitySpeed;
+        if (this.type === "background") {
+            if (this.x === -(this.width)) {
+                this.x = 0;
+            }
+        }
     }
 
     this.hitBottom = function() {
@@ -121,6 +148,9 @@ function updateGameArea() {
         }
     }
     gameArea.clear();
+    background.speedX = -1;
+    background.newPos();
+    background.update();
     gameArea.frameNo += 1;
 
     player.speedX = 0;
@@ -148,7 +178,7 @@ function updateGameArea() {
 
     score.text = "SCORE: " + (gameArea.frameNo / 10).toFixed(0);
     score.update();
-    player.newPos();
+    player.movePlayer();
     player.update();
 }
 
