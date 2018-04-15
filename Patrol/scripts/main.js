@@ -45,6 +45,8 @@ function component(width, height, color, x, y, type) {
     this.height = height;
     this.speedX = 0;
     this.speedY = 0;
+    this.gravity = 0.05;
+    this.gravitySpeed = 0;
     this.x = x;
     this.y = y;
 
@@ -61,6 +63,8 @@ function component(width, height, color, x, y, type) {
     };
 
     this.newPos = function () {
+        this.gravitySpeed += this.gravity;
+
         var tempX = this.x + this.speedX;
         var rightBorder = gameArea.canvas.width / 2;
         
@@ -72,7 +76,18 @@ function component(width, height, color, x, y, type) {
             this.x += this.speedX;
         }
 
-        this.y += this.speedY;
+        this.y += this.speedY + this.gravitySpeed;
+
+        this.hitBottom();
+    }
+
+    this.hitBottom = function() {
+        var groundHeight = 48;
+
+        var rockbottom = gameArea.canvas.height - this.height - groundHeight;
+        if (this.y > rockbottom) {
+            this.y = rockbottom;
+        }
     }
 
     this.crashWith = function (otherobj) {
