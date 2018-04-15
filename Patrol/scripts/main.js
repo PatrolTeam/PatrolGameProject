@@ -1,11 +1,13 @@
 var player;
 var myObstacles = [];
 var score;
+var gameOver;
 
 function startGame() {
     gameArea.start();
     player = new component(30, 30, "red", 10, 120);
     score = new component("30px", "Consolas", "black", 380, 40, "text");
+    gameOver = new component("30px", "Consolas", "black", 250, 240, "text")
 }
 
 var gameArea = {
@@ -35,6 +37,8 @@ var gameArea = {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     },
     stop : function () {
+        gameOver.text = "GAME OVER!";
+        gameOver.update();
         clearInterval(this.interval);
     }
 };
