@@ -5,7 +5,7 @@ var score;
 function startGame() {
     gameArea.start();
     player = new component(30, 30, "red", 10, 120);
-    score = new component("30px", "Consolas", "black", 280, 40, "text");
+    score = new component("30px", "Consolas", "black", 380, 40, "text");
 }
 
 var gameArea = {
@@ -123,11 +123,11 @@ function updateGameArea() {
     }
     for (i = 0; i < myObstacles.length; i += 1) {
         myObstacles[i].x += -1;
-        myObstacles[i].newPos();
+        //myObstacles[i].newPos();
         myObstacles[i].update();
     }
 
-    score.text = "SCORE: " + gameArea.frameNo;
+    score.text = "SCORE: " + (gameArea.frameNo / 10).toFixed(0);
     score.update();
     player.newPos();
     player.update();
