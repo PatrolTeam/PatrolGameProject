@@ -7,7 +7,7 @@ var groundLine;
 var restart;
 
 var groundHeight = 48;
-var isFlying = false;
+var isFlying = true;
 
 function startGame() {
     gameArea.start();
