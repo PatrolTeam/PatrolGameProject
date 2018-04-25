@@ -3,8 +3,8 @@ var myObstacles = [];
 var score;
 var gameOver;
 var background;
+var groundLine;
 var restart;
-
 
 var groundHeight = 48;
 var isFlying = false;
@@ -15,6 +15,7 @@ function startGame() {
     score = new component("30px", "Consolas", "white", 380, 40, "text");
     gameOver = new component("30px", "Consolas", "white ", 250, 240, "text");
     background = new component(960, 480, "resources/images/background/background.png", 0, 0, "background");
+    groundLine = new component(960, 48, "resources/images/ground/ground.png", 0, 480 - groundHeight, "background");
     restart = new component("30px", "Consolas", "white", 145, 270,"text");
 
 }
@@ -172,6 +173,9 @@ function updateGameArea() {
     background.speedX = -1;
     background.newPos();
     background.update();
+    groundLine.speedX = -1;
+    groundLine.newPos();
+    groundLine.update();
     gameArea.frameNo += 1;
 
     player.speedX = 0;
