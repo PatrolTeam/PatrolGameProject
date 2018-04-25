@@ -4,6 +4,8 @@ var score;
 var gameOver;
 var background;
 
+var groundHeight = 48;
+
 function startGame() {
     gameArea.start();
     player = new component(30, 30, "red", 10, 120);
@@ -30,10 +32,14 @@ var gameArea = {
 
         window.addEventListener('keydown', function (ev) {
             gameArea.key = ev.keyCode;
-        })
+        });
         window.addEventListener('keyup', function (ev) {
+            if (ev.keyCode === 32) {
+                accelerateUp(0.1);
+            }
+
             gameArea.key = false;
-        })
+        });
     },
     clear : function() {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -113,9 +119,8 @@ function component(width, height, color, x, y, type) {
     }
 
     this.hitBottom = function() {
-        var groundHeight = 48;
-
         var rockbottom = gameArea.canvas.height - this.height - groundHeight;
+
         if (this.y > rockbottom) {
             this.y = rockbottom;
         }
@@ -157,6 +162,7 @@ function updateGameArea() {
     player.speedY = 0;
     if (gameArea.key && gameArea.key === 37) {player.speedX = -2; }
     if (gameArea.key && gameArea.key === 39) {player.speedX = 2; }
+    if (gameArea.key && gameArea.key === 32) {player.speedX = 0; accelerateUp(-0.2)}
 
     gameArea.frameNo += 1;
     if (gameArea.frameNo === 1 || everyinterval(150)) {
@@ -193,4 +199,13 @@ function moveLeft() {
 
 function moveRight() {
     player.speedX += 1;
+}
+
+function accelerateUp(n) {
+    var rockbottom = gameArea.canvas.height - player.height - groundHeight;
+    if (player.y == rockbottom) {
+        player.gravity = -1;
+    } else {
+        player.gravity = n;
+    }
 }
