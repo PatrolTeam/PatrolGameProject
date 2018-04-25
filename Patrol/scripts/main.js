@@ -6,6 +6,9 @@ var background;
 var restart;
 
 
+var groundHeight = 48;
+var isFlying = false;
+
 function startGame() {
     gameArea.start();
     player = new component(30, 30, "red", 10, 120);
@@ -31,14 +34,18 @@ var gameArea = {
 
         // we update the game area 60 times per second
         this.interval = setInterval(updateGameArea, 10);
+      
+        window.addEventListener('keydown', function (e) {
+            gameArea.keys = (gameArea.keys || []);
+            gameArea.keys[e.keyCode] = true;
+        });
+        window.addEventListener('keyup', function (e) {
+            if (e.keyCode === 32) {
+                accelerateUp(0.1);
+            }
 
-        window.addEventListener('keydown', function (ev) {
-            gameArea.key = ev.keyCode;
-        })
-        window.addEventListener('keyup', function (ev) {
-            gameArea.key = false;
-        })
-
+            gameArea.keys[e.keyCode] = false;
+        });
     },
     clear : function() {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -126,11 +133,12 @@ function component(width, height, color, x, y, type) {
     }
 
     this.hitBottom = function() {
-        var groundHeight = 48;
-
         var rockbottom = gameArea.canvas.height - this.height - groundHeight;
+
         if (this.y > rockbottom) {
             this.y = rockbottom;
+            isFlying = false;
+
         }
     }
 
@@ -168,8 +176,9 @@ function updateGameArea() {
 
     player.speedX = 0;
     player.speedY = 0;
-    if (gameArea.key && gameArea.key === 37) {player.speedX = -2; }
-    if (gameArea.key && gameArea.key === 39) {player.speedX = 2; }
+    if (gameArea.keys && gameArea.keys[37]) {moveLeft() }
+    if (gameArea.keys && gameArea.keys[39]) {moveRight() }
+    if (gameArea.keys && gameArea.keys[32]) {accelerateUp(-0.2)}
 
     gameArea.frameNo += 1;
     if (gameArea.frameNo === 1 || everyinterval(150)) {
@@ -201,9 +210,23 @@ function everyinterval(n) {
 }
 
 function moveLeft() {
-    player.speedX -= 1;
+    if (!isFlying) {
+        player.speedX -= 2;
+    }
 }
 
 function moveRight() {
-    player.speedX += 1;
+    if (!isFlying) {
+        player.speedX += 2;
+    }
+}
+
+function accelerateUp(n) {
+    var rockbottom = gameArea.canvas.height - player.height - groundHeight;
+    if (player.y == rockbottom) {
+        player.gravity = -1;
+        isFlying = true;
+    } else {
+        player.gravity = n;
+    }
 }
