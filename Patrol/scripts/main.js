@@ -3,6 +3,8 @@ var myObstacles = [];
 var score;
 var gameOver;
 var background;
+var restart;
+
 
 var groundHeight = 48;
 var isFlying = false;
@@ -13,6 +15,8 @@ function startGame() {
     score = new component("30px", "Consolas", "white", 380, 40, "text");
     gameOver = new component("30px", "Consolas", "white ", 250, 240, "text");
     background = new component(960, 480, "resources/images/background/background.png", 0, 0, "background");
+    restart = new component("30px", "Consolas", "white", 145, 270,"text");
+
 }
 
 var gameArea = {
@@ -30,7 +34,7 @@ var gameArea = {
 
         // we update the game area 60 times per second
         this.interval = setInterval(updateGameArea, 10);
-
+      
         window.addEventListener('keydown', function (e) {
             gameArea.keys = (gameArea.keys || []);
             gameArea.keys[e.keyCode] = true;
@@ -50,8 +54,16 @@ var gameArea = {
         gameOver.text = "GAME OVER!";
         gameOver.update();
         clearInterval(this.interval);
+
+        restart.text = "Press any key to restart";
+        restart.update();
+        restart = addEventListener("click",restartGame);
     }
 };
+
+function restartGame() {
+    location.reload();
+}
 
 function component(width, height, color, x, y, type) {
     this.type = type;
