@@ -3,6 +3,8 @@ var myObstacles = [];
 var score;
 var gameOver;
 var background;
+var restart;
+
 
 function startGame() {
     gameArea.start();
@@ -10,6 +12,8 @@ function startGame() {
     score = new component("30px", "Consolas", "white", 380, 40, "text");
     gameOver = new component("30px", "Consolas", "white ", 250, 240, "text");
     background = new component(960, 480, "resources/images/background/background.png", 0, 0, "background");
+    restart = new component("30px", "Consolas", "white", 145, 270,"text");
+
 }
 
 var gameArea = {
@@ -34,6 +38,7 @@ var gameArea = {
         window.addEventListener('keyup', function (ev) {
             gameArea.key = false;
         })
+
     },
     clear : function() {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -42,8 +47,16 @@ var gameArea = {
         gameOver.text = "GAME OVER!";
         gameOver.update();
         clearInterval(this.interval);
+
+        restart.text = "Press any key to restart";
+        restart.update();
+        restart = addEventListener("click",restartGame);
     }
 };
+
+function restartGame() {
+    location.reload();
+}
 
 function component(width, height, color, x, y, type) {
     this.type = type;
