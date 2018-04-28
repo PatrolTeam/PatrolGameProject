@@ -5,20 +5,21 @@ var gameOver;
 var background;
 var groundLine;
 var restart;
-
 var groundHeight = 48;
 var isFlying = true;
+var imgArr = ["resources/images/player/1.png", "resources/images/player/2.png", "resources/images/player/3.png", "resources/images/player/4.png"];
+var currFrame = 0;
 
 function startGame() {
     gameArea.start();
-    player = new component(30, 30, "red", 10, 120);
+    player = new component(106.4, 45, "resources/images/player/1.png", 10, 120, "image");
     score = new component("30px", "Consolas", "white", 380, 40, "text");
     gameOver = new component("30px", "Consolas", "white ", 250, 240, "text");
     background = new component(960, 480, "resources/images/background/background.png", 0, 0, "background");
     groundLine = new component(960, 48, "resources/images/ground/ground.png", 0, 480 - groundHeight, "background");
     restart = new component("30px", "Consolas", "white", 145, 270,"text");
-
 }
+
 
 var gameArea = {
     canvas : document.createElement("canvas"),
@@ -64,6 +65,7 @@ var gameArea = {
 
 function restartGame() {
     location.reload();
+
 }
 
 function component(width, height, color, x, y, type) {
@@ -104,6 +106,7 @@ function component(width, height, color, x, y, type) {
     };
 
     this.movePlayer = function () {
+
         this.gravitySpeed += this.gravity;
 
         var tempX = this.x + this.speedX;
@@ -121,6 +124,7 @@ function component(width, height, color, x, y, type) {
 
         this.hitBottom();
     }
+
 
     this.newPos = function () {
 
@@ -142,6 +146,7 @@ function component(width, height, color, x, y, type) {
 
         }
     }
+    
 
     this.crashWith = function (otherobj) {
         var playerLeft = this.x;
@@ -162,6 +167,14 @@ function component(width, height, color, x, y, type) {
 }
 
 function updateGameArea() {
+    if (gameArea.frameNo === 1 || everyinterval(20)) {
+        currFrame++;
+        if (currFrame > 3){
+            currFrame = 0;
+        }
+        player.image.src = imgArr[currFrame];
+    }
+
     var x, height, gap, minHeight, maxHeight, minGap, maxGap;
     for (i = 0; i< myObstacles.length; i += 1) {
         if (player.crashWith(myObstacles[i])) {
