@@ -205,15 +205,13 @@ function updateGameArea() {
 
     gameArea.frameNo += 1;
     if (gameArea.frameNo === 1 || everyinterval(150)) {
-        x = gameArea.canvas.width;
-        minHeight = 100;
-        maxHeight = 110;
-        height = Math.floor(Math.random() * (maxHeight - minHeight + 1) + minHeight);
-        minGap = 200;
-        maxGap = 250;
-        gap = Math.floor(Math.random() * (maxGap - minGap + 1) + minGap);
-        myObstacles.push(new component(10, height, "green", x, 0));
-        myObstacles.push(new component(10, x - height - gap, "green", x, height + gap));
+        obstacleHeight = 48;
+        obstacleWidth = 48;
+
+        obstacleX = gameArea.canvas.width;
+        obstacleY = gameArea.canvas.height - groundHeight - obstacleHeight;
+
+        myObstacles.push(new component(obstacleWidth, obstacleWidth, "resources/images/objects/obstacle.png", obstacleX, obstacleY, "image"));
     }
     for (i = 0; i < myObstacles.length; i += 1) {
         myObstacles[i].x += -1;
@@ -221,6 +219,7 @@ function updateGameArea() {
         //delete obstacles outside the window
         if (myObstacles[i].x < -0 - myObstacles[i].width) {
             myObstacles.splice(i, 1);
+            i--;
         }
 
         //myObstacles[i].newPos();
@@ -242,6 +241,7 @@ function updateGameArea() {
             if (bullets[i].crashWith(myObstacles[j])) {
                 bullets.splice(i, 1);
                 myObstacles.splice(j, 1);
+                j--;
             }
         }
     }
