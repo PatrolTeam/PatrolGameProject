@@ -9,15 +9,16 @@ var restart;
 var groundHeight = 48;
 var isFlying = true;
 
+var bullets = [];
+
 function startGame() {
     gameArea.start();
-    player = new component(30, 30, "red", 10, 120);
+    player = new component(113, 48, "resources/images/player/1.png", 10, 120, "image");
     score = new component("30px", "Consolas", "white", 380, 40, "text");
     gameOver = new component("30px", "Consolas", "white ", 250, 240, "text");
     background = new component(960, 480, "resources/images/background/background.png", 0, 0, "background");
     groundLine = new component(960, 48, "resources/images/ground/ground.png", 0, 480 - groundHeight, "background");
     restart = new component("30px", "Consolas", "white", 145, 270,"text");
-
 }
 
 var gameArea = {
@@ -161,6 +162,7 @@ function component(width, height, color, x, y, type) {
     }
 }
 
+
 function updateGameArea() {
     var x, height, gap, minHeight, maxHeight, minGap, maxGap;
     for (i = 0; i< myObstacles.length; i += 1) {
@@ -180,9 +182,12 @@ function updateGameArea() {
 
     player.speedX = 0;
     player.speedY = 0;
-    if (gameArea.keys && gameArea.keys[37]) {moveLeft() }
-    if (gameArea.keys && gameArea.keys[39]) {moveRight() }
+    if (gameArea.keys && gameArea.keys[65]) {moveLeft() }
+    if (gameArea.keys && gameArea.keys[68]) {moveRight() }
     if (gameArea.keys && gameArea.keys[32]) {accelerateUp(-0.2)}
+    if (gameArea.keys && gameArea.keys[67]) {
+        shoot();
+    }
 
     gameArea.frameNo += 1;
     if (gameArea.frameNo === 1 || everyinterval(150)) {
@@ -198,8 +203,33 @@ function updateGameArea() {
     }
     for (i = 0; i < myObstacles.length; i += 1) {
         myObstacles[i].x += -1;
+
+        //delete obstacles outside the window
+        if (myObstacles[i].x < -0 - myObstacles[i].width) {
+            myObstacles.splice(i, 1);
+        }
+
         //myObstacles[i].newPos();
         myObstacles[i].update();
+
+    }
+
+    for (i = 0; i < bullets.length; i++) {
+        bullets[i].x += 3;
+        bullets[i].update();
+
+        //delete bullets outside the window
+        if (bullets[i].x > gameArea.canvas.width) {
+            bullets.splice(i, 1);
+        }
+
+        //check bullet collisions
+        for (j = 0; j < myObstacles.length; j++) {
+            if (bullets[i].crashWith(myObstacles[j])) {
+                bullets.splice(i, 1);
+                myObstacles.splice(j, 1);
+            }
+        }
     }
 
     score.text = "SCORE: " + (gameArea.frameNo / 10).toFixed(0);
@@ -232,5 +262,16 @@ function accelerateUp(n) {
         isFlying = true;
     } else {
         player.gravity = n;
+    }
+}
+
+var bulletCount = 0;
+function shoot() {
+    bulletCount++;
+    if (bulletCount > 10) {
+        bulletCount = 1;
+    }
+    if (bulletCount === 1) {
+        bullets.push(new component(30, 24, "resources/images/objects/bullet3.png", player.x + player.width + 1, player.y , "image"));
     }
 }
