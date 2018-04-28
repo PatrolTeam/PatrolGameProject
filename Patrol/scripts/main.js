@@ -5,9 +5,10 @@ var gameOver;
 var background;
 var groundLine;
 var restart;
-
 var groundHeight = 48;
 var isFlying = true;
+var imgArr = ["resources/images/player/1.png", "resources/images/player/2.png", "resources/images/player/3.png", "resources/images/player/4.png"];
+var currFrame = 0;
 
 var bullets = [];
 
@@ -20,6 +21,7 @@ function startGame() {
     groundLine = new component(960, 48, "resources/images/ground/ground.png", 0, 480 - groundHeight, "background");
     restart = new component("30px", "Consolas", "white", 145, 270,"text");
 }
+
 
 var gameArea = {
     canvas : document.createElement("canvas"),
@@ -65,6 +67,7 @@ var gameArea = {
 
 function restartGame() {
     location.reload();
+
 }
 
 function component(width, height, color, x, y, type) {
@@ -105,6 +108,7 @@ function component(width, height, color, x, y, type) {
     };
 
     this.movePlayer = function () {
+
         this.gravitySpeed += this.gravity;
 
         var tempX = this.x + this.speedX;
@@ -122,6 +126,7 @@ function component(width, height, color, x, y, type) {
 
         this.hitBottom();
     }
+
 
     this.newPos = function () {
 
@@ -143,6 +148,7 @@ function component(width, height, color, x, y, type) {
 
         }
     }
+    
 
     this.crashWith = function (otherobj) {
         var playerLeft = this.x;
@@ -164,6 +170,14 @@ function component(width, height, color, x, y, type) {
 
 
 function updateGameArea() {
+    if (gameArea.frameNo === 1 || everyinterval(20)) {
+        currFrame++;
+        if (currFrame > 3){
+            currFrame = 0;
+        }
+        player.image.src = imgArr[currFrame];
+    }
+
     var x, height, gap, minHeight, maxHeight, minGap, maxGap;
     for (i = 0; i< myObstacles.length; i += 1) {
         if (player.crashWith(myObstacles[i])) {
