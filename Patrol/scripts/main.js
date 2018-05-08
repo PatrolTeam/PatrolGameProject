@@ -22,7 +22,7 @@ function startGame() {
     background = new component(960, 480, "resources/images/background/background.png", 0, 0, "background");
     groundLine = new component(960, 48, "resources/images/ground/ground.png", 0, 480 - groundHeight, "background");
     restart = new component("30px", "Consolas", "white", 145, 270,"text");
-    planets = new component(960,480,"resources/images/background/planets.png", 0,0,"background");
+    planets = new component(960,480,"resources/images/background/ColorPlanets.png", 0,0,"background");
 
 }
 
