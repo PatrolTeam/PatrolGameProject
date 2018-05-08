@@ -7,19 +7,24 @@ var groundLine;
 var restart;
 var groundHeight = 48;
 var isFlying = true;
-var imgArr = ["resources/images/player/1.png", "resources/images/player/2.png", "resources/images/player/3.png", "resources/images/player/4.png"];
-var currFrame = 0;
+
+var jumpFrame = 0;
 
 var bullets = [];
 var upBullets = [];
 
 function startGame() {
     gameArea.start();
-    player = new component(113, 48, "resources/images/player/1.png", 10, 120, "image");
+
+    player = new component(113, 48, "resources/images/player/1.png", 10, 432, "image");
+    player.imgArr = ["resources/images/player/1.png", "resources/images/player/2.png", "resources/images/player/3.png", "resources/images/player/4.png"];
+
     score = new component("30px", "Consolas", "white", 380, 40, "text");
     gameOver = new component("30px", "Consolas", "white ", 250, 240, "text");
+
     background = new component(960, 480, "resources/images/background/background.png", 0, 0, "background");
     groundLine = new component(960, 48, "resources/images/ground/ground.png", 0, 480 - groundHeight, "background");
+
     restart = new component("30px", "Consolas", "white", 145, 270,"text");
 }
 
@@ -45,10 +50,6 @@ var gameArea = {
             gameArea.keys[e.keyCode] = true;
         });
         window.addEventListener('keyup', function (e) {
-            if (e.keyCode === 32) {
-                accelerateUp(0.1);
-            }
-
             gameArea.keys[e.keyCode] = false;
         });
     },
@@ -76,6 +77,8 @@ function component(width, height, color, x, y, type) {
     if (type === "image" || type === "background") {
         this.image = new Image();
         this.image.src = color;
+        this.currFrame = 0;
+        this.imgArr = [];
     }
     this.width = width;
     this.height = height;
@@ -109,7 +112,7 @@ function component(width, height, color, x, y, type) {
     };
 
     this.movePlayer = function () {
-
+        
         this.gravitySpeed += this.gravity;
 
         var tempX = this.x + this.speedX;
@@ -117,8 +120,8 @@ function component(width, height, color, x, y, type) {
         
         if (tempX < 0) {
             this.x = 0;
-        } else if (tempX > rightBorder) {
-            this.x = rightBorder;
+        // } else if (tempX > rightBorder) {
+        //     this.x = rightBorder;
         } else {
             this.x += this.speedX;
         }
@@ -146,7 +149,7 @@ function component(width, height, color, x, y, type) {
         if (this.y > rockbottom) {
             this.y = rockbottom;
             isFlying = false;
-
+            this.gravitySpeed = 0;
         }
     }
     
@@ -171,48 +174,63 @@ function component(width, height, color, x, y, type) {
 
 
 function updateGameArea() {
+
+    // manage player animation
     if (gameArea.frameNo === 1 || everyinterval(20)) {
-        currFrame++;
-        if (currFrame > 3){
-            currFrame = 0;
+        player.currFrame++;
+        if (player.currFrame > 3){
+            player.currFrame = 0;
         }
-        player.image.src = imgArr[currFrame];
+
+        player.image.src = player.imgArr[player.currFrame];
     }
 
-    var x, height, gap, minHeight, maxHeight, minGap, maxGap;
+    if (gameArea.frameNo - jumpFrame === 10 && isFlying) {
+        player.gravity = 0.5;
+    }
+
+    // manage player-obstacle collision
     for (i = 0; i< myObstacles.length; i += 1) {
         if (player.crashWith(myObstacles[i])) {
             gameArea.stop();
             return;
         }
     }
+
+    // clear game area
     gameArea.clear();
+
     background.speedX = -1;
     background.newPos();
     background.update();
+
     groundLine.speedX = -1;
     groundLine.newPos();
     groundLine.update();
-    gameArea.frameNo += 1;
 
-    player.speedX = 0;
-    player.speedY = 0;
+    if (!isFlying) {
+        player.speedX = 0;
+        player.speedY = 0;
+    }
+
+    // handle keyboard input
     if (gameArea.keys && gameArea.keys[65]) {moveLeft() }
     if (gameArea.keys && gameArea.keys[68]) {moveRight() }
-    if (gameArea.keys && gameArea.keys[32]) {accelerateUp(-0.2)}
+    if (gameArea.keys && gameArea.keys[32]) {jump()}
     if (gameArea.keys && gameArea.keys[67]) {shoot(); upShoot()}
 
-
-    gameArea.frameNo += 1;
-    if (gameArea.frameNo === 1 || everyinterval(150)) {
-        obstacleHeight = 48;
-        obstacleWidth = 48;
+    // spawn obstacles logic
+    if (gameArea.frameNo === 1 || everyinterval(600)) {
+        obstacleHeight = 32;
+        obstacleWidth = 32;
 
         obstacleX = gameArea.canvas.width;
         obstacleY = gameArea.canvas.height - groundHeight - obstacleHeight;
 
         myObstacles.push(new component(obstacleWidth, obstacleWidth, "resources/images/objects/obstacle.png", obstacleX, obstacleY, "image"));
     }
+
+    // manage obstacles
     for (i = 0; i < myObstacles.length; i += 1) {
         myObstacles[i].x += -1;
 
@@ -227,6 +245,7 @@ function updateGameArea() {
 
     }
 
+    // manage bullets
     for (i = 0; i < bullets.length; i++) {
             bullets[i].x += 3;
             bullets[i].update();
@@ -264,10 +283,15 @@ function updateGameArea() {
         }
     }
 
+
     score.text = "SCORE: " + (gameArea.frameNo / 10).toFixed(0);
     score.update();
+
     player.movePlayer();
     player.update();
+
+    // next frame
+    gameArea.frameNo += 1;
 }
 
 function everyinterval(n) {
@@ -287,13 +311,12 @@ function moveRight() {
     }
 }
 
-function accelerateUp(n) {
-    var rockbottom = gameArea.canvas.height - player.height - groundHeight;
-    if (player.y == rockbottom) {
+function jump() {
+    if (!isFlying) {
         player.gravity = -1;
+        player.speedX += 3;
         isFlying = true;
-    } else {
-        player.gravity = n;
+        jumpFrame = gameArea.frameNo;
     }
 }
 
