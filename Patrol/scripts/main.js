@@ -173,8 +173,10 @@ function component(width, height, color, x, y, type) {
 }
 
 var enemies = [
-    [32, 32, "resources/images/objects/obstacle.png", "ground"],
-    [144, 48, "resources/images/objects/pit.png", "underground"]
+    [48, 48, "resources/images/objects/stoneblock.png", "ground"],
+    [144, 48, "resources/images/objects/pit.png", "underground"],
+    [64, 48, "resources/images/enemies/bomber.png", "slow"],
+    [82, 48, "resources/images/enemies/airship.png", "fast"]
 ];
 
 function updateGameArea() {
@@ -224,8 +226,8 @@ function updateGameArea() {
     if (gameArea.keys && gameArea.keys[67]) {shoot(); upShoot()}
 
     // spawn obstacles logic
-    if (gameArea.frameNo === 1 || everyinterval(600)) {
-        var index = Math.floor((Math.random() * 10)) % 2;
+    if (gameArea.frameNo > 60 && everyinterval(600)) {
+        var index = Math.floor((Math.random() * 10)) % enemies.length;
         var currObstacle = enemies[index];
 
         obstacleWidth = currObstacle[0];
@@ -238,14 +240,23 @@ function updateGameArea() {
         } else if (currObstacle[3] === "underground") {
             console.log("underground");
             obstacleY = gameArea.canvas.height - groundHeight;
+        } else if (currObstacle[3] === "slow" || currObstacle[3] === "fast") {
+            obstacleX = 0;
+            obstacleY = 100;
         }
 
-        myObstacles.push(new component(obstacleWidth, obstacleHeight, currObstacle[2], obstacleX, obstacleY, "image"));
+        var obstacle = new component(obstacleWidth, obstacleHeight, currObstacle[2], obstacleX, obstacleY, "image");
+        if (currObstacle[3] === "fast") {
+            obstacle.speedX = 5;
+        } else if (currObstacle[3] === "slow") {
+            obstacle.speedX = 3;
+        }
+        myObstacles.push(obstacle);
     }
 
     // manage obstacles
     for (i = 0; i < myObstacles.length; i += 1) {
-        myObstacles[i].x += -1;
+        myObstacles[i].x += -1 + myObstacles[i].speedX;
 
         //delete obstacles outside the window
         if (myObstacles[i].x < -0 - myObstacles[i].width) {
