@@ -116,12 +116,12 @@ function component(width, height, color, x, y, type) {
         this.gravitySpeed += this.gravity;
 
         var tempX = this.x + this.speedX;
-        var rightBorder = gameArea.canvas.width / 2 - this.width;
+        var rightBorder = gameArea.canvas.width  - this.width;
         
         if (tempX < 0) {
             this.x = 0;
-        // } else if (tempX > rightBorder) {
-        //     this.x = rightBorder;
+        } else if (tempX > rightBorder) {
+            this.x = rightBorder;
         } else {
             this.x += this.speedX;
         }
