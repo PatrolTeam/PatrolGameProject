@@ -172,6 +172,10 @@ function component(width, height, color, x, y, type) {
     }
 }
 
+var enemies = [
+    [32, 32, "resources/images/objects/obstacle.png", "ground"],
+    [144, 48, "resources/images/objects/pit.png", "underground"]
+];
 
 function updateGameArea() {
 
@@ -190,12 +194,12 @@ function updateGameArea() {
     }
 
     // manage player-obstacle collision
-    for (i = 0; i< myObstacles.length; i += 1) {
-        if (player.crashWith(myObstacles[i])) {
-            gameArea.stop();
-            return;
-        }
-    }
+    // for (i = 0; i< myObstacles.length; i += 1) {
+    //     if (player.crashWith(myObstacles[i])) {
+    //         gameArea.stop();
+    //         return;
+    //     }
+    // }
 
     // clear game area
     gameArea.clear();
@@ -221,13 +225,22 @@ function updateGameArea() {
 
     // spawn obstacles logic
     if (gameArea.frameNo === 1 || everyinterval(600)) {
-        obstacleHeight = 32;
-        obstacleWidth = 32;
+        var index = Math.floor((Math.random() * 10)) % 2;
+        var currObstacle = enemies[index];
+
+        obstacleWidth = currObstacle[0];
+        obstacleHeight = currObstacle[1];
 
         obstacleX = gameArea.canvas.width;
-        obstacleY = gameArea.canvas.height - groundHeight - obstacleHeight;
+        if (currObstacle[3] === "ground") {
+            console.log("ground");
+            obstacleY = gameArea.canvas.height - groundHeight - obstacleHeight;
+        } else if (currObstacle[3] === "underground") {
+            console.log("underground");
+            obstacleY = gameArea.canvas.height - groundHeight;
+        }
 
-        myObstacles.push(new component(obstacleWidth, obstacleWidth, "resources/images/objects/obstacle.png", obstacleX, obstacleY, "image"));
+        myObstacles.push(new component(obstacleWidth, obstacleHeight, currObstacle[2], obstacleX, obstacleY, "image"));
     }
 
     // manage obstacles
