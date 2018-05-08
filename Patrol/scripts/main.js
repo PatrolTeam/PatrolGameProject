@@ -10,6 +10,7 @@ var groundHeight = 48;
 var isFlying = true;
 
 var bullets = [];
+var upBullets = [];
 
 function startGame() {
     gameArea.start();
@@ -185,9 +186,8 @@ function updateGameArea() {
     if (gameArea.keys && gameArea.keys[65]) {moveLeft() }
     if (gameArea.keys && gameArea.keys[68]) {moveRight() }
     if (gameArea.keys && gameArea.keys[32]) {accelerateUp(-0.2)}
-    if (gameArea.keys && gameArea.keys[67]) {
-        shoot();
-    }
+    if (gameArea.keys && gameArea.keys[67]) {shoot(); upShoot()}
+
 
     gameArea.frameNo += 1;
     if (gameArea.frameNo === 1 || everyinterval(150)) {
@@ -215,8 +215,8 @@ function updateGameArea() {
     }
 
     for (i = 0; i < bullets.length; i++) {
-        bullets[i].x += 3;
-        bullets[i].update();
+            bullets[i].x += 3;
+            bullets[i].update();
 
         //delete bullets outside the window
         if (bullets[i].x > gameArea.canvas.width) {
@@ -227,6 +227,24 @@ function updateGameArea() {
         for (j = 0; j < myObstacles.length; j++) {
             if (bullets[i].crashWith(myObstacles[j])) {
                 bullets.splice(i, 1);
+                myObstacles.splice(j, 1);
+            }
+        }
+    }
+
+    for (i = 0; i < upBullets.length; i++) {
+        upBullets[i].y -= 3;
+        upBullets[i].update();
+
+        //delete bullets outside the window
+        if (upBullets[i].x > gameArea.canvas.width) {
+            upBullets.splice(i, 1);
+        }
+
+        //check bullet collisions
+        for (j = 0; j < myObstacles.length; j++) {
+            if (upBullets[i].crashWith(myObstacles[j])) {
+                upBullets.splice(i, 1);
                 myObstacles.splice(j, 1);
             }
         }
@@ -273,5 +291,16 @@ function shoot() {
     }
     if (bulletCount === 1) {
         bullets.push(new component(30, 24, "resources/images/objects/bullet3.png", player.x + player.width + 1, player.y , "image"));
+    }
+}
+
+var upBulletCount = 0;
+function upShoot() {
+    upBulletCount++;
+    if (upBulletCount > 10) {
+        upBulletCount = 1;
+    }
+    if (upBulletCount === 1) {
+        upBullets.push(new component(24, 30, "resources/images/objects/upBullet.png", player.x + player.width / 2, player.y, "image"));
     }
 }
