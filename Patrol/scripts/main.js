@@ -9,6 +9,7 @@ var groundHeight = 48;
 var isFlying = true;
 var imgArr = ["resources/images/player/1.png", "resources/images/player/2.png", "resources/images/player/3.png", "resources/images/player/4.png"];
 var currFrame = 0;
+var planets;
 
 var bullets = [];
 var upBullets = [];
@@ -21,6 +22,8 @@ function startGame() {
     background = new component(960, 480, "resources/images/background/background.png", 0, 0, "background");
     groundLine = new component(960, 48, "resources/images/ground/ground.png", 0, 480 - groundHeight, "background");
     restart = new component("30px", "Consolas", "white", 145, 270,"text");
+    planets = new component(960,480,"resources/images/background/planets.png", 0,0,"background");
+
 }
 
 
@@ -187,12 +190,16 @@ function updateGameArea() {
         }
     }
     gameArea.clear();
-    background.speedX = -1;
+    background.speedX = -0.1;
     background.newPos();
     background.update();
     groundLine.speedX = -1;
     groundLine.newPos();
     groundLine.update();
+
+    planets.speedX = -0.3;
+    planets.newPos();
+    planets.update();
     gameArea.frameNo += 1;
 
     player.speedX = 0;
