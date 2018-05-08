@@ -8,6 +8,8 @@ var restart;
 var groundHeight = 48;
 var isFlying = true;
 
+var jumpFrame = 0;
+
 var imgArr = ["resources/images/player/1.png", "resources/images/player/2.png", "resources/images/player/3.png", "resources/images/player/4.png"];
 var currFrame = 0;
 var planets;
