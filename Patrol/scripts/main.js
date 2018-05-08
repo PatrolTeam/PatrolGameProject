@@ -121,12 +121,12 @@ function component(width, height, color, x, y, type) {
         this.gravitySpeed += this.gravity;
 
         var tempX = this.x + this.speedX;
-        var rightBorder = gameArea.canvas.width / 2 - this.width;
+        var rightBorder = gameArea.canvas.width  - this.width;
         
         if (tempX < 0) {
             this.x = 0;
-        // } else if (tempX > rightBorder) {
-        //     this.x = rightBorder;
+        } else if (tempX > rightBorder) {
+            this.x = rightBorder;
         } else {
             this.x += this.speedX;
         }
@@ -177,6 +177,12 @@ function component(width, height, color, x, y, type) {
     }
 }
 
+var enemies = [
+    [48, 48, "resources/images/objects/stoneblock.png", "ground"],
+    [144, 48, "resources/images/objects/pit.png", "underground"],
+    [64, 48, "resources/images/enemies/bomber.png", "slow"],
+    [82, 48, "resources/images/enemies/airship.png", "fast"]
+];
 
 function updateGameArea() {
 
@@ -195,12 +201,12 @@ function updateGameArea() {
     }
 
     // manage player-obstacle collision
-    for (i = 0; i< myObstacles.length; i += 1) {
-        if (player.crashWith(myObstacles[i])) {
-            gameArea.stop();
-            return;
-        }
-    }
+    // for (i = 0; i< myObstacles.length; i += 1) {
+    //     if (player.crashWith(myObstacles[i])) {
+    //         gameArea.stop();
+    //         return;
+    //     }
+    // }
 
     // clear game area
     gameArea.clear();
@@ -233,19 +239,37 @@ function updateGameArea() {
     if (gameArea.keys && gameArea.keys[67]) {shoot(); upShoot()}
 
     // spawn obstacles logic
-    if (gameArea.frameNo === 1 || everyinterval(600)) {
-        obstacleHeight = 32;
-        obstacleWidth = 32;
+    if (gameArea.frameNo > 60 && everyinterval(600)) {
+        var index = Math.floor((Math.random() * 10)) % enemies.length;
+        var currObstacle = enemies[index];
+
+        obstacleWidth = currObstacle[0];
+        obstacleHeight = currObstacle[1];
 
         obstacleX = gameArea.canvas.width;
-        obstacleY = gameArea.canvas.height - groundHeight - obstacleHeight;
+        if (currObstacle[3] === "ground") {
+            console.log("ground");
+            obstacleY = gameArea.canvas.height - groundHeight - obstacleHeight;
+        } else if (currObstacle[3] === "underground") {
+            console.log("underground");
+            obstacleY = gameArea.canvas.height - groundHeight;
+        } else if (currObstacle[3] === "slow" || currObstacle[3] === "fast") {
+            obstacleX = 0;
+            obstacleY = 100;
+        }
 
-        myObstacles.push(new component(obstacleWidth, obstacleWidth, "resources/images/objects/obstacle.png", obstacleX, obstacleY, "image"));
+        var obstacle = new component(obstacleWidth, obstacleHeight, currObstacle[2], obstacleX, obstacleY, "image");
+        if (currObstacle[3] === "fast") {
+            obstacle.speedX = 5;
+        } else if (currObstacle[3] === "slow") {
+            obstacle.speedX = 3;
+        }
+        myObstacles.push(obstacle);
     }
 
     // manage obstacles
     for (i = 0; i < myObstacles.length; i += 1) {
-        myObstacles[i].x += -1;
+        myObstacles[i].x += -1 + myObstacles[i].speedX;
 
         //delete obstacles outside the window
         if (myObstacles[i].x < -0 - myObstacles[i].width) {
