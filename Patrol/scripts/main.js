@@ -8,10 +8,9 @@ var restart;
 var groundHeight = 48;
 var isFlying = true;
 
-var imgArr = ["resources/images/player/1.png", "resources/images/player/2.png", "resources/images/player/3.png", "resources/images/player/4.png"];
-var currFrame = 0;
-var planets;
+var jumpFrame = 0;
 
+var planets;
 
 var bullets = [];
 var upBullets = [];
@@ -206,7 +205,6 @@ function updateGameArea() {
     gameArea.clear();
 
     background.speedX = -0.1;
-
     background.newPos();
     background.update();
 
@@ -214,12 +212,9 @@ function updateGameArea() {
     groundLine.newPos();
     groundLine.update();
 
-
     planets.speedX = -0.3;
     planets.newPos();
     planets.update();
-    gameArea.frameNo += 1;
-
 
     if (!isFlying) {
         player.speedX = 0;
