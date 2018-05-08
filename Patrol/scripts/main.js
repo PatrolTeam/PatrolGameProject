@@ -247,8 +247,9 @@ function updateGameArea() {
 
     // manage bullets
     for (i = 0; i < bullets.length; i++) {
-            bullets[i].x += 3;
+            bullets[i].x += 5.1;
             bullets[i].update();
+
 
         //delete bullets outside the window
         if (bullets[i].x > gameArea.canvas.width) {
@@ -338,6 +339,6 @@ function upShoot() {
         upBulletCount = 1;
     }
     if (upBulletCount === 1) {
-        upBullets.push(new component(24, 30, "resources/images/objects/upBullet.png", player.x + player.width / 2, player.y, "image"));
+        upBullets.push(new component(24, 30, "resources/images/objects/upBullet.png", player.x + player.width / 2 - 10, player.y - 30, "image"));
     }
 }
