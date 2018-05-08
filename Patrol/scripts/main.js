@@ -1,5 +1,7 @@
 var player;
+
 var myObstacles = [];
+
 var score;
 var gameOver;
 var background;
@@ -172,6 +174,7 @@ function component(width, height, color, x, y, type) {
     }
 }
 
+var enemies = [new component(32, 32, "resources/images/objects/obstacle.png", gameArea.canvas.width, gameArea.canvas.height - groundHeight - 32, "image")];
 
 function updateGameArea() {
 
@@ -227,7 +230,11 @@ function updateGameArea() {
         obstacleX = gameArea.canvas.width;
         obstacleY = gameArea.canvas.height - groundHeight - obstacleHeight;
 
-        myObstacles.push(new component(obstacleWidth, obstacleWidth, "resources/images/objects/obstacle.png", obstacleX, obstacleY, "image"));
+        var currObstacle = enemies[0];
+        currObstacle.x = obstacleX;
+        currObstacle.y = obstacleY;
+
+        myObstacles.push(enemies[0]);
     }
 
     // manage obstacles
