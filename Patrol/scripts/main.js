@@ -21,7 +21,6 @@ function startGame() {
     player = new component(113, 48, "resources/images/player/1.png", 10, 432, "image");
     player.imgArr = ["resources/images/player/1.png", "resources/images/player/2.png", "resources/images/player/3.png", "resources/images/player/4.png"];
 
-
     score = new component("30px", "Consolas", "white", 470, 40, "text");
     score.text = "SCORE: " + (gameArea.frameNo / 100).toFixed(0);
 
@@ -193,10 +192,10 @@ var enemies = [
     [64, 48, "resources/images/enemies/bomber.png", "slow"],
     [82, 48, "resources/images/enemies/airship.png", "fast"]
 ];
+
 var explosionArr = ["resources/images/explosion/1.png", "resources/images/explosion/2.png", "resources/images/explosion/3.png", "resources/images/explosion/4.png","resources/images/explosion/5.png","resources/images/explosion/6.png",
     "resources/images/explosion/7.png", "resources/images/explosion/8.png","resources/images/explosion/9.png","resources/images/explosion/10.png","resources/images/explosion/11.png","resources/images/explosion/12.png",
     "resources/images/explosion/13.png","resources/images/explosion/14.png","resources/images/explosion/15.png","resources/images/explosion/16.png"];
-
 
 function updateGameArea() {
 
@@ -209,7 +208,6 @@ function updateGameArea() {
 
         player.image.src = player.imgArr[player.currFrame];
     }
-
 
     if (gameArea.frameNo - jumpFrame === 10 && isFlying) {
         player.gravity = 0.5;
@@ -313,13 +311,11 @@ function updateGameArea() {
             myObstacles[i].x += -1 + myObstacles[i].speedX;
         }
 
-
-
         //delete obstacles outside the window
         if (myObstacles[i].x < -0 - myObstacles[i].width) {
             myObstacles.splice(i, 1);
             i--;
-
+          
             // add score when dodging obstacles
             addScore(10);
         }
@@ -362,7 +358,6 @@ function updateGameArea() {
 
         //check bullet collisions
         for (j = 0; j < myObstacles.length; j++) {
-
             if (upBullets[i].crashWith(myObstacles[j]) && myObstacles[j].isDead === false) {
                 myObstacles[j].isDead = true;
                 myObstacles[j].width = 48;
@@ -376,7 +371,6 @@ function updateGameArea() {
     if (everyinterval(100)) {
         addScore(1);
     }
-
     score.update();
 
     player.movePlayer();
