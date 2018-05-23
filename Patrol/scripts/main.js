@@ -163,15 +163,23 @@ function component(width, height, color, x, y, type) {
         var playerRight = this.x + (this.width);
         var playerTop = this.y;
         var playerBottom = this.y + (this.height);
+
         var obstacleLeft = otherobj.x;
         var obstacleRight = otherobj.x + (otherobj.width);
         var obstacleTop = otherobj.y;
         var obstacleBottom = otherobj.y + (otherobj.height);
+
+        if (otherobj.obstacleType === "underground") {
+            obstacleLeft += otherobj.width / 3;
+            obstacleRight -= otherobj.width / 3;
+        }
+
         var crash = true;
 
         if ((playerBottom < obstacleTop) || (playerTop > obstacleBottom) || (playerRight < obstacleLeft) || (playerLeft > obstacleRight)) {
             crash = false;
         }
+
         return crash;
     }
 }
@@ -200,12 +208,12 @@ function updateGameArea() {
     }
 
     // manage player-obstacle collision
-    // for (i = 0; i< myObstacles.length; i += 1) {
-    //     if (player.crashWith(myObstacles[i])) {
-    //         gameArea.stop();
-    //         return;
-    //     }
-    // }
+    for (i = 0; i< myObstacles.length; i += 1) {
+        if (player.crashWith(myObstacles[i])) {
+            gameArea.stop();
+            return;
+        }
+    }
 
     // clear game area
     gameArea.clear();
@@ -259,6 +267,8 @@ function updateGameArea() {
         } else if (currObstacle[3] === "slow") {
             obstacle.speedX = 3;
         }
+        
+        obstacle.obstacleType = currObstacle[3];
         myObstacles.push(obstacle);
     }
 
