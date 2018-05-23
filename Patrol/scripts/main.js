@@ -24,11 +24,11 @@ function startGame() {
     score = new component("30px", "Consolas", "white", 380, 40, "text");
     gameOver = new component("30px", "Consolas", "white ", 250, 240, "text");
 
-    background = new component(960, 480, "resources/images/background/background.png", 0, 0, "background");
+    background = new component(960, 480, "resources/images/background/BG.png", 0, 0, "background");
     groundLine = new component(960, 48, "resources/images/ground/ground.png", 0, 480 - groundHeight, "background");
 
     restart = new component("30px", "Consolas", "white", 145, 270,"text");
-    planets = new component(960,480,"resources/images/background/ColorPlanets.png", 0,0,"background");
+    planets = new component(960,480,"resources/images/background/desertPlanets.png", 0,0,"background");
 
 }
 
