@@ -21,14 +21,16 @@ function startGame() {
     player = new component(113, 48, "resources/images/player/1.png", 10, 432, "image");
     player.imgArr = ["resources/images/player/1.png", "resources/images/player/2.png", "resources/images/player/3.png", "resources/images/player/4.png"];
 
-    score = new component("30px", "Consolas", "white", 380, 40, "text");
+    score = new component("30px", "Consolas", "white", 470, 40, "text");
+    score.text = "SCORE: " + (gameArea.frameNo / 100).toFixed(0);
+
     gameOver = new component("30px", "Consolas", "white ", 250, 240, "text");
 
     background = new component(960, 480, "resources/images/background/BG.png", 0, 0, "background");
     groundLine = new component(960, 48, "resources/images/ground/ground.png", 0, 480 - groundHeight, "background");
 
     restart = new component("30px", "Consolas", "white", 145, 270,"text");
-    planets = new component(960,480,"resources/images/background/desertPlanets.png", 0,0,"background");
+    planets = new component(960,480,"resources/images/background/desertPlanets.png", -150,-15,"background");
 
 }
 
@@ -191,10 +193,14 @@ var enemies = [
     [82, 48, "resources/images/enemies/airship.png", "fast"]
 ];
 
+var explosionArr = ["resources/images/explosion/1.png", "resources/images/explosion/2.png", "resources/images/explosion/3.png", "resources/images/explosion/4.png","resources/images/explosion/5.png","resources/images/explosion/6.png",
+    "resources/images/explosion/7.png", "resources/images/explosion/8.png","resources/images/explosion/9.png","resources/images/explosion/10.png","resources/images/explosion/11.png","resources/images/explosion/12.png",
+    "resources/images/explosion/13.png","resources/images/explosion/14.png","resources/images/explosion/15.png","resources/images/explosion/16.png"];
+
 function updateGameArea() {
 
     // manage player animation
-    if (gameArea.frameNo === 1 || everyinterval(20)) {
+    if (gameArea.frameNo === 1 || everyinterval(10)) {
         player.currFrame++;
         if (player.currFrame > 3){
             player.currFrame = 0;
@@ -218,7 +224,7 @@ function updateGameArea() {
     // clear game area
     gameArea.clear();
 
-    background.speedX = -0.1;
+    background.speedX = -0.5;
     background.newPos();
     background.update();
 
@@ -226,7 +232,7 @@ function updateGameArea() {
     groundLine.newPos();
     groundLine.update();
 
-    planets.speedX = -0.3;
+    planets.speedX = 0;
     planets.newPos();
     planets.update();
 
@@ -262,24 +268,56 @@ function updateGameArea() {
         }
 
         var obstacle = new component(obstacleWidth, obstacleHeight, currObstacle[2], obstacleX, obstacleY, "image");
+
         if (currObstacle[3] === "fast") {
             obstacle.speedX = 5;
         } else if (currObstacle[3] === "slow") {
             obstacle.speedX = 3;
         }
-        
+      
+        obstacle.isDead = false;
         obstacle.obstacleType = currObstacle[3];
+      
         myObstacles.push(obstacle);
     }
 
+
     // manage obstacles
     for (i = 0; i < myObstacles.length; i += 1) {
-        myObstacles[i].x += -1 + myObstacles[i].speedX;
+        if (myObstacles[i].isDead === true) {
+            if (everyinterval(3)) {
+                if (myObstacles[i].currFrame > 15){
+
+                    // add score when destroying obstacles
+                    switch (myObstacles[i].obstacleType) {
+                        case "fast":
+                            addScore(50);
+                            break;
+                        case "slow":
+                            addScore(30);
+                            break;
+                        case "ground":
+                            addScore(20);
+                            break;
+                    }
+
+                    myObstacles.splice(i, 1);
+                } else {
+                    myObstacles[i].image.src = explosionArr[myObstacles[i].currFrame];
+                }
+                myObstacles[i].currFrame++;
+            }
+        } else {
+            myObstacles[i].x += -1 + myObstacles[i].speedX;
+        }
 
         //delete obstacles outside the window
         if (myObstacles[i].x < -0 - myObstacles[i].width) {
             myObstacles.splice(i, 1);
             i--;
+          
+            // add score when dodging obstacles
+            addScore(10);
         }
 
         //myObstacles[i].newPos();
@@ -300,9 +338,10 @@ function updateGameArea() {
 
         //check bullet collisions
         for (j = 0; j < myObstacles.length; j++) {
-            if (bullets[i].crashWith(myObstacles[j])) {
+            if (bullets[i].crashWith(myObstacles[j]) && myObstacles[j].isDead === false) {
+                myObstacles[j].isDead = true;
+
                 bullets.splice(i, 1);
-                myObstacles.splice(j, 1);
                 j--;
             }
         }
@@ -319,15 +358,19 @@ function updateGameArea() {
 
         //check bullet collisions
         for (j = 0; j < myObstacles.length; j++) {
-            if (upBullets[i].crashWith(myObstacles[j])) {
+            if (upBullets[i].crashWith(myObstacles[j]) && myObstacles[j].isDead === false) {
+                myObstacles[j].isDead = true;
+                myObstacles[j].width = 48;
+                myObstacles[j].height = 48;
+
                 upBullets.splice(i, 1);
-                myObstacles.splice(j, 1);
             }
         }
     }
 
-
-    score.text = "SCORE: " + (gameArea.frameNo / 10).toFixed(0);
+    if (everyinterval(100)) {
+        addScore(1);
+    }
     score.update();
 
     player.movePlayer();
@@ -383,4 +426,9 @@ function upShoot() {
     if (upBulletCount === 1) {
         upBullets.push(new component(24, 30, "resources/images/objects/upBullet.png", player.x + player.width / 2 - 10, player.y - 30, "image"));
     }
+}
+
+function addScore(n) {
+    var newScore = parseInt(score.text.substring(7)) + n;
+    score.text = "SCORE: " + newScore;
 }
