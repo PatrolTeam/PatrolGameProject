@@ -187,7 +187,7 @@ function component(width, height, color, x, y, type) {
 
 var enemies = [
     [48, 48, "resources/images/objects/stoneblock.png", "ground"],
-    // [144, 48, "resources/images/objects/pit.png", "underground"],
+    [144, 48, "resources/images/objects/pit.png", "underground"],
     [64, 48, "resources/images/enemies/bomber.png", "slow"],
     [82, 48, "resources/images/enemies/airship.png", "fast"]
 ];
