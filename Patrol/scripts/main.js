@@ -23,6 +23,8 @@ function startGame() {
 
 
     score = new component("30px", "Consolas", "white", 470, 40, "text");
+    score.text = "SCORE: " + (gameArea.frameNo / 100).toFixed(0);
+
     gameOver = new component("30px", "Consolas", "white ", 250, 240, "text");
 
     background = new component(960, 480, "resources/images/background/BG.png", 0, 0, "background");
@@ -287,6 +289,20 @@ function updateGameArea() {
         if (myObstacles[i].isDead === true) {
             if (everyinterval(3)) {
                 if (myObstacles[i].currFrame > 15){
+
+                    // add score when destroying obstacles
+                    switch (myObstacles[i].obstacleType) {
+                        case "fast":
+                            addScore(50);
+                            break;
+                        case "slow":
+                            addScore(30);
+                            break;
+                        case "ground":
+                            addScore(20);
+                            break;
+                    }
+
                     myObstacles.splice(i, 1);
                 } else {
                     myObstacles[i].image.src = explosionArr[myObstacles[i].currFrame];
@@ -303,6 +319,9 @@ function updateGameArea() {
         if (myObstacles[i].x < -0 - myObstacles[i].width) {
             myObstacles.splice(i, 1);
             i--;
+
+            // add score when dodging obstacles
+            addScore(10);
         }
 
         //myObstacles[i].newPos();
@@ -354,8 +373,10 @@ function updateGameArea() {
         }
     }
 
+    if (everyinterval(100)) {
+        addScore(1);
+    }
 
-    score.text = "SCORE: " + (gameArea.frameNo / 100).toFixed(0);
     score.update();
 
     player.movePlayer();
@@ -411,4 +432,9 @@ function upShoot() {
     if (upBulletCount === 1) {
         upBullets.push(new component(24, 30, "resources/images/objects/upBullet.png", player.x + player.width / 2 - 10, player.y - 30, "image"));
     }
+}
+
+function addScore(n) {
+    var newScore = parseInt(score.text.substring(7)) + n;
+    score.text = "SCORE: " + newScore;
 }
