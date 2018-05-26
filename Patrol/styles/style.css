@@ -2,3 +2,17 @@ canvas {
     border: 1px solid #d3d3d3;
     background-color: #f1f1f1;
 }
+button{
+    width :200px;
+    height :50px;
+    background:transparent url('blue_button00.png') no-repeat;
+    position :absolute;
+    margin-top :300px;
+    margin-left :230px;
+}
+button:hover {
+    background:transparent url('yellow_button00.png') no-repeat;
+}
+button:active{
+    background:transparent url('yellow_button01.png') no-repeat;
+}

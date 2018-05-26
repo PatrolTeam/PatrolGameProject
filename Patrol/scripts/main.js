@@ -5,6 +5,7 @@ var gameOver;
 var background;
 var groundLine;
 var restart;
+//var restartBtn = document.createElement("button");
 var groundHeight = 48;
 var isFlying = true;
 
@@ -15,9 +16,20 @@ var planets;
 var bullets = [];
 var upBullets = [];
 
+//start menu buttons
+var startBtn = document.createElement("button");
+var highScoreBtn = document.createElement("button");
+var exitBtn = document.createElement("button");
+var backBtn = document.createElement("button");
+
 function startGame() {
     gameArea.start();
+    startBtn.remove();
+    highScoreBtn.remove();
+    exitBtn.remove();
+    backBtn.remove();
 
+    //restartBtn.remove();
     player = new component(113, 48, "resources/images/player/1.png", 10, 432, "image");
     player.imgArr = ["resources/images/player/1.png", "resources/images/player/2.png", "resources/images/player/3.png", "resources/images/player/4.png"];
 
@@ -38,11 +50,52 @@ function startGame() {
 var gameArea = {
     canvas : document.createElement("canvas"),
 
+    startMenu: function(){
+
+        //start menu size
+        this.canvas.width = 640;
+        this.canvas.height = 480;
+        this.canvas.style.border = "solid";
+        this.canvas.style.backgroundImage = "url('resources/images/background/startMenuBG.png')";
+        document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+
+        //start button
+        document.body.insertBefore(startBtn,document.body.childNodes[0]);
+        startBtn.innerHTML = "START";
+        startBtn.addEventListener("click", startGame);
+
+        //high score button
+        document.body.insertBefore(highScoreBtn,document.body.childNodes[0]);
+        highScoreBtn.innerHTML = "HIGH SCORE";
+        highScoreBtn.addEventListener("click",function () {
+            startBtn.remove();
+            highScoreBtn.remove();
+            exitBtn.remove();
+
+            //back button
+            document.body.insertBefore(backBtn,document.body.childNodes[0]);
+            backBtn.innerHTML = "BACK";
+            backBtn.addEventListener("click", restartGame);
+            backBtn.style.marginTop = "420px";
+            backBtn.style.marginLeft = "430px";
+        });
+        highScoreBtn.style.marginTop = "360px";
+
+        //exit button
+        document.body.insertBefore(exitBtn,document.body.childNodes[0]);
+        exitBtn.innerHTML = "EXIT";
+        exitBtn.addEventListener("click",function () {
+            window.close();
+        });
+        exitBtn.style.marginTop = "420px";
+    },
+
     start : function() {
+
         // game window size
         this.canvas.width = 640;
         this.canvas.height = 480;
-
+        this.canvas.style.border = "solid";
         this.context = this.canvas.getContext("2d");
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
 
@@ -50,7 +103,7 @@ var gameArea = {
 
         // we update the game area 60 times per second
         this.interval = setInterval(updateGameArea, 10);
-      
+
         window.addEventListener('keydown', function (e) {
             gameArea.keys = (gameArea.keys || []);
             gameArea.keys[e.keyCode] = true;
@@ -63,10 +116,12 @@ var gameArea = {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     },
     stop : function () {
+        clearInterval(this.interval);
         gameOver.text = "GAME OVER!";
         gameOver.update();
-        clearInterval(this.interval);
-
+        /*document.body.insertBefore(restartBtn,document.body.childNodes[0]);
+        restartBtn.innerHTML = "Restart";
+        restartBtn.addEventListener("click", startGame);*/
         restart.text = "Press any key to restart";
         restart.update();
         restart = addEventListener("click",restartGame);
@@ -75,7 +130,6 @@ var gameArea = {
 
 function restartGame() {
     location.reload();
-
 }
 
 function component(width, height, color, x, y, type) {
