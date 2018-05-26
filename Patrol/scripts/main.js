@@ -1,6 +1,7 @@
 var player;
 var myObstacles = [];
 var score;
+var scoreBG;
 var gameOver;
 var background;
 var groundLine;
@@ -35,8 +36,8 @@ function startGame() {
 
     score = new component("30px", "kenvector_future", "white", 400, 40, "text");
     score.text = "SCORE: " + (gameArea.frameNo / 100).toFixed(0);
+    scoreBG = new component(250, 48, "resources/images/UI/scorePanel.png", 390, 5, "background");
     gameOver = new component("40px", "kenvector_future", "white ", 195, 240, "text");
-
     background = new component(960, 480, "resources/images/background/BG.png", 0, 0, "background");
     groundLine = new component(960, 48, "resources/images/ground/ground.png", 0, 480 - groundHeight, "background");
 
@@ -57,6 +58,7 @@ var gameArea = {
         this.canvas.style.border = "solid";
         this.canvas.style.backgroundImage = "url('resources/images/background/startMenuBG.png')";
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+        var marginTop = "300px";
 
         //start button
         document.body.insertBefore(startBtn,document.body.childNodes[0]);
@@ -66,6 +68,7 @@ var gameArea = {
         //high score button
         document.body.insertBefore(highScoreBtn,document.body.childNodes[0]);
         highScoreBtn.innerHTML = "HIGH SCORE";
+
         highScoreBtn.addEventListener("click",function () {
             startBtn.remove();
             highScoreBtn.remove();
@@ -291,6 +294,10 @@ function updateGameArea() {
     planets.speedX = 0;
     planets.newPos();
     planets.update();
+
+    scoreBG.speedX = 0;
+    scoreBG.newPos();
+    scoreBG.update();
 
     if (!isFlying) {
         player.speedX = 0;
