@@ -109,7 +109,7 @@ function component(width, height, color, x, y, type) {
                 this.height);
             if (type === "background"){
                 ctx.drawImage(this.image,
-                    this.x + this.width, this.y, this.width, this.height);
+                    this.x + this.width - 2, this.y, this.width, this.height);
             }
         } else {
             ctx.fillStyle = color;
