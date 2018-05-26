@@ -248,9 +248,9 @@ function component(width, height, color, x, y, type) {
 
 var enemies = [
     [48, 48, "resources/images/objects/stoneblock.png", "ground"],
-    [144, 48, "resources/images/objects/trap.png", "underground"],
-    // [64, 48, "resources/images/enemies/bomber.png", "slow"],
-    // [82, 48, "resources/images/enemies/airship.png", "fast"]
+    [144, 48, "resources/images/objects/spike_pit_small.png", "underground"],
+    [64, 48, "resources/images/enemies/bomber.png", "slow"],
+    [82, 48, "resources/images/enemies/airship.png", "fast"]
 ];
 
 var explosionArr = ["resources/images/explosion/1.png", "resources/images/explosion/2.png", "resources/images/explosion/3.png", "resources/images/explosion/4.png","resources/images/explosion/5.png","resources/images/explosion/6.png",
