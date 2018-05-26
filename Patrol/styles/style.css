@@ -29,6 +29,6 @@ button:hover {
     background: transparent url('../resources/images/UI/yellow_button00.png') no-repeat;
 }
 button:active{
-    margin-top: 304px;
+
     background: transparent url('../resources/images/UI/yellow_button01.png') no-repeat;
 }
