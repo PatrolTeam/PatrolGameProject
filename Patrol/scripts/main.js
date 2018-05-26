@@ -4,8 +4,8 @@ var score;
 var gameOver;
 var background;
 var groundLine;
-var restart;
-//var restartBtn = document.createElement("button");
+
+var restartBtn = document.createElement("button");
 var groundHeight = 48;
 var isFlying = true;
 
@@ -28,20 +28,19 @@ function startGame() {
     highScoreBtn.remove();
     exitBtn.remove();
     backBtn.remove();
-
     //restartBtn.remove();
+
     player = new component(113, 48, "resources/images/player/1.png", 10, 432, "image");
     player.imgArr = ["resources/images/player/1.png", "resources/images/player/2.png", "resources/images/player/3.png", "resources/images/player/4.png"];
 
-    score = new component("30px", "Consolas", "white", 470, 40, "text");
+    score = new component("30px", "kenvector_future", "white", 400, 40, "text");
     score.text = "SCORE: " + (gameArea.frameNo / 100).toFixed(0);
-
-    gameOver = new component("30px", "Consolas", "white ", 250, 240, "text");
+    gameOver = new component("40px", "kenvector_future", "white ", 195, 240, "text");
 
     background = new component(960, 480, "resources/images/background/BG.png", 0, 0, "background");
     groundLine = new component(960, 48, "resources/images/ground/ground.png", 0, 480 - groundHeight, "background");
 
-    restart = new component("30px", "Consolas", "white", 145, 270,"text");
+    //restart = new component("30px", "kenvector_future", "white", 145, 270,"text");
     planets = new component(960,480,"resources/images/background/desertPlanets.png", -150,-15,"background");
 
 }
@@ -119,16 +118,19 @@ var gameArea = {
         clearInterval(this.interval);
         gameOver.text = "GAME OVER!";
         gameOver.update();
-        /*document.body.insertBefore(restartBtn,document.body.childNodes[0]);
-        restartBtn.innerHTML = "Restart";
-        restartBtn.addEventListener("click", startGame);*/
-        restart.text = "Press any key to restart";
+
+        document.body.insertBefore(restartBtn,document.body.childNodes[0]);
+        restartBtn.innerHTML = "MAIN MENU";
+        restartBtn.addEventListener("click", restartGame);
+
+        /*restart.text = "Press any key to restart";
         restart.update();
-        restart = addEventListener("click",restartGame);
+        restart = addEventListener("click",restartGame);*/
     }
 };
 
 function restartGame() {
+
     location.reload();
 }
 
@@ -243,8 +245,8 @@ function component(width, height, color, x, y, type) {
 var enemies = [
     [48, 48, "resources/images/objects/stoneblock.png", "ground"],
     [144, 48, "resources/images/objects/pit.png", "underground"],
-    [64, 48, "resources/images/enemies/bomber.png", "slow"],
-    [82, 48, "resources/images/enemies/airship.png", "fast"]
+    // [64, 48, "resources/images/enemies/bomber.png", "slow"],
+    // [82, 48, "resources/images/enemies/airship.png", "fast"]
 ];
 
 var explosionArr = ["resources/images/explosion/1.png", "resources/images/explosion/2.png", "resources/images/explosion/3.png", "resources/images/explosion/4.png","resources/images/explosion/5.png","resources/images/explosion/6.png",

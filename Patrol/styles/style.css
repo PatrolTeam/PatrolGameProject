@@ -3,16 +3,29 @@ canvas {
     background-color: #f1f1f1;
 }
 button{
-    width :200px;
-    height :50px;
-    background:transparent url('blue_button00.png') no-repeat;
-    position :absolute;
-    margin-top :300px;
-    margin-left :230px;
+    display: inline-block;
+    outline: none;
+    border: none;
+    width: 190px;
+    height: 49px;
+    font-size: 18px;
+    color: #fff;
+    text-align: center;
+    font-family: kenvector_future;
+    background: transparent url('../resources/images/UI/blue_button00.png') no-repeat;
+    position: absolute;
+    border-radius: 15px;
+    margin-top: 300px;
+    margin-left: 230px;
 }
+@font-face {
+    font-family: kenvector_future;
+    src: url("../resources/fonts/kenvector_future.ttf");
+}
+
 button:hover {
-    background:transparent url('yellow_button00.png') no-repeat;
+    background: transparent url('../resources/images/UI/yellow_button00.png') no-repeat;
 }
 button:active{
-    background:transparent url('yellow_button01.png') no-repeat;
+    background: transparent url('../resources/images/UI/yellow_button01.png') no-repeat;
 }
