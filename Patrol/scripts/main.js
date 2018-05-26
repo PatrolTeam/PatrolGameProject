@@ -37,7 +37,7 @@ function startGame() {
     score.text = "SCORE: " + (gameArea.frameNo / 100).toFixed(0);
     gameOver = new component("40px", "kenvector_future", "white ", 195, 240, "text");
 
-    background = new component(960, 480, "resources/images/background/BG.png", 0, 0, "background");
+    background = new component(960, 480, "resources/images/background/game_background.png", 0, 0, "background");
     groundLine = new component(960, 48, "resources/images/ground/ground.png", 0, 480 - groundHeight, "background");
 
     //restart = new component("30px", "kenvector_future", "white", 145, 270,"text");
@@ -55,7 +55,7 @@ var gameArea = {
         this.canvas.width = 640;
         this.canvas.height = 480;
         this.canvas.style.border = "solid";
-        this.canvas.style.backgroundImage = "url('resources/images/background/startMenuBG.png')";
+        this.canvas.style.backgroundImage = "url('resources/images/background/menu_background_small.png')";
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
 
         //start button
@@ -244,7 +244,7 @@ function component(width, height, color, x, y, type) {
 
 var enemies = [
     [48, 48, "resources/images/objects/stoneblock.png", "ground"],
-    [144, 48, "resources/images/objects/pit.png", "underground"],
+    [144, 48, "resources/images/objects/trap.png", "underground"],
     // [64, 48, "resources/images/enemies/bomber.png", "slow"],
     // [82, 48, "resources/images/enemies/airship.png", "fast"]
 ];
