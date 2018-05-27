@@ -1,10 +1,12 @@
 var player;
 var myObstacles = [];
 var score;
+var scoreBG;
 var gameOver;
 var background;
 var groundLine;
-var restart;
+
+var restartBtn = document.createElement("button");
 var groundHeight = 48;
 var isFlying = true;
 
@@ -15,21 +17,32 @@ var planets;
 var bullets = [];
 var upBullets = [];
 
+//start menu buttons
+var startBtn = document.createElement("button");
+var highScoreBtn = document.createElement("button");
+var exitBtn = document.createElement("button");
+var backBtn = document.createElement("button");
+
 function startGame() {
     gameArea.start();
+    startBtn.remove();
+    highScoreBtn.remove();
+    exitBtn.remove();
+    backBtn.remove();
+    //restartBtn.remove();
 
     player = new component(113, 48, "resources/images/player/1.png", 10, 432, "image");
     player.imgArr = ["resources/images/player/1.png", "resources/images/player/2.png", "resources/images/player/3.png", "resources/images/player/4.png"];
 
-    score = new component("30px", "Consolas", "white", 470, 40, "text");
+    score = new component("30px", "kenvector_future", "white", 400, 40, "text");
     score.text = "SCORE: " + (gameArea.frameNo / 100).toFixed(0);
+    scoreBG = new component(250, 48, "resources/images/UI/scorePanel.png", 390, 5, "background");
+    gameOver = new component("40px", "kenvector_future", "white ", 195, 240, "text");
 
-    gameOver = new component("30px", "Consolas", "white ", 250, 240, "text");
-
-    background = new component(960, 480, "resources/images/background/BG.png", 0, 0, "background");
+    background = new component(960, 480, "resources/images/background/game_background.png", 0, 0, "background");
     groundLine = new component(960, 48, "resources/images/ground/ground.png", 0, 480 - groundHeight, "background");
 
-    restart = new component("30px", "Consolas", "white", 145, 270,"text");
+    //restart = new component("30px", "kenvector_future", "white", 145, 270,"text");
     planets = new component(960,480,"resources/images/background/desertPlanets.png", -150,-15,"background");
 
 }
@@ -38,11 +51,54 @@ function startGame() {
 var gameArea = {
     canvas : document.createElement("canvas"),
 
+    startMenu: function(){
+
+        //start menu size
+        this.canvas.width = 640;
+        this.canvas.height = 480;
+        this.canvas.style.border = "solid";
+        this.canvas.style.backgroundImage = "url('resources/images/background/menu_background_small.png')";
+        document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+        var marginTop = "300px";
+
+        //start button
+        document.body.insertBefore(startBtn,document.body.childNodes[0]);
+        startBtn.innerHTML = "START";
+        startBtn.addEventListener("click", startGame);
+
+        //high score button
+        document.body.insertBefore(highScoreBtn,document.body.childNodes[0]);
+        highScoreBtn.innerHTML = "HIGH SCORE";
+
+        highScoreBtn.addEventListener("click",function () {
+            startBtn.remove();
+            highScoreBtn.remove();
+            exitBtn.remove();
+
+            //back button
+            document.body.insertBefore(backBtn,document.body.childNodes[0]);
+            backBtn.innerHTML = "BACK";
+            backBtn.addEventListener("click", restartGame);
+            backBtn.style.marginTop = "420px";
+            backBtn.style.marginLeft = "430px";
+        });
+        highScoreBtn.style.marginTop = "360px";
+
+        //exit button
+        document.body.insertBefore(exitBtn,document.body.childNodes[0]);
+        exitBtn.innerHTML = "EXIT";
+        exitBtn.addEventListener("click",function () {
+            window.close();
+        });
+        exitBtn.style.marginTop = "420px";
+    },
+
     start : function() {
+
         // game window size
         this.canvas.width = 640;
         this.canvas.height = 480;
-
+        this.canvas.style.border = "solid";
         this.context = this.canvas.getContext("2d");
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
 
@@ -50,7 +106,7 @@ var gameArea = {
 
         // we update the game area 60 times per second
         this.interval = setInterval(updateGameArea, 10);
-      
+
         window.addEventListener('keydown', function (e) {
             gameArea.keys = (gameArea.keys || []);
             gameArea.keys[e.keyCode] = true;
@@ -63,19 +119,23 @@ var gameArea = {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     },
     stop : function () {
+        clearInterval(this.interval);
         gameOver.text = "GAME OVER!";
         gameOver.update();
-        clearInterval(this.interval);
 
-        restart.text = "Press any key to restart";
+        document.body.insertBefore(restartBtn,document.body.childNodes[0]);
+        restartBtn.innerHTML = "MAIN MENU";
+        restartBtn.addEventListener("click", restartGame);
+
+        /*restart.text = "Press any key to restart";
         restart.update();
-        restart = addEventListener("click",restartGame);
+        restart = addEventListener("click",restartGame);*/
     }
 };
 
 function restartGame() {
-    location.reload();
 
+    location.reload();
 }
 
 function component(width, height, color, x, y, type) {
@@ -188,7 +248,7 @@ function component(width, height, color, x, y, type) {
 
 var enemies = [
     [48, 48, "resources/images/objects/stoneblock.png", "ground"],
-    [144, 48, "resources/images/objects/pit.png", "underground"],
+    [144, 48, "resources/images/objects/spike_pit_small.png", "underground"],
     [64, 48, "resources/images/enemies/bomber.png", "slow"],
     [82, 48, "resources/images/enemies/airship.png", "fast"]
 ];
@@ -235,6 +295,10 @@ function updateGameArea() {
     planets.speedX = 0;
     planets.newPos();
     planets.update();
+
+    scoreBG.speedX = 0;
+    scoreBG.newPos();
+    scoreBG.update();
 
     if (!isFlying) {
         player.speedX = 0;
