@@ -32,3 +32,36 @@ button:active{
 
     background: transparent url('../resources/images/UI/yellow_button01.png') no-repeat;
 }
+table{
+    /*border: none;*/
+
+    outline: none;
+    position: absolute;
+    background: transparent url('../resources/images/UI/highScoreTable.png') no-repeat;
+    opacity: 0.95;
+    width: 560px;
+    height: 340px;
+    margin-top: 40px;
+    margin-left: 40px;
+    font-family: kenvector_future;
+    padding-top: 10px;
+    color: white;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 50px;
+}
+th{
+    border: 1px solid white;border-collapse: collapse;
+    padding-top: 25px;
+    text-align: center;
+    font-size: 30px;
+    width: 560px;
+    height: 60px;
+}
+td{
+    border: 1px solid white;border-collapse: collapse;
+    width: 250px;
+    height: 35px;
+}
+
+

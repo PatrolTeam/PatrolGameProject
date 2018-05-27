@@ -2,6 +2,7 @@ var player;
 var myObstacles = [];
 var score;
 var scoreBG;
+var scoreCount;
 var gameOver;
 var background;
 var groundLine;
@@ -22,6 +23,8 @@ var startBtn = document.createElement("button");
 var highScoreBtn = document.createElement("button");
 var exitBtn = document.createElement("button");
 var backBtn = document.createElement("button");
+
+var highScoreTable = document.createElement("TABLE");
 
 function startGame() {
     gameArea.start();
@@ -46,7 +49,6 @@ function startGame() {
     planets = new component(960,480,"resources/images/background/desertPlanets.png", -150,-15,"background");
 
 }
-
 
 var gameArea = {
     canvas : document.createElement("canvas"),
@@ -74,6 +76,31 @@ var gameArea = {
             startBtn.remove();
             highScoreBtn.remove();
             exitBtn.remove();
+
+
+            //high score table
+           document.body.insertBefore(highScoreTable,document.body.childNodes[0]);
+            //highScoreTable.setAttribute('border', '1px');
+            var tableTitle = document.createElement("TH");
+            tableTitle.setAttribute('colSpan', '2');
+            tableTitle.innerText = "High Score";
+            highScoreTable.appendChild(tableTitle);
+
+            var tableBody = document.createElement("tbody");
+            highScoreTable.appendChild(tableBody);
+
+            var tableRows;
+            var tableCells;
+            tableTitle.innerText = "High Score";
+            for (var i = 0; i < 5; i++){
+                tableRows = document.createElement("TR");
+                tableBody.appendChild(tableRows);
+                for (var j = 0; j < 2; j++){
+                    tableCells = document.createElement("td");
+                    tableBody.appendChild(tableCells);
+                    tableCells.innerText= "SomethingSomething";
+                }
+            }
 
             //back button
             document.body.insertBefore(backBtn,document.body.childNodes[0]);
@@ -127,6 +154,10 @@ var gameArea = {
         restartBtn.innerHTML = "MAIN MENU";
         restartBtn.addEventListener("click", restartGame);
 
+        scoreCount = score.text.match(/\d/g);
+        scoreCount = scoreCount.join("");
+        parseInt(scoreCount);
+        //alert(scoreCount);
         /*restart.text = "Press any key to restart";
         restart.update();
         restart = addEventListener("click",restartGame);*/
@@ -496,3 +527,4 @@ function addScore(n) {
     var newScore = parseInt(score.text.substring(7)) + n;
     score.text = "SCORE: " + newScore;
 }
+
