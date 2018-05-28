@@ -34,7 +34,6 @@ button:active{
 }
 table{
     /*border: none;*/
-
     outline: none;
     position: absolute;
     background: transparent url('../resources/images/UI/highScoreTable.png') no-repeat;
@@ -51,16 +50,17 @@ table{
     padding-bottom: 50px;
 }
 th{
-    border: 1px solid white;border-collapse: collapse;
+
     padding-top: 25px;
     text-align: center;
     font-size: 30px;
-    width: 560px;
-    height: 60px;
+    height: 55px;
+}
+td:hover {
+    background-color:#e86a17;
 }
 td{
-    border: 1px solid white;border-collapse: collapse;
-    width: 250px;
+
     height: 35px;
 }
 

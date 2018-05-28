@@ -26,6 +26,7 @@ var backBtn = document.createElement("button");
 
 var highScoreTable = document.createElement("TABLE");
 
+
 function startGame() {
     gameArea.start();
     startBtn.remove();
@@ -92,14 +93,17 @@ var gameArea = {
             var tableRows;
             var tableCells;
             tableTitle.innerText = "High Score";
+
+            //create 5 rows in table
             for (var i = 0; i < 5; i++){
                 tableRows = document.createElement("TR");
                 tableBody.appendChild(tableRows);
-                for (var j = 0; j < 2; j++){
+
+                //for (var j = 0; j < 1; j++){
                     tableCells = document.createElement("td");
                     tableBody.appendChild(tableCells);
-                    tableCells.innerText= "SomethingSomething";
-                }
+                    tableCells.innerText= "Some";
+                //}
             }
 
             //back button
@@ -150,10 +154,12 @@ var gameArea = {
         gameOver.text = "GAME OVER!";
         gameOver.update();
 
+        //restart button
         document.body.insertBefore(restartBtn,document.body.childNodes[0]);
         restartBtn.innerHTML = "MAIN MENU";
         restartBtn.addEventListener("click", restartGame);
 
+        //take score
         scoreCount = score.text.match(/\d/g);
         scoreCount = scoreCount.join("");
         parseInt(scoreCount);
@@ -161,6 +167,7 @@ var gameArea = {
         /*restart.text = "Press any key to restart";
         restart.update();
         restart = addEventListener("click",restartGame);*/
+        
     }
 };
 
