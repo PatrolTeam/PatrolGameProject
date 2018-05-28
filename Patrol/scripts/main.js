@@ -23,9 +23,14 @@ var startBtn = document.createElement("button");
 var highScoreBtn = document.createElement("button");
 var exitBtn = document.createElement("button");
 var backBtn = document.createElement("button");
+var resetBtn = document.createElement("button");
 
 var highScoreTable = document.createElement("TABLE");
+var namesArr = [];
+var localStorageName = ["first name", "second name", "third name", "fourth name", "fifth name"];
 
+var highScoreArr = [];
+var localStorageArr = ["first score","second score","third score","fourth score","fifth score"];
 
 function startGame() {
     gameArea.start();
@@ -33,6 +38,7 @@ function startGame() {
     highScoreBtn.remove();
     exitBtn.remove();
     backBtn.remove();
+    resetBtn.remove();
     //restartBtn.remove();
 
     player = new component(113, 48, "resources/images/player/1.png", 10, 432, "image");
@@ -56,6 +62,30 @@ var gameArea = {
 
     startMenu: function(){
 
+        //check the local storage to see if we already saved a high score
+        /*if(localStorage.getItem(localStorageName) == null) {
+            highScore = 0;
+        } else {
+            highScore = localStorage.getItem(localStorageName);
+        }*/
+
+        for (var i = 0; i < localStorageArr.length; i++){
+            if(localStorage.getItem(localStorageArr[i]) == null) {
+                highScoreArr[i] = 0;
+            } else {
+                highScoreArr[i] = localStorage.getItem(localStorageArr[i]);
+            }
+        }
+
+        for (var i = 0; i < localStorageName.length; i++){
+            if(localStorage.getItem(localStorageName[i]) == null) {
+                namesArr[i] = 'Martian';
+            } else {
+                namesArr[i] = localStorage.getItem(localStorageName[i]);
+            }
+        }
+
+
         //start menu size
         this.canvas.width = 640;
         this.canvas.height = 480;
@@ -73,7 +103,7 @@ var gameArea = {
         document.body.insertBefore(highScoreBtn,document.body.childNodes[0]);
         highScoreBtn.innerHTML = "HIGH SCORE";
 
-        highScoreBtn.addEventListener("click",function () {
+        highScoreBtn.addEventListener("click",function (){
             startBtn.remove();
             highScoreBtn.remove();
             exitBtn.remove();
@@ -102,7 +132,8 @@ var gameArea = {
                 //for (var j = 0; j < 1; j++){
                     tableCells = document.createElement("td");
                     tableBody.appendChild(tableCells);
-                    tableCells.innerText= "Some";
+
+                    tableCells.innerText = namesArr[i] + " ---> " + highScoreArr[i];
                 //}
             }
 
@@ -112,6 +143,15 @@ var gameArea = {
             backBtn.addEventListener("click", restartGame);
             backBtn.style.marginTop = "420px";
             backBtn.style.marginLeft = "430px";
+
+            //reset button
+            document.body.insertBefore(resetBtn,document.body.childNodes[0]);
+            resetBtn.innerHTML = "RESET";
+            resetBtn.addEventListener("click", function () {
+                localStorage.clear();
+            });
+            resetBtn.style.marginTop = "420px";
+            resetBtn.style.marginLeft = "229px";
         });
         highScoreBtn.style.marginTop = "360px";
 
@@ -160,15 +200,42 @@ var gameArea = {
         restartBtn.addEventListener("click", restartGame);
 
         //take score
-        scoreCount = score.text.match(/\d/g);
-        scoreCount = scoreCount.join("");
-        parseInt(scoreCount);
-        //alert(scoreCount);
+        scoreCount = parseInt(score.text.substring(7));
+
         /*restart.text = "Press any key to restart";
         restart.update();
         restart = addEventListener("click",restartGame);*/
+
+        var currName = prompt("Enter your name:", "Name");
+        if (scoreCount >= highScoreArr[0]){
+            highScoreArr[0] = scoreCount;
+            localStorage.setItem(localStorageArr[0],highScoreArr[0]);
+            namesArr[0] = currName;
+            localStorage.setItem(localStorageName[0],namesArr[0]);
+        } else if (scoreCount >= highScoreArr[1]){
+            highScoreArr[1] = scoreCount;
+            localStorage.setItem(localStorageArr[1],highScoreArr[1]);
+            namesArr[1] = currName;
+            localStorage.setItem(localStorageName[1],namesArr[1]);
+        } else if (scoreCount >= highScoreArr[2]){
+            highScoreArr[2] = scoreCount;
+            localStorage.setItem(localStorageArr[2],highScoreArr[2]);
+            namesArr[2] = currName;
+            localStorage.setItem(localStorageName[2],namesArr[2]);
+        } else if (scoreCount >= highScoreArr[3]){
+            highScoreArr[3] = scoreCount;
+            localStorage.setItem(localStorageArr[3],highScoreArr[3]);
+            namesArr[3] = currName;
+            localStorage.setItem(localStorageName[3],namesArr[3]);
+        } else if (scoreCount >= highScoreArr[4]){
+            highScoreArr[4] = scoreCount;
+            localStorage.setItem(localStorageArr[4],highScoreArr[4]);
+            namesArr[4] = currName;
+            localStorage.setItem(localStorageName[4],namesArr[4]);
+        }
         
     }
+
 };
 
 function restartGame() {

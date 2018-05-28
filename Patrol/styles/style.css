@@ -58,9 +58,10 @@ th{
 }
 td:hover {
     background-color:#e86a17;
+    color: white;
 }
 td{
-
+    color:#e86a17;
     height: 35px;
 }
 
