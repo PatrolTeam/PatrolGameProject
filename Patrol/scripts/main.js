@@ -1,20 +1,19 @@
 var player;
 var myObstacles = [];
+var background;
+var groundLine;
+var planets;
+
+//score
 var score;
 var scoreBG;
 var scoreCount;
-var gameOver;
-var background;
-var groundLine;
 
-var restartBtn = document.createElement("button");
 var groundHeight = 48;
 var isFlying = true;
-
 var jumpFrame = 0;
 
-var planets;
-
+//bullets
 var bullets = [];
 var upBullets = [];
 
@@ -22,15 +21,20 @@ var upBullets = [];
 var startBtn = document.createElement("button");
 var highScoreBtn = document.createElement("button");
 var exitBtn = document.createElement("button");
+
+//high score menu
 var backBtn = document.createElement("button");
 var resetBtn = document.createElement("button");
-
 var highScoreTable = document.createElement("TABLE");
 var namesArr = [];
 var localStorageName = ["first name", "second name", "third name", "fourth name", "fifth name"];
-
 var highScoreArr = [];
 var localStorageArr = ["first score","second score","third score","fourth score","fifth score"];
+
+//game over menu
+var gameOver;
+var restartBtn = document.createElement("button");
+
 
 function startGame() {
     gameArea.start();
@@ -111,6 +115,7 @@ var gameArea = {
 
             //high score table
            document.body.insertBefore(highScoreTable,document.body.childNodes[0]);
+           highScoreTable.setAttribute("id", "highScoreTable");
             //highScoreTable.setAttribute('border', '1px');
             var tableTitle = document.createElement("TH");
             tableTitle.setAttribute('colSpan', '2');
@@ -191,13 +196,6 @@ var gameArea = {
     },
     stop : function () {
         clearInterval(this.interval);
-        gameOver.text = "GAME OVER!";
-        gameOver.update();
-
-        //restart button
-        document.body.insertBefore(restartBtn,document.body.childNodes[0]);
-        restartBtn.innerHTML = "MAIN MENU";
-        restartBtn.addEventListener("click", restartGame);
 
         //take score
         scoreCount = parseInt(score.text.substring(7));
@@ -206,399 +204,457 @@ var gameArea = {
         restart.update();
         restart = addEventListener("click",restartGame);*/
 
-        var currName = prompt("Enter your name:", "Name");
+        //check high score
+        var isItBigger = false;
+        var indexOfHighScoreArr;
         if (scoreCount >= highScoreArr[0]){
+            isItBigger = true;
             highScoreArr[0] = scoreCount;
             localStorage.setItem(localStorageArr[0],highScoreArr[0]);
-            namesArr[0] = currName;
-            localStorage.setItem(localStorageName[0],namesArr[0]);
+            indexOfHighScoreArr = 0;
+
         } else if (scoreCount >= highScoreArr[1]){
+            isItBigger = true;
             highScoreArr[1] = scoreCount;
             localStorage.setItem(localStorageArr[1],highScoreArr[1]);
-            namesArr[1] = currName;
-            localStorage.setItem(localStorageName[1],namesArr[1]);
+            indexOfHighScoreArr = 1;
+
         } else if (scoreCount >= highScoreArr[2]){
+            isItBigger = true;
             highScoreArr[2] = scoreCount;
             localStorage.setItem(localStorageArr[2],highScoreArr[2]);
-            namesArr[2] = currName;
-            localStorage.setItem(localStorageName[2],namesArr[2]);
+            indexOfHighScoreArr = 2;
+
         } else if (scoreCount >= highScoreArr[3]){
+            isItBigger = true;
             highScoreArr[3] = scoreCount;
             localStorage.setItem(localStorageArr[3],highScoreArr[3]);
-            namesArr[3] = currName;
-            localStorage.setItem(localStorageName[3],namesArr[3]);
+            indexOfHighScoreArr = 3;
+
         } else if (scoreCount >= highScoreArr[4]){
+            isItBigger = true;
             highScoreArr[4] = scoreCount;
             localStorage.setItem(localStorageArr[4],highScoreArr[4]);
-            namesArr[4] = currName;
-            localStorage.setItem(localStorageName[4],namesArr[4]);
-        }
-        
-    }
+            indexOfHighScoreArr = 4;
 
+        }
+        if (isItBigger === true){
+                var gameOverTable = document.createElement("TABLE");
+                document.body.insertBefore(gameOverTable,document.body.childNodes[0]);
+                gameOverTable.setAttribute("id", "gameOverTable");
+
+                //gameOverTable.setAttribute('border', '1px');
+                var tableTitle = document.createElement("TH");
+                tableTitle.setAttribute('colSpan', '2');
+                tableTitle.innerText = "Game Over";
+                gameOverTable.appendChild(tableTitle);
+
+                //first row with text field
+                var firstRow = document.createElement("tr");
+                gameOverTable.appendChild(firstRow);
+                var firstCell = document.createElement("td");
+                gameOverTable.appendChild(firstCell);
+                firstCell.innerText = "Enter your name:";
+
+                //text field
+                var textfield = document.createElement("INPUT");
+                textfield.setAttribute("type", "text");
+                textfield.setAttribute("placeholder", "Your name...");
+                firstCell.appendChild(textfield);
+                if (textfield.value === ""){
+                    textfield.value = "Martian";
+                }
+
+                //second row with buttons
+                var secondRow = document.createElement("tr");
+                gameOverTable.appendChild(secondRow);
+                var secondCell = document.createElement("td");
+                secondRow.appendChild(secondCell);
+                var submitBtn = document.createElement("input");
+                submitBtn.setAttribute("type", "submit");
+                submitBtn.setAttribute("value", "Submit");
+                secondCell.appendChild(submitBtn);
+
+                submitBtn.addEventListener("click", function () {
+                    namesArr[indexOfHighScoreArr] = textfield.value;
+                    localStorage.setItem(localStorageName[indexOfHighScoreArr],namesArr[indexOfHighScoreArr]);
+                    location.reload();
+                });
+
+            }else {
+            gameOver.text = "GAME OVER!";
+            gameOver.update();
+
+            //restart button
+            document.body.insertBefore(restartBtn,document.body.childNodes[0]);
+            restartBtn.innerHTML = "MAIN MENU";
+            restartBtn.addEventListener("click", restartGame);
+}
+
+}
 };
 
 function restartGame() {
 
-    location.reload();
+location.reload();
 }
 
 function component(width, height, color, x, y, type) {
-    this.type = type;
-    if (type === "image" || type === "background") {
-        this.image = new Image();
-        this.image.src = color;
-        this.currFrame = 0;
-        this.imgArr = [];
+this.type = type;
+if (type === "image" || type === "background") {
+this.image = new Image();
+this.image.src = color;
+this.currFrame = 0;
+this.imgArr = [];
+}
+this.width = width;
+this.height = height;
+this.speedX = 0;
+this.speedY = 0;
+this.gravity = 0.05;
+this.gravitySpeed = 0;
+this.x = x;
+this.y = y;
+
+this.update = function(){
+ctx = gameArea.context;
+if (this.type == "text") {
+    ctx.font = this.width + " " + this.height;
+    ctx.fillStyle = color;
+    ctx.fillText(this.text, this.x, this.y);
+} else if (this.type === "image" || type === "background") {
+    ctx.drawImage(this.image,
+        this.x,
+        this.y,
+        this.width,
+        this.height);
+    if (type === "background"){
+        ctx.drawImage(this.image,
+            this.x + this.width - 2, this.y, this.width, this.height);
     }
-    this.width = width;
-    this.height = height;
-    this.speedX = 0;
-    this.speedY = 0;
-    this.gravity = 0.05;
+} else {
+    ctx.fillStyle = color;
+    ctx.fillRect(this.x, this.y, this.width, this.height);
+}
+};
+
+this.movePlayer = function () {
+
+this.gravitySpeed += this.gravity;
+
+var tempX = this.x + this.speedX;
+var rightBorder = gameArea.canvas.width  - this.width;
+
+if (tempX < 0) {
+    this.x = 0;
+} else if (tempX > rightBorder) {
+    this.x = rightBorder;
+} else {
+    this.x += this.speedX;
+}
+
+this.y += this.speedY + this.gravitySpeed;
+
+this.hitBottom();
+}
+
+
+this.newPos = function () {
+
+this.x += this.speedX;
+this.y += this.speedY + this.gravitySpeed;
+if (this.type === "background") {
+    if (this.x === -(this.width)) {
+        this.x = 0;
+    }
+}
+}
+
+this.hitBottom = function() {
+var rockbottom = gameArea.canvas.height - this.height - groundHeight;
+
+if (this.y > rockbottom) {
+    this.y = rockbottom;
+    isFlying = false;
     this.gravitySpeed = 0;
-    this.x = x;
-    this.y = y;
-
-    this.update = function(){
-        ctx = gameArea.context;
-        if (this.type == "text") {
-            ctx.font = this.width + " " + this.height;
-            ctx.fillStyle = color;
-            ctx.fillText(this.text, this.x, this.y);
-        } else if (this.type === "image" || type === "background") {
-            ctx.drawImage(this.image,
-                this.x,
-                this.y,
-                this.width,
-                this.height);
-            if (type === "background"){
-                ctx.drawImage(this.image,
-                    this.x + this.width - 2, this.y, this.width, this.height);
-            }
-        } else {
-            ctx.fillStyle = color;
-            ctx.fillRect(this.x, this.y, this.width, this.height);
-        }
-    };
-
-    this.movePlayer = function () {
-        
-        this.gravitySpeed += this.gravity;
-
-        var tempX = this.x + this.speedX;
-        var rightBorder = gameArea.canvas.width  - this.width;
-        
-        if (tempX < 0) {
-            this.x = 0;
-        } else if (tempX > rightBorder) {
-            this.x = rightBorder;
-        } else {
-            this.x += this.speedX;
-        }
-
-        this.y += this.speedY + this.gravitySpeed;
-
-        this.hitBottom();
-    }
+}
+}
 
 
-    this.newPos = function () {
+this.crashWith = function (otherobj) {
+var playerLeft = this.x;
+var playerRight = this.x + (this.width);
+var playerTop = this.y;
+var playerBottom = this.y + (this.height);
 
-        this.x += this.speedX;
-        this.y += this.speedY + this.gravitySpeed;
-        if (this.type === "background") {
-            if (this.x === -(this.width)) {
-                this.x = 0;
-            }
-        }
-    }
+var obstacleLeft = otherobj.x;
+var obstacleRight = otherobj.x + (otherobj.width);
+var obstacleTop = otherobj.y;
+var obstacleBottom = otherobj.y + (otherobj.height);
 
-    this.hitBottom = function() {
-        var rockbottom = gameArea.canvas.height - this.height - groundHeight;
+if (otherobj.obstacleType === "underground") {
+    obstacleLeft += otherobj.width / 3;
+    obstacleRight -= otherobj.width / 3;
+}
 
-        if (this.y > rockbottom) {
-            this.y = rockbottom;
-            isFlying = false;
-            this.gravitySpeed = 0;
-        }
-    }
-    
+var crash = true;
 
-    this.crashWith = function (otherobj) {
-        var playerLeft = this.x;
-        var playerRight = this.x + (this.width);
-        var playerTop = this.y;
-        var playerBottom = this.y + (this.height);
+if ((playerBottom < obstacleTop) || (playerTop > obstacleBottom) || (playerRight < obstacleLeft) || (playerLeft > obstacleRight)) {
+    crash = false;
+}
 
-        var obstacleLeft = otherobj.x;
-        var obstacleRight = otherobj.x + (otherobj.width);
-        var obstacleTop = otherobj.y;
-        var obstacleBottom = otherobj.y + (otherobj.height);
-
-        if (otherobj.obstacleType === "underground") {
-            obstacleLeft += otherobj.width / 3;
-            obstacleRight -= otherobj.width / 3;
-        }
-
-        var crash = true;
-
-        if ((playerBottom < obstacleTop) || (playerTop > obstacleBottom) || (playerRight < obstacleLeft) || (playerLeft > obstacleRight)) {
-            crash = false;
-        }
-
-        return crash;
-    }
+return crash;
+}
 }
 
 var enemies = [
-    [48, 48, "resources/images/objects/stoneblock.png", "ground"],
-    [144, 48, "resources/images/objects/spike_pit_small.png", "underground"],
-    [64, 48, "resources/images/enemies/bomber.png", "slow"],
-    [82, 48, "resources/images/enemies/airship.png", "fast"]
+[48, 48, "resources/images/objects/stoneblock.png", "ground"],
+[144, 48, "resources/images/objects/spike_pit_small.png", "underground"],
+[64, 48, "resources/images/enemies/bomber.png", "slow"],
+[82, 48, "resources/images/enemies/airship.png", "fast"]
 ];
 
 var explosionArr = ["resources/images/explosion/1.png", "resources/images/explosion/2.png", "resources/images/explosion/3.png", "resources/images/explosion/4.png","resources/images/explosion/5.png","resources/images/explosion/6.png",
-    "resources/images/explosion/7.png", "resources/images/explosion/8.png","resources/images/explosion/9.png","resources/images/explosion/10.png","resources/images/explosion/11.png","resources/images/explosion/12.png",
-    "resources/images/explosion/13.png","resources/images/explosion/14.png","resources/images/explosion/15.png","resources/images/explosion/16.png"];
+"resources/images/explosion/7.png", "resources/images/explosion/8.png","resources/images/explosion/9.png","resources/images/explosion/10.png","resources/images/explosion/11.png","resources/images/explosion/12.png",
+"resources/images/explosion/13.png","resources/images/explosion/14.png","resources/images/explosion/15.png","resources/images/explosion/16.png"];
 
 function updateGameArea() {
 
-    // manage player animation
-    if (gameArea.frameNo === 1 || everyinterval(10)) {
-        player.currFrame++;
-        if (player.currFrame > 3){
-            player.currFrame = 0;
-        }
+// manage player animation
+if (gameArea.frameNo === 1 || everyinterval(10)) {
+player.currFrame++;
+if (player.currFrame > 3){
+    player.currFrame = 0;
+}
 
-        player.image.src = player.imgArr[player.currFrame];
-    }
+player.image.src = player.imgArr[player.currFrame];
+}
 
-    if (gameArea.frameNo - jumpFrame === 10 && isFlying) {
-        player.gravity = 0.5;
-    }
+if (gameArea.frameNo - jumpFrame === 10 && isFlying) {
+player.gravity = 0.5;
+}
 
-    // manage player-obstacle collision
-    for (i = 0; i< myObstacles.length; i += 1) {
-        if (player.crashWith(myObstacles[i])) {
-            gameArea.stop();
-            return;
-        }
-    }
+// manage player-obstacle collision
+for (i = 0; i< myObstacles.length; i += 1) {
+if (player.crashWith(myObstacles[i])) {
+    gameArea.stop();
+    return;
+}
+}
 
-    // clear game area
-    gameArea.clear();
+// clear game area
+gameArea.clear();
 
-    background.speedX = -0.5;
-    background.newPos();
-    background.update();
+background.speedX = -0.5;
+background.newPos();
+background.update();
 
-    groundLine.speedX = -1;
-    groundLine.newPos();
-    groundLine.update();
+groundLine.speedX = -1;
+groundLine.newPos();
+groundLine.update();
 
-    planets.speedX = 0;
-    planets.newPos();
-    planets.update();
+planets.speedX = 0;
+planets.newPos();
+planets.update();
 
-    scoreBG.speedX = 0;
-    scoreBG.newPos();
-    scoreBG.update();
+scoreBG.speedX = 0;
+scoreBG.newPos();
+scoreBG.update();
 
-    if (!isFlying) {
-        player.speedX = 0;
-        player.speedY = 0;
-    }
+if (!isFlying) {
+player.speedX = 0;
+player.speedY = 0;
+}
 
-    // handle keyboard input
-    if (gameArea.keys && gameArea.keys[65]) {moveLeft() }
-    if (gameArea.keys && gameArea.keys[68]) {moveRight() }
-    if (gameArea.keys && gameArea.keys[32]) {jump()}
-    if (gameArea.keys && gameArea.keys[67]) {shoot(); upShoot()}
+// handle keyboard input
+if (gameArea.keys && gameArea.keys[65]) {moveLeft() }
+if (gameArea.keys && gameArea.keys[68]) {moveRight() }
+if (gameArea.keys && gameArea.keys[32]) {jump()}
+if (gameArea.keys && gameArea.keys[67]) {shoot(); upShoot()}
 
-    // spawn obstacles logic
-    if (gameArea.frameNo > 60 && everyinterval(600)) {
-        var index = Math.floor((Math.random() * 10)) % enemies.length;
-        var currObstacle = enemies[index];
+// spawn obstacles logic
+if (gameArea.frameNo > 60 && everyinterval(600)) {
+var index = Math.floor((Math.random() * 10)) % enemies.length;
+var currObstacle = enemies[index];
 
-        obstacleWidth = currObstacle[0];
-        obstacleHeight = currObstacle[1];
+obstacleWidth = currObstacle[0];
+obstacleHeight = currObstacle[1];
 
-        obstacleX = gameArea.canvas.width;
-        if (currObstacle[3] === "ground") {
-            console.log("ground");
-            obstacleY = gameArea.canvas.height - groundHeight - obstacleHeight;
-        } else if (currObstacle[3] === "underground") {
-            console.log("underground");
-            obstacleY = gameArea.canvas.height - groundHeight;
-        } else if (currObstacle[3] === "slow" || currObstacle[3] === "fast") {
-            obstacleX = 0;
-            obstacleY = 100;
-        }
+obstacleX = gameArea.canvas.width;
+if (currObstacle[3] === "ground") {
+    console.log("ground");
+    obstacleY = gameArea.canvas.height - groundHeight - obstacleHeight;
+} else if (currObstacle[3] === "underground") {
+    console.log("underground");
+    obstacleY = gameArea.canvas.height - groundHeight;
+} else if (currObstacle[3] === "slow" || currObstacle[3] === "fast") {
+    obstacleX = 0;
+    obstacleY = 100;
+}
 
-        var obstacle = new component(obstacleWidth, obstacleHeight, currObstacle[2], obstacleX, obstacleY, "image");
+var obstacle = new component(obstacleWidth, obstacleHeight, currObstacle[2], obstacleX, obstacleY, "image");
 
-        if (currObstacle[3] === "fast") {
-            obstacle.speedX = 5;
-        } else if (currObstacle[3] === "slow") {
-            obstacle.speedX = 3;
-        }
-      
-        obstacle.isDead = false;
-        obstacle.obstacleType = currObstacle[3];
-      
-        myObstacles.push(obstacle);
-    }
+if (currObstacle[3] === "fast") {
+    obstacle.speedX = 5;
+} else if (currObstacle[3] === "slow") {
+    obstacle.speedX = 3;
+}
+
+obstacle.isDead = false;
+obstacle.obstacleType = currObstacle[3];
+
+myObstacles.push(obstacle);
+}
 
 
-    // manage obstacles
-    for (i = 0; i < myObstacles.length; i += 1) {
-        if (myObstacles[i].isDead === true) {
-            if (everyinterval(3)) {
-                if (myObstacles[i].currFrame > 15){
+// manage obstacles
+for (i = 0; i < myObstacles.length; i += 1) {
+if (myObstacles[i].isDead === true) {
+    if (everyinterval(3)) {
+        if (myObstacles[i].currFrame > 15){
 
-                    // add score when destroying obstacles
-                    switch (myObstacles[i].obstacleType) {
-                        case "fast":
-                            addScore(50);
-                            break;
-                        case "slow":
-                            addScore(30);
-                            break;
-                        case "ground":
-                            addScore(20);
-                            break;
-                    }
-
-                    myObstacles.splice(i, 1);
-                } else {
-                    myObstacles[i].image.src = explosionArr[myObstacles[i].currFrame];
-                }
-                myObstacles[i].currFrame++;
+            // add score when destroying obstacles
+            switch (myObstacles[i].obstacleType) {
+                case "fast":
+                    addScore(50);
+                    break;
+                case "slow":
+                    addScore(30);
+                    break;
+                case "ground":
+                    addScore(20);
+                    break;
             }
-        } else {
-            myObstacles[i].x += -1 + myObstacles[i].speedX;
-        }
 
-        //delete obstacles outside the window
-        if (myObstacles[i].x < -0 - myObstacles[i].width) {
             myObstacles.splice(i, 1);
-            i--;
-          
-            // add score when dodging obstacles
-            addScore(10);
+        } else {
+            myObstacles[i].image.src = explosionArr[myObstacles[i].currFrame];
         }
-
-        //myObstacles[i].newPos();
-        myObstacles[i].update();
-
+        myObstacles[i].currFrame++;
     }
+} else {
+    myObstacles[i].x += -1 + myObstacles[i].speedX;
+}
 
-    // manage bullets
-    for (i = 0; i < bullets.length; i++) {
-            bullets[i].x += 5.1;
-            bullets[i].update();
+//delete obstacles outside the window
+if (myObstacles[i].x < -0 - myObstacles[i].width) {
+    myObstacles.splice(i, 1);
+    i--;
+
+    // add score when dodging obstacles
+    addScore(10);
+}
+
+//myObstacles[i].newPos();
+myObstacles[i].update();
+
+}
+
+// manage bullets
+for (i = 0; i < bullets.length; i++) {
+    bullets[i].x += 5.1;
+    bullets[i].update();
 
 
-        //delete bullets outside the window
-        if (bullets[i].x > gameArea.canvas.width) {
-            bullets.splice(i, 1);
-        }
+//delete bullets outside the window
+if (bullets[i].x > gameArea.canvas.width) {
+    bullets.splice(i, 1);
+}
 
-        //check bullet collisions
-        for (j = 0; j < myObstacles.length; j++) {
-            if (bullets[i].crashWith(myObstacles[j]) && myObstacles[j].isDead === false) {
-                myObstacles[j].isDead = true;
+//check bullet collisions
+for (j = 0; j < myObstacles.length; j++) {
+    if (bullets[i].crashWith(myObstacles[j]) && myObstacles[j].isDead === false) {
+        myObstacles[j].isDead = true;
 
-                bullets.splice(i, 1);
-                j--;
-            }
-        }
+        bullets.splice(i, 1);
+        j--;
     }
+}
+}
 
-    for (i = 0; i < upBullets.length; i++) {
-        upBullets[i].y -= 3;
-        upBullets[i].update();
+for (i = 0; i < upBullets.length; i++) {
+upBullets[i].y -= 3;
+upBullets[i].update();
 
-        //delete bullets outside the window
-        if (upBullets[i].x > gameArea.canvas.width) {
-            upBullets.splice(i, 1);
-        }
+//delete bullets outside the window
+if (upBullets[i].x > gameArea.canvas.width) {
+    upBullets.splice(i, 1);
+}
 
-        //check bullet collisions
-        for (j = 0; j < myObstacles.length; j++) {
-            if (upBullets[i].crashWith(myObstacles[j]) && myObstacles[j].isDead === false) {
-                myObstacles[j].isDead = true;
-                myObstacles[j].width = 48;
-                myObstacles[j].height = 48;
+//check bullet collisions
+for (j = 0; j < myObstacles.length; j++) {
+    if (upBullets[i].crashWith(myObstacles[j]) && myObstacles[j].isDead === false) {
+        myObstacles[j].isDead = true;
+        myObstacles[j].width = 48;
+        myObstacles[j].height = 48;
 
-                upBullets.splice(i, 1);
-            }
-        }
+        upBullets.splice(i, 1);
     }
+}
+}
 
-    if (everyinterval(100)) {
-        addScore(1);
-    }
-    score.update();
+if (everyinterval(100)) {
+addScore(1);
+}
+score.update();
 
-    player.movePlayer();
-    player.update();
+player.movePlayer();
+player.update();
 
-    // next frame
-    gameArea.frameNo += 1;
+// next frame
+gameArea.frameNo += 1;
 }
 
 function everyinterval(n) {
-    if ((gameArea.frameNo / n) % 1 === 0) {return true;}
-    return false;
+if ((gameArea.frameNo / n) % 1 === 0) {return true;}
+return false;
 }
 
 function moveLeft() {
-    if (!isFlying) {
-        player.speedX -= 2;
-    }
+if (!isFlying) {
+player.speedX -= 2;
+}
 }
 
 function moveRight() {
-    if (!isFlying) {
-        player.speedX += 2;
-    }
+if (!isFlying) {
+player.speedX += 2;
+}
 }
 
 function jump() {
-    if (!isFlying) {
-        player.gravity = -1;
-        player.speedX += 3;
-        isFlying = true;
-        jumpFrame = gameArea.frameNo;
-    }
+if (!isFlying) {
+player.gravity = -1;
+player.speedX += 3;
+isFlying = true;
+jumpFrame = gameArea.frameNo;
+}
 }
 
 var bulletCount = 0;
 function shoot() {
-    bulletCount++;
-    if (bulletCount > 10) {
-        bulletCount = 1;
-    }
-    if (bulletCount === 1) {
-        bullets.push(new component(30, 24, "resources/images/objects/bullet3.png", player.x + player.width + 1, player.y , "image"));
-    }
+bulletCount++;
+if (bulletCount > 10) {
+bulletCount = 1;
+}
+if (bulletCount === 1) {
+bullets.push(new component(30, 24, "resources/images/objects/bullet3.png", player.x + player.width + 1, player.y , "image"));
+}
 }
 
 var upBulletCount = 0;
 function upShoot() {
-    upBulletCount++;
-    if (upBulletCount > 10) {
-        upBulletCount = 1;
-    }
-    if (upBulletCount === 1) {
-        upBullets.push(new component(24, 30, "resources/images/objects/upBullet.png", player.x + player.width / 2 - 10, player.y - 30, "image"));
-    }
+upBulletCount++;
+if (upBulletCount > 10) {
+upBulletCount = 1;
+}
+if (upBulletCount === 1) {
+upBullets.push(new component(24, 30, "resources/images/objects/upBullet.png", player.x + player.width / 2 - 10, player.y - 30, "image"));
+}
 }
 
 function addScore(n) {
-    var newScore = parseInt(score.text.substring(7)) + n;
-    score.text = "SCORE: " + newScore;
+var newScore = parseInt(score.text.substring(7)) + n;
+score.text = "SCORE: " + newScore;
 }
 

@@ -3,6 +3,8 @@ canvas {
     background-color: #f1f1f1;
     cursor: url(../resources/images/UI/cursor_pointer3D_shadow.png),pointer;
 }
+
+/* buttons */
 button{
     display: inline-block;
     outline: none;
@@ -24,7 +26,6 @@ button{
     font-family: kenvector_future;
     src: url("../resources/fonts/kenvector_future.ttf");
 }
-
 button:hover {
     background: transparent url('../resources/images/UI/yellow_button00.png') no-repeat;
 }
@@ -32,7 +33,12 @@ button:active{
 
     background: transparent url('../resources/images/UI/yellow_button01.png') no-repeat;
 }
-table{
+
+
+
+/* high score table */
+
+#highScoreTable{
     /*border: none;*/
     outline: none;
     position: absolute;
@@ -43,26 +49,104 @@ table{
     margin-top: 40px;
     margin-left: 40px;
     font-family: kenvector_future;
-    padding-top: 10px;
     color: white;
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-top: 16px;
+    padding-left: 12px;
+    padding-right: 10px;
     padding-bottom: 50px;
 }
-th{
+#highScoreTable th{
 
     padding-top: 25px;
     text-align: center;
     font-size: 30px;
     height: 55px;
 }
-td:hover {
+#highScoreTable td:hover {
     background-color:#e86a17;
     color: white;
 }
-td{
+#highScoreTable td{
+    padding-left: 20px;
     color:#e86a17;
     height: 35px;
 }
+
+
+/* game over table */
+
+#gameOverTable{
+    /*border: none;*/
+    border:1px solid white;
+    outline: none;
+    position: absolute;
+    background: transparent url('../resources/images/UI/gameOverBG.png') no-repeat;
+    opacity: 0.95;
+    width: 560px;
+    height: 340px;
+    margin-top: 70px;
+    margin-left: 40px;
+    font-family: kenvector_future;
+    color: white;
+    padding-top: 30px;
+    padding-left: 12px;
+    padding-right: 10px;
+    padding-bottom: 50px;
+}
+#gameOverTable th{
+    border:1px solid white;
+    padding-top: 25px;
+    text-align: center;
+    font-size: 40px;
+    height: 55px;
+}
+
+#gameOverTable td{
+    border: 1px solid white;
+    padding-left: 20px;
+    padding-right: 20px;
+    color: white;
+    height: 75px;
+
+}
+
+
+/*text field */
+
+input[type=text], select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+
+/* submit button */
+
+input[type=submit] {
+    width: 190px;
+    height: 49px;
+    background: transparent url('../resources/images/UI/red_button11.png') no-repeat;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 150px;
+    border: none;
+    outline: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+input[type=submit]:hover {
+    background: transparent url('../resources/images/UI/yellow_button00.png') no-repeat;
+}
+
+input[type=submit]:active{
+    background: transparent url('../resources/images/UI/yellow_button01.png') no-repeat;
+}
+
+
 
 
