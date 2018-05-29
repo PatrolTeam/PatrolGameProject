@@ -16,10 +16,10 @@ var bullets = [];
 var upBullets = [];
 
 var airshipBullets = [];
-var airshipsCount = 0;
-
 var bomberBullets = [];
-bombersCount = 0;
+var tankBullets = [];
+
+var enemiesCount = 0;
 
 //start menu buttons
 var startBtn = document.createElement("button");
@@ -255,8 +255,11 @@ var enemies = [
     [48, 48, "resources/images/objects/stoneblock.png", "ground"],
     [144, 48, "resources/images/objects/spike_pit_small.png", "underground"],
     [64, 48, "resources/images/enemies/airship.png", "airship"],
-    [82, 48, "resources/images/enemies/bomber.png", "bomber"]
+    [82, 48, "resources/images/enemies/bomber.png", "bomber"],
+    [102, 48, "resources/images/enemies/tank/1.png", "tank"],
 ];
+
+var tankArr = ["resources/images/enemies/tank/1.png", "resources/images/enemies/tank/2.png", "resources/images/enemies/tank/3.png", "resources/images/enemies/tank/4.png"];
 
 var explosionArr = ["resources/images/explosion/1.png", "resources/images/explosion/2.png", "resources/images/explosion/3.png", "resources/images/explosion/4.png","resources/images/explosion/5.png","resources/images/explosion/6.png",
     "resources/images/explosion/7.png", "resources/images/explosion/8.png","resources/images/explosion/9.png","resources/images/explosion/10.png","resources/images/explosion/11.png","resources/images/explosion/12.png",
@@ -291,9 +294,14 @@ function updateGameArea() {
             return;
         }
     }
-
     for (i = 0; i< bomberBullets.length; i++) {
         if (player.crashWith(bomberBullets[i])) {
+            gameArea.stop();
+            return;
+        }
+    }
+    for (i = 0; i< tankBullets.length; i++) {
+        if (player.crashWith(tankBullets[i])) {
             gameArea.stop();
             return;
         }
@@ -344,12 +352,12 @@ function updateGameArea() {
             obstacle.y = gameArea.canvas.height - groundLine.height;
             obstacle.speedX = -1;
         } else if (currObstacle[3] === "airship") {
-            airshipsCount++;
+            enemiesCount++;
 
             obstacle.y = 60;
             obstacle.speedX = -1;
         } else if (currObstacle[3] === "bomber") {
-            bombersCount++;
+            enemiesCount++;
 
             obstacle.y = 100;
 
@@ -363,6 +371,12 @@ function updateGameArea() {
 
                 obstacle.speedX = -3;
             }
+        } else if (currObstacle[3] === "tank") {
+            enemiesCount++;
+            
+            obstacle.y = gameArea.canvas.height - groundLine.height - obstacle.height;
+            obstacle.speedX = -1.5;
+            obstacle.currFrame = 0;
         }
       
         obstacle.isDead = false;
@@ -370,12 +384,9 @@ function updateGameArea() {
       
         myObstacles.push(obstacle);
 
-        if (obstacle.obstacleType === "airship" && airshipsCount > 1) {
+        if (enemiesCount > 1) {
             myObstacles.pop();
-            airshipsCount--;
-        } else if (obstacle.obstacleType === "bomber" && bombersCount > 1) {
-            myObstacles.pop();
-            bombersCount--;
+            enemiesCount--;
         }
     }
 
@@ -390,11 +401,15 @@ function updateGameArea() {
                     switch (myObstacles[i].obstacleType) {
                         case "bomber":
                             addScore(50);
-                            bombersCount--;
+                            enemiesCount--;
+                            break;
+                        case "tank":
+                            addScore(40);
+                            enemiesCount--;
                             break;
                         case "airship":
                             addScore(30);
-                            airshipsCount--;
+                            enemiesCount--;
                             break;
                         case "ground":
                             addScore(20);
@@ -410,6 +425,26 @@ function updateGameArea() {
             }
         } else {
             myObstacles[i].x += myObstacles[i].speedX;
+            
+            if (myObstacles[i].obstacleType === "tank" && everyinterval(10)) {
+                if (myObstacles[i].currFrame > 3) {
+                    myObstacles[i].currFrame = 0;
+                }
+
+                myObstacles[i].image.src = tankArr[myObstacles[i].currFrame];
+                myObstacles[i].currFrame++;
+
+                if (everyinterval(150)) {
+                    let bulletX = myObstacles[i].x  - 32;
+                    let bulletY = myObstacles[i].y + myObstacles[i].height / 2 - 16;
+
+                    let newBullet = new component(35, 18, "resources/images/objects/bullet2.png", bulletX, bulletY, "image");
+                    newBullet.speedX = -2;
+                    newBullet.speedY = 0;
+
+                    tankBullets.push(newBullet);
+                }
+            }
 
             if (myObstacles[i].obstacleType === "airship") {
                 if (myObstacles[i].speedX != 0) {
@@ -443,7 +478,7 @@ function updateGameArea() {
                 let bulletX = myObstacles[i].x + myObstacles[i].width / 2 - 10;
                 let bulletY = myObstacles[i].y + 48;
 
-                let newBullet = new component(24, 24, "resources/images/objects/bullet4.png", bulletX, bulletY, "image");
+                let newBullet = new component(18, 48, "resources/images/objects/bullet1.png", bulletX, bulletY, "image");
                 newBullet.speedX = 0;
                 newBullet.speedY = 1;
 
@@ -453,8 +488,8 @@ function updateGameArea() {
 
         //delete obstacles outside the window
         if (myObstacles[i].x < -0 - myObstacles[i].width || myObstacles[i].x > gameArea.canvas.width) {
-            if (myObstacles[i].obstacleType === "bomber") {
-                bombersCount--;
+            if (myObstacles[i].obstacleType === "bomber" || myObstacles[i].obstacleType === "tank") {
+                enemiesCount--;
             }
 
             myObstacles.splice(i, 1);
@@ -486,9 +521,41 @@ function updateGameArea() {
         for (j = 0; j < myObstacles.length; j++) {
             if (bullets[i].crashWith(myObstacles[j]) && myObstacles[j].isDead === false) {
                 myObstacles[j].isDead = true;
+                myObstacles[j].width = 48;
+                myObstacles[j].height = 48;
+
+                bullets.splice(i, 1);
+                break;
+            }
+        }
+        for (j = 0; j < bomberBullets.length; j++) {
+            if (bullets[i].crashWith(bomberBullets[j])) {
+                bomberBullets.splice(j, 1);
 
                 bullets.splice(i, 1);
 
+                addScore(3);
+                break;
+            }
+        }
+        for (j = 0; j < airshipBullets.length; j++) {
+            if (bullets[i].crashWith(airshipBullets[j])) {
+                airshipBullets.splice(j, 1);
+
+                bullets.splice(i, 1);
+
+                addScore(5);
+                break;
+            }
+        }
+        for (j = 0; j < tankBullets.length; j++) {
+            if (bullets[i].crashWith(tankBullets[j])) {
+                tankBullets.splice(j, 1);
+
+                bullets.splice(i, 1);
+
+                addScore(3);
+                break;
             }
         }
     }
@@ -512,6 +579,23 @@ function updateGameArea() {
                 myObstacles[j].height = 48;
 
                 upBullets.splice(i, 1);
+                break;
+            }
+        }
+        for (j = 0; j < bomberBullets.length; j++) {
+            if (upBullets[i].crashWith(bomberBullets[j])) {
+                bomberBullets.splice(j, 1);
+
+                upBullets.splice(i, 1);
+                break;
+            }
+        }
+        for (j = 0; j < airshipBullets.length; j++) {
+            if (upBullets[i].crashWith(airshipBullets[j])) {
+                airshipBullets.splice(j, 1);
+
+                upBullets.splice(i, 1);
+                break;
             }
         }
     }
@@ -538,6 +622,19 @@ function updateGameArea() {
         //delete bullets outside the window
         if (bomberBullets[i].y > gameArea.canvas.height - groundLine.height - bomberBullets[i].height) {
             bomberBullets.splice(i, 1);
+            console.log("deleted.");
+            continue;
+        }
+    }
+
+    // manage tank bullets
+    for (i = 0; i < tankBullets.length; i++) {
+        tankBullets[i].x += tankBullets[i].speedX;
+        tankBullets[i].update();
+
+        //delete bullets outside the window
+        if (tankBullets[i].x < 0) {
+            tankBullets.splice(i, 1);
             console.log("deleted.");
             continue;
         }
