@@ -1,17 +1,19 @@
 var player;
 var myObstacles = [];
-var score;
-var scoreBG;
-var gameOver;
+
 var background;
 var groundLine;
-
-var isFlying = true;
-
-var jumpFrame = 0;
-
 var planets;
 
+//score
+var score;
+var scoreBG;
+var scoreCount;
+
+var isFlying = true;
+var jumpFrame = 0;
+
+//bullets
 var bullets = [];
 var upBullets = [];
 
@@ -25,7 +27,18 @@ var enemiesCount = 0;
 var startBtn = document.createElement("button");
 var highScoreBtn = document.createElement("button");
 var exitBtn = document.createElement("button");
+
+//high score menu
 var backBtn = document.createElement("button");
+var resetBtn = document.createElement("button");
+var highScoreTable = document.createElement("TABLE");
+var namesArr = [];
+var localStorageName = ["first name", "second name", "third name", "fourth name", "fifth name"];
+var highScoreArr = [];
+var localStorageArr = ["first score","second score","third score","fourth score","fifth score"];
+
+//game over menu
+var gameOver;
 var restartBtn = document.createElement("button");
 
 function startGame() {
@@ -34,6 +47,7 @@ function startGame() {
     highScoreBtn.remove();
     exitBtn.remove();
     backBtn.remove();
+    restartBtn.remove();
     //restartBtn.remove();
 
     player = new component(113, 48, "resources/images/player/1.png", 10, 432, "image");
@@ -58,6 +72,22 @@ var gameArea = {
 
     startMenu: function(){
 
+        for (var i = 0; i < localStorageArr.length; i++){
+            if(localStorage.getItem(localStorageArr[i]) == null) {
+                highScoreArr[i] = 0;
+            } else {
+                highScoreArr[i] = localStorage.getItem(localStorageArr[i]);
+            }
+        }
+
+        for (var i = 0; i < localStorageName.length; i++){
+            if(localStorage.getItem(localStorageName[i]) == null) {
+                namesArr[i] = 'Martian';
+            } else {
+                namesArr[i] = localStorage.getItem(localStorageName[i]);
+            }
+        }
+
         //start menu size
         this.canvas.width = 640;
         this.canvas.height = 480;
@@ -80,13 +110,52 @@ var gameArea = {
             highScoreBtn.remove();
             exitBtn.remove();
 
+            //high score table
+            document.body.insertBefore(highScoreTable,document.body.childNodes[0]);
+            highScoreTable.setAttribute("id", "highScoreTable");
+            //highScoreTable.setAttribute('border', '1px');
+            var tableTitle = document.createElement("TH");
+            tableTitle.setAttribute('colSpan', '2');
+            tableTitle.innerText = "High Score";
+            highScoreTable.appendChild(tableTitle);
+
+            var tableBody = document.createElement("tbody");
+            highScoreTable.appendChild(tableBody);
+
+            var tableRows;
+            var tableCells;
+            tableTitle.innerText = "High Score";
+
+            //create 5 rows in table
+            for (var i = 0; i < 5; i++){
+                tableRows = document.createElement("TR");
+                tableBody.appendChild(tableRows);
+
+                //for (var j = 0; j < 1; j++){
+                tableCells = document.createElement("td");
+                tableBody.appendChild(tableCells);
+
+                tableCells.innerText = namesArr[i] + "--->" + highScoreArr[i];
+                //}
+            }
+
             //back button
             document.body.insertBefore(backBtn,document.body.childNodes[0]);
             backBtn.innerHTML = "BACK";
             backBtn.addEventListener("click", restartGame);
             backBtn.style.marginTop = "420px";
             backBtn.style.marginLeft = "430px";
+
+            //reset button
+            document.body.insertBefore(resetBtn,document.body.childNodes[0]);
+            resetBtn.innerHTML = "RESET";
+            resetBtn.addEventListener("click", function () {
+                localStorage.clear();
+            });
+            resetBtn.style.marginTop = "420px";
+            resetBtn.style.marginLeft = "229px";
         });
+
         highScoreBtn.style.marginTop = "360px";
 
         //exit button
@@ -125,16 +194,97 @@ var gameArea = {
     },
     stop : function () {
         clearInterval(this.interval);
-        gameOver.text = "GAME OVER!";
-        gameOver.update();
 
-        document.body.insertBefore(restartBtn,document.body.childNodes[0]);
-        restartBtn.innerHTML = "MAIN MENU";
-        restartBtn.addEventListener("click", restartGame);
+        //take score
+        scoreCount = parseInt(score.text.substring(7));
 
-        /*restart.text = "Press any key to restart";
-        restart.update();
-        restart = addEventListener("click",restartGame);*/
+        //check high score
+        var isItBigger = false;
+        var indexOfHighScoreArr;
+        if (scoreCount >= highScoreArr[0]) {
+            isItBigger = true;
+            highScoreArr[0] = scoreCount;
+            localStorage.setItem(localStorageArr[0], highScoreArr[0]);
+            indexOfHighScoreArr = 0;
+
+        } else if (scoreCount >= highScoreArr[1]) {
+            isItBigger = true;
+            highScoreArr[1] = scoreCount;
+            localStorage.setItem(localStorageArr[1], highScoreArr[1]);
+            indexOfHighScoreArr = 1;
+
+        } else if (scoreCount >= highScoreArr[2]) {
+            isItBigger = true;
+            highScoreArr[2] = scoreCount;
+            localStorage.setItem(localStorageArr[2], highScoreArr[2]);
+            indexOfHighScoreArr = 2;
+
+        } else if (scoreCount >= highScoreArr[3]) {
+            isItBigger = true;
+            highScoreArr[3] = scoreCount;
+            localStorage.setItem(localStorageArr[3], highScoreArr[3]);
+            indexOfHighScoreArr = 3;
+
+        } else if (scoreCount >= highScoreArr[4]) {
+            isItBigger = true;
+            highScoreArr[4] = scoreCount;
+            localStorage.setItem(localStorageArr[4], highScoreArr[4]);
+            indexOfHighScoreArr = 4;
+
+        }
+        if (isItBigger === true) {
+            var gameOverTable = document.createElement("TABLE");
+            document.body.insertBefore(gameOverTable, document.body.childNodes[0]);
+            gameOverTable.setAttribute("id", "gameOverTable");
+
+            //gameOverTable.setAttribute('border', '1px');
+            var tableTitle = document.createElement("TH");
+            tableTitle.setAttribute('colSpan', '2');
+            tableTitle.innerText = "Game Over";
+            gameOverTable.appendChild(tableTitle);
+
+            //first row with text field
+            var firstRow = document.createElement("tr");
+            gameOverTable.appendChild(firstRow);
+            var firstCell = document.createElement("td");
+            gameOverTable.appendChild(firstCell);
+            firstCell.innerText = " Enter your name:\n";
+            firstCell.style.fontSize = "20px";
+
+            //text field
+            var textfield = document.createElement("INPUT");
+            textfield.setAttribute("type", "text");
+            textfield.setAttribute("placeholder", "Your name...");
+            firstCell.appendChild(textfield);
+            if (textfield.value === "") {
+                textfield.value = "Martian";
+            }
+
+            //second row with buttons
+            var secondRow = document.createElement("tr");
+            gameOverTable.appendChild(secondRow);
+            var secondCell = document.createElement("td");
+            secondRow.appendChild(secondCell);
+            var submitBtn = document.createElement("input");
+            submitBtn.setAttribute("type", "submit");
+            submitBtn.setAttribute("value", "Submit");
+            secondCell.appendChild(submitBtn);
+
+            submitBtn.addEventListener("click", function () {
+                namesArr[indexOfHighScoreArr] = textfield.value;
+                localStorage.setItem(localStorageName[indexOfHighScoreArr], namesArr[indexOfHighScoreArr]);
+                location.reload();
+            });
+
+        } else {
+            gameOver.text = "GAME OVER!";
+            gameOver.update();
+
+            //restart button
+            document.body.insertBefore(restartBtn, document.body.childNodes[0]);
+            restartBtn.innerHTML = "MAIN MENU";
+            restartBtn.addEventListener("click", restartGame);
+        }
     }
 };
 
