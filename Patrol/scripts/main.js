@@ -255,6 +255,7 @@ var gameArea = {
                 var firstCell = document.createElement("td");
                 gameOverTable.appendChild(firstCell);
                 firstCell.innerText = "Enter your name:";
+                firstCell.style.fontSize = "20px";
 
                 //text field
                 var textfield = document.createElement("INPUT");
