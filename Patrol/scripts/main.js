@@ -15,8 +15,11 @@ var planets;
 var bullets = [];
 var upBullets = [];
 
+var airshipBullets = [];
+var airshipsCount = 0;
+
 var bomberBullets = [];
-var bombersCount = 0;
+bombersCount = 0;
 
 //start menu buttons
 var startBtn = document.createElement("button");
@@ -249,10 +252,10 @@ function component(width, height, color, x, y, type) {
 }
 
 var enemies = [
-    // [48, 48, "resources/images/objects/stoneblock.png", "ground"],
-    // [144, 48, "resources/images/objects/spike_pit_small.png", "underground"],
-    [64, 48, "resources/images/enemies/bomber.png", "bomber"],
-    // [82, 48, "resources/images/enemies/airship.png", "fast"]
+    [48, 48, "resources/images/objects/stoneblock.png", "ground"],
+    [144, 48, "resources/images/objects/spike_pit_small.png", "underground"],
+    [64, 48, "resources/images/enemies/airship.png", "airship"],
+    [82, 48, "resources/images/enemies/bomber.png", "bomber"]
 ];
 
 var explosionArr = ["resources/images/explosion/1.png", "resources/images/explosion/2.png", "resources/images/explosion/3.png", "resources/images/explosion/4.png","resources/images/explosion/5.png","resources/images/explosion/6.png",
@@ -282,6 +285,13 @@ function updateGameArea() {
             return;
         }
     }
+    for (i = 0; i< airshipBullets.length; i++) {
+        if (player.crashWith(airshipBullets[i])) {
+            gameArea.stop();
+            return;
+        }
+    }
+
     for (i = 0; i< bomberBullets.length; i++) {
         if (player.crashWith(bomberBullets[i])) {
             gameArea.stop();
@@ -329,19 +339,30 @@ function updateGameArea() {
 
         if (currObstacle[3] === "ground") {
             obstacle.y = gameArea.canvas.height - groundLine.height - obstacle.height;
+            obstacle.speedX = -1;
         } else if (currObstacle[3] === "underground") {
             obstacle.y = gameArea.canvas.height - groundLine.height;
+            obstacle.speedX = -1;
+        } else if (currObstacle[3] === "airship") {
+            airshipsCount++;
+
+            obstacle.y = 60;
+            obstacle.speedX = -1;
         } else if (currObstacle[3] === "bomber") {
             bombersCount++;
 
-            obstacle.y = 60;
-
-            obstacle.speedX = -1;
-        } else if (currObstacle[3] === "fast") {
-            obstacle.x = 0;
             obstacle.y = 100;
 
-            obstacle.speedX = 5;
+            let startingPoint = Math.floor((Math.random() * 10) + 1);
+            if (startingPoint <= 5) {
+                obstacle.x = 0;
+                obstacle.speedX = 3;
+            } else {
+                obstacle.x = gameArea.canvas.width;
+                obstacle.image.src = "resources/images/enemies/bomber2.png";
+
+                obstacle.speedX = -3;
+            }
         }
       
         obstacle.isDead = false;
@@ -349,7 +370,10 @@ function updateGameArea() {
       
         myObstacles.push(obstacle);
 
-        if (obstacle.obstacleType === "bomber" && bombersCount > 1) {
+        if (obstacle.obstacleType === "airship" && airshipsCount > 1) {
+            myObstacles.pop();
+            airshipsCount--;
+        } else if (obstacle.obstacleType === "bomber" && bombersCount > 1) {
             myObstacles.pop();
             bombersCount--;
         }
@@ -364,12 +388,13 @@ function updateGameArea() {
 
                     // add score when destroying obstacles
                     switch (myObstacles[i].obstacleType) {
-                        case "fast":
-                            addScore(50);
-                            break;
                         case "bomber":
-                            addScore(30);
+                            addScore(50);
                             bombersCount--;
+                            break;
+                        case "airship":
+                            addScore(30);
+                            airshipsCount--;
                             break;
                         case "ground":
                             addScore(20);
@@ -384,12 +409,12 @@ function updateGameArea() {
                 }
             }
         } else {
-            myObstacles[i].x += -1 + myObstacles[i].speedX;
+            myObstacles[i].x += myObstacles[i].speedX;
 
-            if (myObstacles[i].obstacleType === "bomber") {
-                if (myObstacles[i].speedX < 1) {
+            if (myObstacles[i].obstacleType === "airship") {
+                if (myObstacles[i].speedX != 0) {
                     if (myObstacles[i].x <= gameArea.canvas.width / 2) {
-                        myObstacles[i].speedX = 1;
+                        myObstacles[i].speedX = 0;
                     }
                 } else if (everyinterval(150)) {
                     let bulletX = myObstacles[i].x + myObstacles[i].width / 2 - 10;
@@ -405,20 +430,33 @@ function updateGameArea() {
                     }
 
                     let distanceY = gameArea.canvas.height - bulletY;
-                    
+
                     let ratio = distanceX / distanceY;
 
                     newBullet.speedY = 1;
                     newBullet.speedX = newBullet.speedY * ratio;
 
 
-                    bomberBullets.push(newBullet);
+                    airshipBullets.push(newBullet);
                 }
+            } if (myObstacles[i].obstacleType === "bomber" && everyinterval(100)) {
+                let bulletX = myObstacles[i].x + myObstacles[i].width / 2 - 10;
+                let bulletY = myObstacles[i].y + 48;
+
+                let newBullet = new component(24, 24, "resources/images/objects/bullet4.png", bulletX, bulletY, "image");
+                newBullet.speedX = 0;
+                newBullet.speedY = 1;
+
+                bomberBullets.push(newBullet);
             }
         }
 
         //delete obstacles outside the window
-        if (myObstacles[i].x < -0 - myObstacles[i].width) {
+        if (myObstacles[i].x < -0 - myObstacles[i].width || myObstacles[i].x > gameArea.canvas.width) {
+            if (myObstacles[i].obstacleType === "bomber") {
+                bombersCount--;
+            }
+
             myObstacles.splice(i, 1);
             i--;
           
@@ -450,7 +488,7 @@ function updateGameArea() {
                 myObstacles[j].isDead = true;
 
                 bullets.splice(i, 1);
-                j--;
+
             }
         }
     }
@@ -478,10 +516,23 @@ function updateGameArea() {
         }
     }
 
-    // manage slow bullets
+    // manage airship bullets
+    for (i = 0; i < airshipBullets.length; i++) {
+        airshipBullets[i].y += airshipBullets[i].speedY;
+        airshipBullets[i].x -= airshipBullets[i].speedX;
+        airshipBullets[i].update();
+
+        //delete bullets outside the window
+        if (airshipBullets[i].y > gameArea.canvas.height - groundLine.height - airshipBullets[i].height) {
+            airshipBullets.splice(i, 1);
+            console.log("deleted.");
+            continue;
+        }
+    }
+
+    // manage bomber bullets
     for (i = 0; i < bomberBullets.length; i++) {
         bomberBullets[i].y += bomberBullets[i].speedY;
-        bomberBullets[i].x -= bomberBullets[i].speedX;
         bomberBullets[i].update();
 
         //delete bullets outside the window
@@ -490,12 +541,6 @@ function updateGameArea() {
             console.log("deleted.");
             continue;
         }
-
-        // //check bullet collisions
-        // if (player.crashWith(bomberBullets[i])) {
-        //     gameArea.stop();
-        //     return;
-        // }
     }
 
     if (everyinterval(100)) {
