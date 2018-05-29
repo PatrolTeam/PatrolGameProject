@@ -1,18 +1,17 @@
 var player;
 var myObstacles = [];
-var background;
-var groundLine;
-var planets;
-
-//score
 var score;
 var scoreBG;
-var scoreCount;
+var gameOver;
+var background;
+var groundLine;
 
 var isFlying = true;
+
 var jumpFrame = 0;
 
-//bullets
+var planets;
+
 var bullets = [];
 var upBullets = [];
 
@@ -26,18 +25,7 @@ var enemiesCount = 0;
 var startBtn = document.createElement("button");
 var highScoreBtn = document.createElement("button");
 var exitBtn = document.createElement("button");
-
-//high score menu
 var backBtn = document.createElement("button");
-var resetBtn = document.createElement("button");
-var highScoreTable = document.createElement("TABLE");
-var namesArr = [];
-var localStorageName = ["first name", "second name", "third name", "fourth name", "fifth name"];
-var highScoreArr = [];
-var localStorageArr = ["first score","second score","third score","fourth score","fifth score"];
-
-//game over menu
-var gameOver;
 var restartBtn = document.createElement("button");
 
 function startGame() {
@@ -46,7 +34,6 @@ function startGame() {
     highScoreBtn.remove();
     exitBtn.remove();
     backBtn.remove();
-    resetBtn.remove();
     //restartBtn.remove();
 
     player = new component(113, 48, "resources/images/player/1.png", 10, 432, "image");
@@ -65,34 +52,11 @@ function startGame() {
 
 }
 
+
 var gameArea = {
     canvas : document.createElement("canvas"),
 
     startMenu: function(){
-
-        //check the local storage to see if we already saved a high score
-        /*if(localStorage.getItem(localStorageName) == null) {
-            highScore = 0;
-        } else {
-            highScore = localStorage.getItem(localStorageName);
-        }*/
-
-        for (var i = 0; i < localStorageArr.length; i++){
-            if(localStorage.getItem(localStorageArr[i]) == null) {
-                highScoreArr[i] = 0;
-            } else {
-                highScoreArr[i] = localStorage.getItem(localStorageArr[i]);
-            }
-        }
-
-        for (var i = 0; i < localStorageName.length; i++){
-            if(localStorage.getItem(localStorageName[i]) == null) {
-                namesArr[i] = 'Martian';
-            } else {
-                namesArr[i] = localStorage.getItem(localStorageName[i]);
-            }
-        }
-
 
         //start menu size
         this.canvas.width = 640;
@@ -111,40 +75,10 @@ var gameArea = {
         document.body.insertBefore(highScoreBtn,document.body.childNodes[0]);
         highScoreBtn.innerHTML = "HIGH SCORE";
 
-        highScoreBtn.addEventListener("click",function (){
+        highScoreBtn.addEventListener("click",function () {
             startBtn.remove();
             highScoreBtn.remove();
             exitBtn.remove();
-
-
-            //high score table
-           document.body.insertBefore(highScoreTable,document.body.childNodes[0]);
-           highScoreTable.setAttribute("id", "highScoreTable");
-            //highScoreTable.setAttribute('border', '1px');
-            var tableTitle = document.createElement("TH");
-            tableTitle.setAttribute('colSpan', '2');
-            tableTitle.innerText = "High Score";
-            highScoreTable.appendChild(tableTitle);
-
-            var tableBody = document.createElement("tbody");
-            highScoreTable.appendChild(tableBody);
-
-            var tableRows;
-            var tableCells;
-            tableTitle.innerText = "High Score";
-
-            //create 5 rows in table
-            for (var i = 0; i < 5; i++){
-                tableRows = document.createElement("TR");
-                tableBody.appendChild(tableRows);
-
-                //for (var j = 0; j < 1; j++){
-                    tableCells = document.createElement("td");
-                    tableBody.appendChild(tableCells);
-
-                    tableCells.innerText = namesArr[i] + "--->" + highScoreArr[i];
-                //}
-            }
 
             //back button
             document.body.insertBefore(backBtn,document.body.childNodes[0]);
@@ -152,15 +86,6 @@ var gameArea = {
             backBtn.addEventListener("click", restartGame);
             backBtn.style.marginTop = "420px";
             backBtn.style.marginLeft = "430px";
-
-            //reset button
-            document.body.insertBefore(resetBtn,document.body.childNodes[0]);
-            resetBtn.innerHTML = "RESET";
-            resetBtn.addEventListener("click", function () {
-                localStorage.clear();
-            });
-            resetBtn.style.marginTop = "420px";
-            resetBtn.style.marginLeft = "229px";
         });
         highScoreBtn.style.marginTop = "360px";
 
@@ -200,215 +125,130 @@ var gameArea = {
     },
     stop : function () {
         clearInterval(this.interval);
+        gameOver.text = "GAME OVER!";
+        gameOver.update();
 
-        //take score
-        scoreCount = parseInt(score.text.substring(7));
+        document.body.insertBefore(restartBtn,document.body.childNodes[0]);
+        restartBtn.innerHTML = "MAIN MENU";
+        restartBtn.addEventListener("click", restartGame);
 
         /*restart.text = "Press any key to restart";
         restart.update();
         restart = addEventListener("click",restartGame);*/
-
-        //check high score
-        var isItBigger = false;
-        var indexOfHighScoreArr;
-        if (scoreCount >= highScoreArr[0]){
-            isItBigger = true;
-            highScoreArr[0] = scoreCount;
-            localStorage.setItem(localStorageArr[0],highScoreArr[0]);
-            indexOfHighScoreArr = 0;
-
-        } else if (scoreCount >= highScoreArr[1]){
-            isItBigger = true;
-            highScoreArr[1] = scoreCount;
-            localStorage.setItem(localStorageArr[1],highScoreArr[1]);
-            indexOfHighScoreArr = 1;
-
-        } else if (scoreCount >= highScoreArr[2]){
-            isItBigger = true;
-            highScoreArr[2] = scoreCount;
-            localStorage.setItem(localStorageArr[2],highScoreArr[2]);
-            indexOfHighScoreArr = 2;
-
-        } else if (scoreCount >= highScoreArr[3]){
-            isItBigger = true;
-            highScoreArr[3] = scoreCount;
-            localStorage.setItem(localStorageArr[3],highScoreArr[3]);
-            indexOfHighScoreArr = 3;
-
-        } else if (scoreCount >= highScoreArr[4]){
-            isItBigger = true;
-            highScoreArr[4] = scoreCount;
-            localStorage.setItem(localStorageArr[4],highScoreArr[4]);
-            indexOfHighScoreArr = 4;
-
-        }
-        if (isItBigger === true){
-                var gameOverTable = document.createElement("TABLE");
-                document.body.insertBefore(gameOverTable,document.body.childNodes[0]);
-                gameOverTable.setAttribute("id", "gameOverTable");
-
-                //gameOverTable.setAttribute('border', '1px');
-                var tableTitle = document.createElement("TH");
-                tableTitle.setAttribute('colSpan', '2');
-                tableTitle.innerText = "Game Over";
-                gameOverTable.appendChild(tableTitle);
-
-                //first row with text field
-                var firstRow = document.createElement("tr");
-                gameOverTable.appendChild(firstRow);
-                var firstCell = document.createElement("td");
-                gameOverTable.appendChild(firstCell);
-                firstCell.innerText = " Enter your name:\n";
-                firstCell.style.fontSize = "20px";
-
-                //text field
-                var textfield = document.createElement("INPUT");
-                textfield.setAttribute("type", "text");
-                textfield.setAttribute("placeholder", "Your name...");
-                firstCell.appendChild(textfield);
-                if (textfield.value === ""){
-                    textfield.value = "Martian";
-                }
-
-                //second row with buttons
-                var secondRow = document.createElement("tr");
-                gameOverTable.appendChild(secondRow);
-                var secondCell = document.createElement("td");
-                secondRow.appendChild(secondCell);
-                var submitBtn = document.createElement("input");
-                submitBtn.setAttribute("type", "submit");
-                submitBtn.setAttribute("value", "Submit");
-                secondCell.appendChild(submitBtn);
-
-                submitBtn.addEventListener("click", function () {
-                    namesArr[indexOfHighScoreArr] = textfield.value;
-                    localStorage.setItem(localStorageName[indexOfHighScoreArr],namesArr[indexOfHighScoreArr]);
-                    location.reload();
-                });
-
-            }else {
-            gameOver.text = "GAME OVER!";
-            gameOver.update();
-
-            //restart button
-            document.body.insertBefore(restartBtn,document.body.childNodes[0]);
-            restartBtn.innerHTML = "MAIN MENU";
-            restartBtn.addEventListener("click", restartGame);
-}
-
-}
+    }
 };
 
 function restartGame() {
 
-location.reload();
+    location.reload();
 }
 
 function component(width, height, color, x, y, type) {
-this.type = type;
-if (type === "image" || type === "background") {
-this.image = new Image();
-this.image.src = color;
-this.currFrame = 0;
-this.imgArr = [];
-}
-this.width = width;
-this.height = height;
-this.speedX = 0;
-this.speedY = 0;
-this.gravity = 0.05;
-this.gravitySpeed = 0;
-this.x = x;
-this.y = y;
-
-this.update = function(){
-ctx = gameArea.context;
-if (this.type == "text") {
-    ctx.font = this.width + " " + this.height;
-    ctx.fillStyle = color;
-    ctx.fillText(this.text, this.x, this.y);
-} else if (this.type === "image" || type === "background") {
-    ctx.drawImage(this.image,
-        this.x,
-        this.y,
-        this.width,
-        this.height);
-    if (type === "background"){
-        ctx.drawImage(this.image,
-            this.x + this.width - 2, this.y, this.width, this.height);
+    this.type = type;
+    if (type === "image" || type === "background") {
+        this.image = new Image();
+        this.image.src = color;
+        this.currFrame = 0;
+        this.imgArr = [];
     }
-} else {
-    ctx.fillStyle = color;
-    ctx.fillRect(this.x, this.y, this.width, this.height);
-}
-};
-
-this.movePlayer = function () {
-
-this.gravitySpeed += this.gravity;
-
-var tempX = this.x + this.speedX;
-var rightBorder = gameArea.canvas.width  - this.width;
-
-if (tempX < 0) {
-    this.x = 0;
-} else if (tempX > rightBorder) {
-    this.x = rightBorder;
-} else {
-    this.x += this.speedX;
-}
-
-this.y += this.speedY + this.gravitySpeed;
-
-this.hitBottom();
-}
-
-this.newPos = function () {
-
-this.x += this.speedX;
-this.y += this.speedY + this.gravitySpeed;
-if (this.type === "background") {
-    if (this.x === -(this.width)) {
-        this.x = 0;
-    }
-}
-}
-
-this.hitBottom = function() {
-var rockbottom = gameArea.canvas.height - this.height - groundHeight;
-
-if (this.y > rockbottom) {
-    this.y = rockbottom;
-    isFlying = false;
+    this.width = width;
+    this.height = height;
+    this.speedX = 0;
+    this.speedY = 0;
+    this.gravity = 0.05;
     this.gravitySpeed = 0;
-}
-}
+    this.x = x;
+    this.y = y;
+
+    this.update = function(){
+        ctx = gameArea.context;
+        if (this.type == "text") {
+            ctx.font = this.width + " " + this.height;
+            ctx.fillStyle = color;
+            ctx.fillText(this.text, this.x, this.y);
+        } else if (this.type === "image" || type === "background") {
+            ctx.drawImage(this.image,
+                this.x,
+                this.y,
+                this.width,
+                this.height);
+            if (type === "background"){
+                ctx.drawImage(this.image,
+                    this.x + this.width - 2, this.y, this.width, this.height);
+            }
+        } else {
+            ctx.fillStyle = color;
+            ctx.fillRect(this.x, this.y, this.width, this.height);
+        }
+    };
+
+    this.movePlayer = function () {
+        
+        this.gravitySpeed += this.gravity;
+
+        var tempX = this.x + this.speedX;
+        var rightBorder = gameArea.canvas.width  - this.width;
+        
+        if (tempX < 0) {
+            this.x = 0;
+        } else if (tempX > rightBorder) {
+            this.x = rightBorder;
+        } else {
+            this.x += this.speedX;
+        }
+
+        this.y += this.speedY + this.gravitySpeed;
+
+        this.hitBottom();
+    }
 
 
-this.crashWith = function (otherobj) {
-var playerLeft = this.x;
-var playerRight = this.x + (this.width);
-var playerTop = this.y;
-var playerBottom = this.y + (this.height);
+    this.newPos = function () {
 
-var obstacleLeft = otherobj.x;
-var obstacleRight = otherobj.x + (otherobj.width);
-var obstacleTop = otherobj.y;
-var obstacleBottom = otherobj.y + (otherobj.height);
+        this.x += this.speedX;
+        this.y += this.speedY + this.gravitySpeed;
+        if (this.type === "background") {
+            if (this.x === -(this.width)) {
+                this.x = 0;
+            }
+        }
+    }
 
-if (otherobj.obstacleType === "underground") {
-    obstacleLeft += otherobj.width / 3;
-    obstacleRight -= otherobj.width / 3;
-}
+    this.hitBottom = function() {
+        var rockbottom = gameArea.canvas.height - this.height - groundLine.height;
 
-var crash = true;
+        if (this.y > rockbottom) {
+            this.y = rockbottom;
+            isFlying = false;
+            this.gravitySpeed = 0;
+        }
+    }
+    
 
-if ((playerBottom < obstacleTop) || (playerTop > obstacleBottom) || (playerRight < obstacleLeft) || (playerLeft > obstacleRight)) {
-    crash = false;
-}
+    this.crashWith = function (otherobj) {
+        var playerLeft = this.x;
+        var playerRight = this.x + (this.width);
+        var playerTop = this.y;
+        var playerBottom = this.y + (this.height);
 
-return crash;
-}
+        var obstacleLeft = otherobj.x;
+        var obstacleRight = otherobj.x + (otherobj.width);
+        var obstacleTop = otherobj.y;
+        var obstacleBottom = otherobj.y + (otherobj.height);
+
+        if (otherobj.obstacleType === "underground") {
+            obstacleLeft += otherobj.width / 3;
+            obstacleRight -= otherobj.width / 3;
+        }
+
+        var crash = true;
+
+        if ((playerBottom < obstacleTop) || (playerTop > obstacleBottom) || (playerRight < obstacleLeft) || (playerLeft > obstacleRight)) {
+            crash = false;
+        }
+
+        return crash;
+    }
 }
 
 var enemies = [
@@ -422,25 +262,24 @@ var enemies = [
 var tankArr = ["resources/images/enemies/tank/1.png", "resources/images/enemies/tank/2.png", "resources/images/enemies/tank/3.png", "resources/images/enemies/tank/4.png"];
 
 var explosionArr = ["resources/images/explosion/1.png", "resources/images/explosion/2.png", "resources/images/explosion/3.png", "resources/images/explosion/4.png","resources/images/explosion/5.png","resources/images/explosion/6.png",
-"resources/images/explosion/7.png", "resources/images/explosion/8.png","resources/images/explosion/9.png","resources/images/explosion/10.png","resources/images/explosion/11.png","resources/images/explosion/12.png",
-"resources/images/explosion/13.png","resources/images/explosion/14.png","resources/images/explosion/15.png","resources/images/explosion/16.png"];
+    "resources/images/explosion/7.png", "resources/images/explosion/8.png","resources/images/explosion/9.png","resources/images/explosion/10.png","resources/images/explosion/11.png","resources/images/explosion/12.png",
+    "resources/images/explosion/13.png","resources/images/explosion/14.png","resources/images/explosion/15.png","resources/images/explosion/16.png"];
 
 function updateGameArea() {
 
-// manage player animation
-if (gameArea.frameNo === 1 || everyinterval(10)) {
-player.currFrame++;
-if (player.currFrame > 3){
-    player.currFrame = 0;
-}
+    // manage player animation
+    if (gameArea.frameNo === 1 || everyinterval(10)) {
+        player.currFrame++;
+        if (player.currFrame > 3){
+            player.currFrame = 0;
+        }
 
-player.image.src = player.imgArr[player.currFrame];
-}
+        player.image.src = player.imgArr[player.currFrame];
+    }
 
-if (gameArea.frameNo - jumpFrame === 10 && isFlying) {
-player.gravity = 0.5;
-}
-
+    if (gameArea.frameNo - jumpFrame === 10 && isFlying) {
+        player.gravity = 0.5;
+    }
 
     // manage player-obstacle collision
     for (i = 0; i< myObstacles.length; i++) {
@@ -468,29 +307,29 @@ player.gravity = 0.5;
         }
     }
 
-// clear game area
-gameArea.clear();
+    // clear game area
+    gameArea.clear();
 
-background.speedX = -0.5;
-background.newPos();
-background.update();
+    background.speedX = -0.5;
+    background.newPos();
+    background.update();
 
-groundLine.speedX = -1;
-groundLine.newPos();
-groundLine.update();
+    groundLine.speedX = -1;
+    groundLine.newPos();
+    groundLine.update();
 
-planets.speedX = 0;
-planets.newPos();
-planets.update();
+    planets.speedX = 0;
+    planets.newPos();
+    planets.update();
 
-scoreBG.speedX = 0;
-scoreBG.newPos();
-scoreBG.update();
+    scoreBG.speedX = 0;
+    scoreBG.newPos();
+    scoreBG.update();
 
-if (!isFlying) {
-player.speedX = 0;
-player.speedY = 0;
-}
+    if (!isFlying) {
+        player.speedX = 0;
+        player.speedY = 0;
+    }
 
     // handle keyboard input
     if (gameArea.keys && gameArea.keys[65]) {moveLeft() }
@@ -551,8 +390,6 @@ player.speedY = 0;
         }
     }
 
-obstacle.isDead = false;
-obstacle.obstacleType = currObstacle[3];
 
     // manage obstacles
     for (i = 0; i < myObstacles.length; i += 1) {
@@ -663,24 +500,16 @@ obstacle.obstacleType = currObstacle[3];
 
             continue;
         }
-        myObstacles[i].currFrame++;
-    }
-} else {
-    myObstacles[i].x += -1 + myObstacles[i].speedX;
-}
 
         myObstacles[i].update();
 
-    // add score when dodging obstacles
-    addScore(10);
-}
+    }
 
     // manage bullets
     for (i = 0; i < bullets.length; i++) {
             bullets[i].x += bullets[i].speedX;
             bullets[i].update();
 
-}
 
         //delete bullets outside the window
         if (bullets[i].x > gameArea.canvas.width) {
@@ -730,8 +559,6 @@ obstacle.obstacleType = currObstacle[3];
             }
         }
     }
-}
-}
 
     for (i = 0; i < upBullets.length; i++) {
         upBullets[i].y -= upBullets[i].speedY;
@@ -744,12 +571,12 @@ obstacle.obstacleType = currObstacle[3];
             continue;
         }
 
-//check bullet collisions
-for (j = 0; j < myObstacles.length; j++) {
-    if (upBullets[i].crashWith(myObstacles[j]) && myObstacles[j].isDead === false) {
-        myObstacles[j].isDead = true;
-        myObstacles[j].width = 48;
-        myObstacles[j].height = 48;
+        //check bullet collisions
+        for (j = 0; j < myObstacles.length; j++) {
+            if (upBullets[i].crashWith(myObstacles[j]) && myObstacles[j].isDead === false) {
+                myObstacles[j].isDead = true;
+                myObstacles[j].width = 48;
+                myObstacles[j].height = 48;
 
                 upBullets.splice(i, 1);
                 break;
@@ -772,8 +599,6 @@ for (j = 0; j < myObstacles.length; j++) {
             }
         }
     }
-}
-}
 
     // manage airship bullets
     for (i = 0; i < airshipBullets.length; i++) {
@@ -820,37 +645,37 @@ for (j = 0; j < myObstacles.length; j++) {
     }
     score.update();
 
-player.movePlayer();
-player.update();
+    player.movePlayer();
+    player.update();
 
-// next frame
-gameArea.frameNo += 1;
+    // next frame
+    gameArea.frameNo += 1;
 }
 
 function everyinterval(n) {
-if ((gameArea.frameNo / n) % 1 === 0) {return true;}
-return false;
+    if ((gameArea.frameNo / n) % 1 === 0) {return true;}
+    return false;
 }
 
 function moveLeft() {
-if (!isFlying) {
-player.speedX -= 2;
-}
+    if (!isFlying) {
+        player.speedX -= 2;
+    }
 }
 
 function moveRight() {
-if (!isFlying) {
-player.speedX += 2;
-}
+    if (!isFlying) {
+        player.speedX += 2;
+    }
 }
 
 function jump() {
-if (!isFlying) {
-player.gravity = -1;
-player.speedX += 3;
-isFlying = true;
-jumpFrame = gameArea.frameNo;
-}
+    if (!isFlying) {
+        player.gravity = -1;
+        player.speedX += 3;
+        isFlying = true;
+        jumpFrame = gameArea.frameNo;
+    }
 }
 
 var bulletCount = 0;
@@ -882,7 +707,6 @@ function upShoot() {
 }
 
 function addScore(n) {
-var newScore = parseInt(score.text.substring(7)) + n;
-score.text = "SCORE: " + newScore;
+    var newScore = parseInt(score.text.substring(7)) + n;
+    score.text = "SCORE: " + newScore;
 }
-
