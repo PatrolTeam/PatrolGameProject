@@ -138,7 +138,7 @@ var gameArea = {
                     tableCells = document.createElement("td");
                     tableBody.appendChild(tableCells);
 
-                    tableCells.innerText = namesArr[i] + " ---> " + highScoreArr[i];
+                    tableCells.innerText = namesArr[i] + "--->" + highScoreArr[i];
                 //}
             }
 
@@ -254,7 +254,7 @@ var gameArea = {
                 gameOverTable.appendChild(firstRow);
                 var firstCell = document.createElement("td");
                 gameOverTable.appendChild(firstCell);
-                firstCell.innerText = "Enter your name:";
+                firstCell.innerText = " Enter your name:\n";
                 firstCell.style.fontSize = "20px";
 
                 //text field

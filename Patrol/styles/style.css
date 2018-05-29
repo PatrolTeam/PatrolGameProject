@@ -54,6 +54,7 @@ button:active{
     padding-left: 12px;
     padding-right: 10px;
     padding-bottom: 50px;
+
 }
 #highScoreTable th{
 
@@ -68,6 +69,7 @@ button:active{
 }
 #highScoreTable td{
     padding-left: 20px;
+    padding-right: 20px;
     color:#e86a17;
     height: 35px;
 }
@@ -93,6 +95,7 @@ button:active{
     padding-bottom: 50px;
     cursor: url(../resources/images/UI/cursor_pointer3D_shadow.png),pointer;
 }
+
 #gameOverTable th{
 
     padding-top: 25px;
@@ -120,13 +123,14 @@ input[type=text], select {
     margin: 8px 0;
     display: inline-block;
     border: 2px solid #a1cedd;
-    background: #e5f8ff;
+    background: linear-gradient(#e5f8ff, #a1cedd);
     border-radius: 4px;
     box-sizing: border-box;
     font-family: kenvector_future;
     font-size: 24px;
     color: white;
     cursor: url(../resources/images/UI/cursor_hand.png),pointer;
+
 }
 input[type=text]:focus {
     border: 4px solid #a1cedd;
