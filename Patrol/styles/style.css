@@ -43,34 +43,43 @@ button:active{
     position: absolute;
     background: transparent url('../resources/images/UI/highScoreTable.png') no-repeat;
     opacity: 0.95;
-    width: 560px;
-    height: 340px;
+    /*height: 340px;*/
     margin-top: 40px;
     margin-left: 40px;
+    margin-right: 40px;
     font-family: kenvector_future;
-    color: white;
     padding-top: 16px;
     padding-left: 12px;
-    padding-right: 10px;
+    padding-right: 12px;
     padding-bottom: 50px;
-
+mso-cellspacing: 50px;
+}
+tr{
+    color:#e86a17;
+}
+#highScoreTable tr:hover{
+    background: #e86a17;
+    color:white;
 }
 #highScoreTable th{
-
+    color: white;
+    width: 528px;
     padding-top: 25px;
     text-align: center;
     font-size: 30px;
-    height: 55px;
+    height: 40px;
+    padding-bottom: 15px;
 }
-#highScoreTable td:hover {
-    background-color:#e86a17;
-    color: white;
-}
+
 #highScoreTable td{
+    max-width: 450px;
     padding-left: 20px;
     padding-right: 20px;
-    color:#e86a17;
     height: 35px;
+
+}
+#highScoreCell{
+    text-align: right;
 }
 
 
@@ -129,8 +138,8 @@ input[type=text], select {
     font-size: 24px;
     color: white;
     cursor: url(../resources/images/UI/cursor_hand.png),pointer;
-
 }
+
 input[type=text]:focus {
     border: 4px solid #a1cedd;
     outline: none;
