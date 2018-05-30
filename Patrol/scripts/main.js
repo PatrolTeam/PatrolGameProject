@@ -31,11 +31,12 @@ var exitBtn = document.createElement("button");
 //high score menu
 var backBtn = document.createElement("button");
 var resetBtn = document.createElement("button");
-var highScoreTable = document.createElement("TABLE");
+
+var highScoreTable;
 var namesArr = [];
 var localStorageName = ["first name", "second name", "third name", "fourth name", "fifth name"];
 var highScoreArr = [];
-var localStorageArr = ["first score","second score","third score","fourth score","fifth score"];
+var localStorageHighScoreArr = ["first score","second score","third score","fourth score","fifth score"];
 
 //game over menu
 var gameOver;
@@ -72,11 +73,12 @@ var gameArea = {
 
     startMenu: function(){
 
-        for (var i = 0; i < localStorageArr.length; i++){
-            if(localStorage.getItem(localStorageArr[i]) == null) {
+        for (var i = 0; i < localStorageHighScoreArr.length; i++){
+            if(localStorage.getItem(localStorageHighScoreArr[i]) == null) {
                 highScoreArr[i] = 0;
+
             } else {
-                highScoreArr[i] = localStorage.getItem(localStorageArr[i]);
+                highScoreArr[i] = localStorage.getItem(localStorageHighScoreArr[i]);
             }
         }
 
@@ -105,39 +107,13 @@ var gameArea = {
         document.body.insertBefore(highScoreBtn,document.body.childNodes[0]);
         highScoreBtn.innerHTML = "HIGH SCORE";
 
-        highScoreBtn.addEventListener("click",function () {
+        highScoreBtn.addEventListener("click",function highScore() {
             startBtn.remove();
             highScoreBtn.remove();
             exitBtn.remove();
 
             //high score table
-            document.body.insertBefore(highScoreTable,document.body.childNodes[0]);
-            highScoreTable.setAttribute("id", "highScoreTable");
-            //highScoreTable.setAttribute('border', '1px');
-            var tableTitle = document.createElement("TH");
-            tableTitle.setAttribute('colSpan', '2');
-            tableTitle.innerText = "High Score";
-            highScoreTable.appendChild(tableTitle);
-
-            var tableBody = document.createElement("tbody");
-            highScoreTable.appendChild(tableBody);
-
-            var tableRows;
-            var tableCells;
-            tableTitle.innerText = "High Score";
-
-            //create 5 rows in table
-            for (var i = 0; i < 5; i++){
-                tableRows = document.createElement("TR");
-                tableBody.appendChild(tableRows);
-
-                //for (var j = 0; j < 1; j++){
-                tableCells = document.createElement("td");
-                tableBody.appendChild(tableCells);
-
-                tableCells.innerText = namesArr[i] + "--->" + highScoreArr[i];
-                //}
-            }
+            initHighScoreTable();
 
             //back button
             document.body.insertBefore(backBtn,document.body.childNodes[0]);
@@ -151,6 +127,14 @@ var gameArea = {
             resetBtn.innerHTML = "RESET";
             resetBtn.addEventListener("click", function () {
                 localStorage.clear();
+
+//ivan
+                var cells = document.getElementsByTagName("td")
+                    
+                for (var k = 0; k < cells.length; k += 2) {
+                    cells[k].innerText = "Martian";
+                    cells[k + 1].innerText = 0;
+                }
             });
             resetBtn.style.marginTop = "420px";
             resetBtn.style.marginLeft = "229px";
@@ -199,40 +183,38 @@ var gameArea = {
         scoreCount = parseInt(score.text.substring(7));
 
         //check high score
-        var isItBigger = false;
+        var isHighScore = false;
         var indexOfHighScoreArr;
-        if (scoreCount >= highScoreArr[0]) {
-            isItBigger = true;
-            highScoreArr[0] = scoreCount;
-            localStorage.setItem(localStorageArr[0], highScoreArr[0]);
-            indexOfHighScoreArr = 0;
 
-        } else if (scoreCount >= highScoreArr[1]) {
-            isItBigger = true;
-            highScoreArr[1] = scoreCount;
-            localStorage.setItem(localStorageArr[1], highScoreArr[1]);
-            indexOfHighScoreArr = 1;
 
-        } else if (scoreCount >= highScoreArr[2]) {
-            isItBigger = true;
-            highScoreArr[2] = scoreCount;
-            localStorage.setItem(localStorageArr[2], highScoreArr[2]);
-            indexOfHighScoreArr = 2;
+        for (var i = 0; highScoreArr.length; i++){
+            if (scoreCount >= highScoreArr[i]){
+                isHighScore = true;
+                var currScore = highScoreArr[i];
+                var currName = namesArr[i];
+                highScoreArr[i] = scoreCount;
+                indexOfHighScoreArr = i;
 
-        } else if (scoreCount >= highScoreArr[3]) {
-            isItBigger = true;
-            highScoreArr[3] = scoreCount;
-            localStorage.setItem(localStorageArr[3], highScoreArr[3]);
-            indexOfHighScoreArr = 3;
+                localStorage.setItem(localStorageHighScoreArr[i], highScoreArr[i]);
+                for (var j = i + 1; j < highScoreArr.length; j++) {
+                    var temp = highScoreArr[j];
+                    var tempName = namesArr[j];
 
-        } else if (scoreCount >= highScoreArr[4]) {
-            isItBigger = true;
-            highScoreArr[4] = scoreCount;
-            localStorage.setItem(localStorageArr[4], highScoreArr[4]);
-            indexOfHighScoreArr = 4;
+                    highScoreArr[j] = currScore;
+                    namesArr[j] = currName;
 
+                    currScore = temp;
+                    currName = tempName;
+
+                    localStorage.setItem(localStorageHighScoreArr[j], highScoreArr[j]);
+                    localStorage.setItem(localStorageName[j], namesArr[j]);
+
+                }
+                break;
+            }
         }
-        if (isItBigger === true) {
+
+        if (isHighScore === true) {
             var gameOverTable = document.createElement("TABLE");
             document.body.insertBefore(gameOverTable, document.body.childNodes[0]);
             gameOverTable.setAttribute("id", "gameOverTable");
@@ -255,10 +237,8 @@ var gameArea = {
             var textfield = document.createElement("INPUT");
             textfield.setAttribute("type", "text");
             textfield.setAttribute("placeholder", "Your name...");
+            //textfield.setAttribute("max-length", "15");
             firstCell.appendChild(textfield);
-            if (textfield.value === "") {
-                textfield.value = "Martian";
-            }
 
             //second row with buttons
             var secondRow = document.createElement("tr");
@@ -271,7 +251,12 @@ var gameArea = {
             secondCell.appendChild(submitBtn);
 
             submitBtn.addEventListener("click", function () {
-                namesArr[indexOfHighScoreArr] = textfield.value;
+                if (textfield.value === "") {
+                    namesArr[indexOfHighScoreArr]= "Martian";
+                } else {
+                    namesArr[indexOfHighScoreArr] = textfield.value;
+                }
+
                 localStorage.setItem(localStorageName[indexOfHighScoreArr], namesArr[indexOfHighScoreArr]);
                 location.reload();
             });
@@ -420,7 +405,7 @@ function updateGameArea() {
     // manage player animation
     if (gameArea.frameNo === 1 || everyinterval(10)) {
         player.currFrame++;
-        if (player.currFrame > 3){
+        if (player.currFrame > 3) {
             player.currFrame = 0;
         }
 
@@ -432,25 +417,25 @@ function updateGameArea() {
     }
 
     // manage player-obstacle collision
-    for (i = 0; i< myObstacles.length; i++) {
+    for (i = 0; i < myObstacles.length; i++) {
         if (player.crashWith(myObstacles[i])) {
             gameArea.stop();
             return;
         }
     }
-    for (i = 0; i< airshipBullets.length; i++) {
+    for (i = 0; i < airshipBullets.length; i++) {
         if (player.crashWith(airshipBullets[i])) {
             gameArea.stop();
             return;
         }
     }
-    for (i = 0; i< bomberBullets.length; i++) {
+    for (i = 0; i < bomberBullets.length; i++) {
         if (player.crashWith(bomberBullets[i])) {
             gameArea.stop();
             return;
         }
     }
-    for (i = 0; i< tankBullets.length; i++) {
+    for (i = 0; i < tankBullets.length; i++) {
         if (player.crashWith(tankBullets[i])) {
             gameArea.stop();
             return;
@@ -482,10 +467,19 @@ function updateGameArea() {
     }
 
     // handle keyboard input
-    if (gameArea.keys && gameArea.keys[65]) {moveLeft() }
-    if (gameArea.keys && gameArea.keys[68]) {moveRight() }
-    if (gameArea.keys && gameArea.keys[32]) {jump()}
-    if (gameArea.keys && gameArea.keys[67]) {shoot(); upShoot()}
+    if (gameArea.keys && gameArea.keys[65]) {
+        moveLeft()
+    }
+    if (gameArea.keys && gameArea.keys[68]) {
+        moveRight()
+    }
+    if (gameArea.keys && gameArea.keys[32]) {
+        jump()
+    }
+    if (gameArea.keys && gameArea.keys[67]) {
+        shoot();
+        upShoot()
+    }
 
     // spawn obstacles logic
     if (gameArea.frameNo > 60 && everyinterval(400)) {
@@ -523,15 +517,15 @@ function updateGameArea() {
             }
         } else if (currObstacle[3] === "tank") {
             enemiesCount++;
-            
+
             obstacle.y = gameArea.canvas.height - groundLine.height - obstacle.height;
             obstacle.speedX = -1.5;
             obstacle.currFrame = 0;
         }
-      
+
         obstacle.isDead = false;
         obstacle.obstacleType = currObstacle[3];
-      
+
         myObstacles.push(obstacle);
 
         if (enemiesCount > 1) {
@@ -545,7 +539,7 @@ function updateGameArea() {
     for (i = 0; i < myObstacles.length; i += 1) {
         if (myObstacles[i].isDead === true) {
             if (everyinterval(3)) {
-                if (myObstacles[i].currFrame > 15){
+                if (myObstacles[i].currFrame > 15) {
 
                     // add score when destroying obstacles
                     switch (myObstacles[i].obstacleType) {
@@ -575,7 +569,7 @@ function updateGameArea() {
             }
         } else {
             myObstacles[i].x += myObstacles[i].speedX;
-            
+
             if (myObstacles[i].obstacleType === "tank" && everyinterval(10)) {
                 if (myObstacles[i].currFrame > 3) {
                     myObstacles[i].currFrame = 0;
@@ -585,7 +579,7 @@ function updateGameArea() {
                 myObstacles[i].currFrame++;
 
                 if (everyinterval(150)) {
-                    let bulletX = myObstacles[i].x  - 32;
+                    let bulletX = myObstacles[i].x - 32;
                     let bulletY = myObstacles[i].y + myObstacles[i].height / 2 - 16;
 
                     let newBullet = new component(35, 18, "resources/images/objects/bullet2.png", bulletX, bulletY, "image");
@@ -624,7 +618,8 @@ function updateGameArea() {
 
                     airshipBullets.push(newBullet);
                 }
-            } if (myObstacles[i].obstacleType === "bomber" && everyinterval(100)) {
+            }
+            if (myObstacles[i].obstacleType === "bomber" && everyinterval(100)) {
                 let bulletX = myObstacles[i].x + myObstacles[i].width / 2 - 10;
                 let bulletY = myObstacles[i].y + 48;
 
@@ -644,7 +639,7 @@ function updateGameArea() {
 
             myObstacles.splice(i, 1);
             i--;
-          
+
             // add score when dodging obstacles
             addScore(10);
 
@@ -657,8 +652,8 @@ function updateGameArea() {
 
     // manage bullets
     for (i = 0; i < bullets.length; i++) {
-            bullets[i].x += bullets[i].speedX;
-            bullets[i].update();
+        bullets[i].x += bullets[i].speedX;
+        bullets[i].update();
 
 
         //delete bullets outside the window
@@ -710,6 +705,7 @@ function updateGameArea() {
         }
     }
 
+
     for (i = 0; i < upBullets.length; i++) {
         upBullets[i].y -= upBullets[i].speedY;
         upBullets[i].update();
@@ -749,6 +745,7 @@ function updateGameArea() {
             }
         }
     }
+
 
     // manage airship bullets
     for (i = 0; i < airshipBullets.length; i++) {
@@ -859,4 +856,45 @@ function upShoot() {
 function addScore(n) {
     var newScore = parseInt(score.text.substring(7)) + n;
     score.text = "SCORE: " + newScore;
+}
+
+function initHighScoreTable() {
+    highScoreTable = highScoreTable = document.createElement("TABLE");
+
+    document.body.insertBefore(highScoreTable,document.body.childNodes[0]);
+    highScoreTable.setAttribute("id", "highScoreTable");
+
+    //highScoreTable.setAttribute('border', '1px');
+    var tableTitle = document.createElement("TH");
+    tableTitle.setAttribute('colSpan', '2');
+    tableTitle.innerText = "High Score";
+    highScoreTable.appendChild(tableTitle);
+
+    var tableBody = document.createElement("tbody");
+    highScoreTable.appendChild(tableBody);
+
+    var tableRows;
+    var tableCells;
+    var tableCells2;
+    tableTitle.innerText = "High Score";
+
+    //create 5 rows in table
+    for (var i = 0; i < 5; i++){
+        tableRows = document.createElement("TR");
+        tableBody.appendChild(tableRows);
+
+        //cells with names
+        tableCells = document.createElement("td");
+        tableCells.setAttribute("id", "nameCell");
+        tableRows.appendChild(tableCells);
+        tableCells.innerText = namesArr[i];
+
+
+        //cells with high score
+        tableCells2= document.createElement("td");
+        tableCells2.setAttribute("id","highScoreCell");
+        tableRows.appendChild(tableCells2);
+        tableCells2.innerText = highScoreArr[i];
+
+    }
 }
