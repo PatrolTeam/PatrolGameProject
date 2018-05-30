@@ -31,11 +31,14 @@ var exitBtn = document.createElement("button");
 //high score menu
 var backBtn = document.createElement("button");
 var resetBtn = document.createElement("button");
-var highScoreTable = document.createElement("TABLE");
+var highScoreTable;
 var namesArr = [];
 var localStorageName = ["first name", "second name", "third name", "fourth name", "fifth name"];
 var highScoreArr = [];
-var localStorageArr = ["first score","second score","third score","fourth score","fifth score"];
+var localStorageHighScoreArr = ["first score","second score","third score","fourth score","fifth score"];
+
+var currPlayerName;
+var currPlayerHighScore;
 
 //game over menu
 var gameOver;
@@ -72,12 +75,12 @@ var gameArea = {
 
     startMenu: function(){
 
-        for (var i = 0; i < localStorageArr.length; i++){
-            if(localStorage.getItem(localStorageArr[i]) == null) {
+        for (var i = 0; i < localStorageHighScoreArr.length; i++){
+            if(localStorage.getItem(localStorageHighScoreArr[i]) == null) {
                 highScoreArr[i] = 0;
 
             } else {
-                highScoreArr[i] = localStorage.getItem(localStorageArr[i]);
+                highScoreArr[i] = localStorage.getItem(localStorageHighScoreArr[i]);
             }
         }
 
@@ -106,50 +109,13 @@ var gameArea = {
         document.body.insertBefore(highScoreBtn,document.body.childNodes[0]);
         highScoreBtn.innerHTML = "HIGH SCORE";
 
-        highScoreBtn.addEventListener("click",function () {
+        highScoreBtn.addEventListener("click",function highScore() {
             startBtn.remove();
             highScoreBtn.remove();
             exitBtn.remove();
 
             //high score table
-            document.body.insertBefore(highScoreTable,document.body.childNodes[0]);
-            highScoreTable.setAttribute("id", "highScoreTable");
-
-            //highScoreTable.setAttribute('border', '1px');
-            var tableTitle = document.createElement("TH");
-            tableTitle.setAttribute('colSpan', '2');
-            tableTitle.innerText = "High Score";
-            highScoreTable.appendChild(tableTitle);
-
-            var tableBody = document.createElement("tbody");
-            highScoreTable.appendChild(tableBody);
-
-            var tableRows;
-            var tableCells;
-            tableTitle.innerText = "High Score";
-
-            //create 5 rows in table
-            for (var i = 0; i < 5; i++){
-                tableRows = document.createElement("TR");
-                tableBody.appendChild(tableRows);
-
-                //for (var j = 0; j < 2; j++){
-                tableCells = document.createElement("td");
-                tableCells.setAttribute("id", "nameCell");
-                tableRows.appendChild(tableCells);
-                //var temp = 47 - (namesArr[i].length + highScoreArr[i].toString().length);
-
-                console.log(namesArr[i].length + highScoreArr[i].toString().length);
-                //console.log(90 - temp * 2);
-                //console.log(temp);
-                tableCells.innerText = namesArr[i];
-
-                var tableCells2= document.createElement("td");
-                tableCells2.setAttribute("id","highScoreCell");
-                tableRows.appendChild(tableCells2);
-                tableCells2.innerText = highScoreArr[i];
-                //}
-            }
+            initHighScoreTable();
 
             //back button
             document.body.insertBefore(backBtn,document.body.childNodes[0]);
@@ -163,6 +129,14 @@ var gameArea = {
             resetBtn.innerHTML = "RESET";
             resetBtn.addEventListener("click", function () {
                 localStorage.clear();
+//ivan
+
+                var cells = document.getElementsByTagName("td")
+                    
+                for (var k = 0; k < cells.length; k += 2) {
+                    cells[k].innerText = "Martian";
+                    cells[k + 1].innerText = 0;
+                }
             });
             resetBtn.style.marginTop = "420px";
             resetBtn.style.marginLeft = "229px";
@@ -211,40 +185,38 @@ var gameArea = {
         scoreCount = parseInt(score.text.substring(7));
 
         //check high score
-        var isItBigger = false;
+        var isHighScore = false;
         var indexOfHighScoreArr;
-        if (scoreCount >= highScoreArr[0]) {
-            isItBigger = true;
-            highScoreArr[0] = scoreCount;
-            localStorage.setItem(localStorageArr[0], highScoreArr[0]);
-            indexOfHighScoreArr = 0;
 
-        } else if (scoreCount >= highScoreArr[1]) {
-            isItBigger = true;
-            highScoreArr[1] = scoreCount;
-            localStorage.setItem(localStorageArr[1], highScoreArr[1]);
-            indexOfHighScoreArr = 1;
 
-        } else if (scoreCount >= highScoreArr[2]) {
-            isItBigger = true;
-            highScoreArr[2] = scoreCount;
-            localStorage.setItem(localStorageArr[2], highScoreArr[2]);
-            indexOfHighScoreArr = 2;
+        for (var i = 0; highScoreArr.length; i++){
+            if (scoreCount >= highScoreArr[i]){
+                isHighScore = true;
+                var currScore = highScoreArr[i];
+                var currName = namesArr[i];
+                highScoreArr[i] = scoreCount;
+                indexOfHighScoreArr = i;
 
-        } else if (scoreCount >= highScoreArr[3]) {
-            isItBigger = true;
-            highScoreArr[3] = scoreCount;
-            localStorage.setItem(localStorageArr[3], highScoreArr[3]);
-            indexOfHighScoreArr = 3;
+                localStorage.setItem(localStorageHighScoreArr[i], highScoreArr[i]);
+                for (var j = i + 1; j < highScoreArr.length; j++) {
+                    var temp = highScoreArr[j];
+                    var tempName = namesArr[j];
 
-        } else if (scoreCount >= highScoreArr[4]) {
-            isItBigger = true;
-            highScoreArr[4] = scoreCount;
-            localStorage.setItem(localStorageArr[4], highScoreArr[4]);
-            indexOfHighScoreArr = 4;
+                    highScoreArr[j] = currScore;
+                    namesArr[j] = currName;
 
+                    currScore = temp;
+                    currName = tempName;
+
+                    localStorage.setItem(localStorageHighScoreArr[j], highScoreArr[j]);
+                    localStorage.setItem(localStorageName[j], namesArr[j]);
+
+                }
+                break;
+            }
         }
-        if (isItBigger === true) {
+
+        if (isHighScore === true) {
             var gameOverTable = document.createElement("TABLE");
             document.body.insertBefore(gameOverTable, document.body.childNodes[0]);
             gameOverTable.setAttribute("id", "gameOverTable");
@@ -887,4 +859,45 @@ function upShoot() {
 function addScore(n) {
     var newScore = parseInt(score.text.substring(7)) + n;
     score.text = "SCORE: " + newScore;
+}
+
+function initHighScoreTable() {
+    highScoreTable = highScoreTable = document.createElement("TABLE");
+
+    document.body.insertBefore(highScoreTable,document.body.childNodes[0]);
+    highScoreTable.setAttribute("id", "highScoreTable");
+
+    //highScoreTable.setAttribute('border', '1px');
+    var tableTitle = document.createElement("TH");
+    tableTitle.setAttribute('colSpan', '2');
+    tableTitle.innerText = "High Score";
+    highScoreTable.appendChild(tableTitle);
+
+    var tableBody = document.createElement("tbody");
+    highScoreTable.appendChild(tableBody);
+
+    var tableRows;
+    var tableCells;
+    var tableCells2;
+    tableTitle.innerText = "High Score";
+
+    //create 5 rows in table
+    for (var i = 0; i < 5; i++){
+        tableRows = document.createElement("TR");
+        tableBody.appendChild(tableRows);
+
+        //cells with names
+        tableCells = document.createElement("td");
+        tableCells.setAttribute("id", "nameCell");
+        tableRows.appendChild(tableCells);
+        tableCells.innerText = namesArr[i];
+
+
+        //cells with high score
+        tableCells2= document.createElement("td");
+        tableCells2.setAttribute("id","highScoreCell");
+        tableRows.appendChild(tableCells2);
+        tableCells2.innerText = highScoreArr[i];
+
+    }
 }
