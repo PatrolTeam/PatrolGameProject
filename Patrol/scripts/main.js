@@ -31,14 +31,12 @@ var exitBtn = document.createElement("button");
 //high score menu
 var backBtn = document.createElement("button");
 var resetBtn = document.createElement("button");
+
 var highScoreTable;
 var namesArr = [];
 var localStorageName = ["first name", "second name", "third name", "fourth name", "fifth name"];
 var highScoreArr = [];
 var localStorageHighScoreArr = ["first score","second score","third score","fourth score","fifth score"];
-
-var currPlayerName;
-var currPlayerHighScore;
 
 //game over menu
 var gameOver;
@@ -129,8 +127,8 @@ var gameArea = {
             resetBtn.innerHTML = "RESET";
             resetBtn.addEventListener("click", function () {
                 localStorage.clear();
-//ivan
 
+//ivan
                 var cells = document.getElementsByTagName("td")
                     
                 for (var k = 0; k < cells.length; k += 2) {
@@ -241,7 +239,6 @@ var gameArea = {
             textfield.setAttribute("placeholder", "Your name...");
             //textfield.setAttribute("max-length", "15");
             firstCell.appendChild(textfield);
-
 
             //second row with buttons
             var secondRow = document.createElement("tr");
