@@ -3,6 +3,12 @@ canvas {
     background-color: #f1f1f1;
     cursor: url(../resources/images/UI/cursor_pointer3D_shadow.png),pointer;
 }
+
+/* buttons */
+
+#mainMenuBtn{
+    margin-top: 400px;
+}
 button{
     display: inline-block;
     outline: none;
@@ -52,7 +58,8 @@ button:active{
     padding-left: 12px;
     padding-right: 12px;
     padding-bottom: 50px;
-mso-cellspacing: 50px;
+    mso-cellspacing: 50px;
+    cursor: url(../resources/images/UI/cursor_pointer3D_shadow.png),pointer;
 }
 tr{
     color:#e86a17;
@@ -60,6 +67,7 @@ tr{
 #highScoreTable tr:hover{
     background: #e86a17;
     color:white;
+    cursor: url(../resources/images/UI/cursor_hand.png),pointer;
 }
 #highScoreTable th{
     color: white;
@@ -105,7 +113,6 @@ tr{
 }
 
 #gameOverTable th{
-
     padding-top: 25px;
     text-align: center;
     font-size: 40px;
@@ -113,12 +120,10 @@ tr{
 }
 
 #gameOverTable td{
-
     padding-left: 20px;
     padding-right: 20px;
     color: white;
     height: 75px;
-
 }
 
 
