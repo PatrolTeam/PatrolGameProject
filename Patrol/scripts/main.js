@@ -53,6 +53,7 @@ function startGame() {
 
     player = new component(113, 48, "resources/images/player/1.png", 10, 432, "image");
     player.imgArr = ["resources/images/player/1.png", "resources/images/player/2.png", "resources/images/player/3.png", "resources/images/player/4.png"];
+    player.isShooting = false;
 
     score = new component("30px", "kenvector_future", "white", 400, 40, "text");
     score.text = "SCORE: " + (gameArea.frameNo / 100).toFixed(0);
@@ -171,6 +172,7 @@ var gameArea = {
         });
         window.addEventListener('keyup', function (e) {
             gameArea.keys[e.keyCode] = false;
+            player.isShooting = false;
         });
     },
     clear : function() {
@@ -477,8 +479,11 @@ function updateGameArea() {
         jump()
     }
     if (gameArea.keys && gameArea.keys[67]) {
-        shoot();
-        upShoot()
+        if (!player.isShooting) {
+            player.isShooting = true;
+
+            shoot();
+        }
     }
 
     // spawn obstacles logic
@@ -712,7 +717,6 @@ function updateGameArea() {
 
         //delete bullets outside the window
         if (upBullets[i].y + upBullets[i].height < 0) {
-            console.log("deleted");
             upBullets.splice(i, 1);
             continue;
         }
@@ -756,7 +760,6 @@ function updateGameArea() {
         //delete bullets outside the window
         if (airshipBullets[i].y > gameArea.canvas.height - groundLine.height - airshipBullets[i].height) {
             airshipBullets.splice(i, 1);
-            console.log("deleted.");
             continue;
         }
     }
@@ -769,7 +772,6 @@ function updateGameArea() {
         //delete bullets outside the window
         if (bomberBullets[i].y > gameArea.canvas.height - groundLine.height - bomberBullets[i].height) {
             bomberBullets.splice(i, 1);
-            console.log("deleted.");
             continue;
         }
     }
@@ -782,7 +784,6 @@ function updateGameArea() {
         //delete bullets outside the window
         if (tankBullets[i].x < 0) {
             tankBullets.splice(i, 1);
-            console.log("deleted.");
             continue;
         }
     }
@@ -825,32 +826,15 @@ function jump() {
     }
 }
 
-var bulletCount = 0;
 function shoot() {
-    bulletCount++;
-    if (bulletCount > 10) {
-        bulletCount = 1;
-    }
-    if (bulletCount === 1) {
-        let bullet = new component(30, 24, "resources/images/objects/bullet3.png", player.x + player.width + 1, player.y , "image");
-        bullet.speedX = 8;
+    let bullet = new component(30, 24, "resources/images/objects/bullet3.png", player.x + player.width + 1, player.y , "image");
+    bullet.speedX = 8;
 
-        bullets.push(bullet);
-    }
-}
+    let upBullet = new component(24, 30, "resources/images/objects/upBullet.png", player.x + player.width / 2 - 10, player.y - 30, "image");
+    upBullet.speedY = 8;
 
-var upBulletCount = 0;
-function upShoot() {
-    upBulletCount++;
-    if (upBulletCount > 10) {
-        upBulletCount = 1;
-    }
-    if (upBulletCount === 1) {
-        let upBullet = new component(24, 30, "resources/images/objects/upBullet.png", player.x + player.width / 2 - 10, player.y - 30, "image");
-        upBullet.speedY = 8;
-
-        upBullets.push(upBullet);
-    }
+    upBullets.push(upBullet);
+    bullets.push(bullet);
 }
 
 function addScore(n) {
