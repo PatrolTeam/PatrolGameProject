@@ -564,8 +564,8 @@ function updateGameArea() {
     for (i = 0; i < myObstacles.length; i += 1) {
         if (myObstacles[i].isDead === true) {
             if (everyinterval(3)) {
-                if (myObstacles[i].currFrame > 15) {
 
+                if (myObstacles[i].currFrame == 0) {
                     // add score when destroying obstacles
                     switch (myObstacles[i].obstacleType) {
                         case "bomber":
@@ -584,6 +584,9 @@ function updateGameArea() {
                             addScore(20);
                             break;
                     }
+                }
+
+                if (myObstacles[i].currFrame > 15) {
 
                     myObstacles.splice(i, 1);
                     continue;
@@ -693,6 +696,7 @@ function updateGameArea() {
                 myObstacles[j].isDead = true;
                 myObstacles[j].width = 48;
                 myObstacles[j].height = 48;
+                myObstacles[j].currFrame = 0;
 
                 bullets.splice(i, 1);
                 break;
