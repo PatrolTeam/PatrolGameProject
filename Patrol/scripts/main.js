@@ -153,7 +153,6 @@ var gameArea = {
     },
 
     start : function() {
-
         // game window size
         this.canvas.width = 640;
         this.canvas.height = 480;
@@ -187,34 +186,45 @@ var gameArea = {
         //check high score
         var isHighScore = false;
         var indexOfHighScoreArr;
+        if (scoreCount < highScoreArr[4]){
+            gameOver.text = "GAME OVER!";
+            gameOver.update();
 
+            //restart button
+            document.body.insertBefore(restartBtn, document.body.childNodes[0]);
+            restartBtn.innerHTML = "MAIN MENU";
+            restartBtn.addEventListener("click", restartGame);
+        }
+        else{
+            for (var i = 0; highScoreArr.length; i++){
 
-        for (var i = 0; highScoreArr.length; i++){
-            if (scoreCount >= highScoreArr[i]){
-                isHighScore = true;
-                var currScore = highScoreArr[i];
-                var currName = namesArr[i];
-                highScoreArr[i] = scoreCount;
-                indexOfHighScoreArr = i;
+                if (scoreCount >= highScoreArr[i]){
+                    isHighScore = true;
+                    var currScore = highScoreArr[i];
+                    var currName = namesArr[i];
+                    highScoreArr[i] = scoreCount;
+                    indexOfHighScoreArr = i;
 
-                localStorage.setItem(localStorageHighScoreArr[i], highScoreArr[i]);
-                for (var j = i + 1; j < highScoreArr.length; j++) {
-                    var temp = highScoreArr[j];
-                    var tempName = namesArr[j];
+                    localStorage.setItem(localStorageHighScoreArr[i], highScoreArr[i]);
+                    for (var j = i + 1; j < highScoreArr.length; j++) {
+                        var temp = highScoreArr[j];
+                        var tempName = namesArr[j];
 
-                    highScoreArr[j] = currScore;
-                    namesArr[j] = currName;
+                        highScoreArr[j] = currScore;
+                        namesArr[j] = currName;
 
-                    currScore = temp;
-                    currName = tempName;
+                        currScore = temp;
+                        currName = tempName;
 
-                    localStorage.setItem(localStorageHighScoreArr[j], highScoreArr[j]);
-                    localStorage.setItem(localStorageName[j], namesArr[j]);
+                        localStorage.setItem(localStorageHighScoreArr[j], highScoreArr[j]);
+                        localStorage.setItem(localStorageName[j], namesArr[j]);
 
+                    }
+                    break;
                 }
-                break;
             }
         }
+
 
         if (isHighScore === true) {
             var gameOverTable = document.createElement("TABLE");
@@ -239,7 +249,7 @@ var gameArea = {
             var textfield = document.createElement("INPUT");
             textfield.setAttribute("type", "text");
             textfield.setAttribute("placeholder", "Your name...");
-            //textfield.setAttribute("max-length", "15");
+            textfield.setAttribute("maxLength", "20");
             firstCell.appendChild(textfield);
 
             //second row with buttons
@@ -260,7 +270,17 @@ var gameArea = {
                 }
 
                 localStorage.setItem(localStorageName[indexOfHighScoreArr], namesArr[indexOfHighScoreArr]);
-                location.reload();
+
+                //show high score table
+                gameOverTable.remove();
+                initHighScoreTable();
+
+                //buttons to main menu
+                var mainMenuBtn = document.createElement("button");
+                document.body.insertBefore(mainMenuBtn, document.body.childNodes[0]);
+                mainMenuBtn.setAttribute("id","mainMenuBtn");
+                mainMenuBtn.innerHTML = "MAIN MENU";
+                mainMenuBtn.addEventListener("click", restartGame);
             });
 
         } else {
