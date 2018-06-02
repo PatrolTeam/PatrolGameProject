@@ -21,8 +21,6 @@ var airshipBullets = [];
 var bomberBullets = [];
 var tankBullets = [];
 
-var enemiesCount = 0;
-
 //start menu buttons
 var startBtn = document.createElement("button");
 var highScoreBtn = document.createElement("button");
@@ -509,7 +507,7 @@ function updateGameArea() {
     }
 
     // spawn obstacles logic
-    if (gameArea.frameNo > 60 && everyinterval(400)) {
+    if (gameArea.frameNo > 60 && everyinterval(400) && myObstacles.length === 0) {
         // var index = Math.floor((Math.random() * 10)) % enemies.length;
         var index = randomNumberBetween(0, enemies.length - 1);
         var currObstacle = enemies[index];
@@ -524,7 +522,6 @@ function updateGameArea() {
             obstacle.y = gameArea.canvas.height - groundLine.height;
             obstacle.speedX = -1;
         } else if (currObstacle[3] === "airship") {
-            enemiesCount++;
 
             obstacle.x = gameArea.canvas.width;
             obstacle.y = 60;
@@ -532,7 +529,6 @@ function updateGameArea() {
             obstacle.speedX = -1;
             obstacle.destinationPoint = randomNumberBetween(100, 500);
         } else if (currObstacle[3] === "bomber") {
-            enemiesCount++;
 
             obstacle.y = 100;
 
@@ -548,7 +544,6 @@ function updateGameArea() {
                 obstacle.speedX = -3;
             }
         } else if (currObstacle[3] === "tank") {
-            enemiesCount++;
 
             obstacle.y = gameArea.canvas.height - groundLine.height - obstacle.height;
             obstacle.speedX = -1.5;
@@ -559,11 +554,6 @@ function updateGameArea() {
         obstacle.obstacleType = currObstacle[3];
 
         myObstacles.push(obstacle);
-
-        if (enemiesCount > 1) {
-            myObstacles.pop();
-            enemiesCount--;
-        }
     }
 
 
@@ -645,9 +635,6 @@ function updateGameArea() {
 
         //delete obstacles outside the window
         if (myObstacles[i].x < -0 - myObstacles[i].width || myObstacles[i].x > gameArea.canvas.width) {
-            if (myObstacles[i].obstacleType === "bomber" || myObstacles[i].obstacleType === "tank") {
-                enemiesCount--;
-            }
 
             myObstacles.splice(i, 1);
             i--;
@@ -860,15 +847,12 @@ function addDeathScore() {
     switch (myObstacles[i].obstacleType) {
         case "bomber":
             addScore(50);
-            enemiesCount--;
             break;
         case "tank":
             addScore(40);
-            enemiesCount--;
             break;
         case "airship":
             addScore(30);
-            enemiesCount--;
             break;
         case "ground":
             addScore(20);
