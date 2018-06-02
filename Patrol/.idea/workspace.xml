@@ -14,20 +14,29 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="main.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/scripts/main.js">
+      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="476">
-              <caret line="222" lean-forward="true" selection-start-line="222" selection-end-line="222" />
+            <state relative-caret-position="51">
+              <caret line="3" column="88" selection-start-line="3" selection-start-column="88" selection-end-line="3" selection-end-column="88" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/index.html">
+      <file leaf-file-name="main.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/scripts/main.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
-              <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
+            <state relative-caret-position="305">
+              <caret line="411" selection-start-line="411" selection-end-line="413" selection-end-column="64" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="style.css" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/styles/style.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="425">
+              <caret line="25" column="23" selection-start-line="25" selection-start-column="23" selection-end-line="25" selection-end-column="23" />
             </state>
           </provider>
         </entry>
@@ -45,23 +54,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>obsta</find>
-      <find>score</find>
-      <find>newpos</find>
-      <find>newposmo</find>
-      <find>backgro</find>
-      <find>componen</find>
-      <find>canvas</find>
-      <find>rest</find>
-      <find>fun</find>
-      <find>image</find>
-      <find>player</find>
-      <find>color</find>
-      <find>move</find>
-      <find>clear</find>
-      <find>everyinte</find>
+      <find>undergro</find>
+      <find>airship</find>
+      <find>airshipscoun</find>
+      <find>manage bu</find>
+      <find>bomberbullets.l</find>
+      <find>airshipscount</find>
+      <find>bombers</find>
+      <find>enemies</find>
+      <find>manage</find>
+      <find>undergr</find>
+      <find>imgarr</find>
+      <find>explosion</find>
+      <find>48</find>
+      <find>enemiescount</find>
+      <find>airshipbullets</find>
+      <find>tankbullets</find>
+      <find>bomberbullet</find>
       <find>key</find>
-      <find>update</find>
+      <find>shoot</find>
+      <find>deleted</find>
+      <find>explosionArr</find>
+      <find>isDead</find>
+      <find>ground</find>
+      <find>&quot;ground</find>
+      <find>addscore</find>
+      <find>enemies =</find>
+      <find>tank</find>
+      <find>currframe</find>
+      <find>currframe = 0</find>
+      <find>isdead</find>
     </findStrings>
   </component>
   <component name="IdeDocumentHistory">
@@ -70,6 +92,7 @@
         <option value="$PROJECT_DIR$/patrol.js" />
         <option value="$PROJECT_DIR$/style.css" />
         <option value="$PROJECT_DIR$/styles/style.css" />
+        <option value="$PROJECT_DIR$/scripts/obstacles.js" />
         <option value="$PROJECT_DIR$/index.html" />
         <option value="$PROJECT_DIR$/scripts/main.js" />
       </list>
@@ -93,35 +116,7 @@
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
-    <panes>
-      <pane id="Scope" />
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="Patrol" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Patrol" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Patrol" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Patrol" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Patrol" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Patrol" type="462c0819:PsiDirectoryNode" />
-              <item name="scripts" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Patrol" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Patrol" type="462c0819:PsiDirectoryNode" />
-              <item name="styles" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-    </panes>
+    <panes />
   </component>
   <component name="PropertiesComponent">
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
@@ -192,11 +187,14 @@
       <workItem from="1524408233954" duration="4501000" />
       <workItem from="1524649322546" duration="15224000" />
       <workItem from="1524907128055" duration="13063000" />
+      <workItem from="1527596666836" duration="18371000" />
+      <workItem from="1527700252798" duration="1835000" />
+      <workItem from="1527787998435" duration="2003000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="59724000" />
+    <option name="totallyTimeSpent" value="82709000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -218,7 +216,7 @@
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32946146" />
     </layout>
     <layout-to-restore>
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -247,13 +245,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="1" selection-start-line="6" selection-start-column="1" selection-end-line="6" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/main.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="697">
@@ -567,22 +558,23 @@
     <entry file="file://$PROJECT_DIR$/patrol.js" />
     <entry file="file://$PROJECT_DIR$/styles/style.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" selection-start-line="4" selection-end-line="4" />
+        <state relative-caret-position="425">
+          <caret line="25" column="23" selection-start-line="25" selection-start-column="23" selection-end-line="25" selection-end-column="23" />
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/obstacles.js" />
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
+        <state relative-caret-position="51">
+          <caret line="3" column="88" selection-start-line="3" selection-start-column="88" selection-end-line="3" selection-end-column="88" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/scripts/main.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
-          <caret line="222" lean-forward="true" selection-start-line="222" selection-end-line="222" />
+        <state relative-caret-position="305">
+          <caret line="411" selection-start-line="411" selection-end-line="413" selection-end-column="64" />
         </state>
       </provider>
     </entry>

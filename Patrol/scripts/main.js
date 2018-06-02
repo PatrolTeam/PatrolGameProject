@@ -394,8 +394,8 @@ function component(width, height, color, x, y, type) {
         var obstacleBottom = otherobj.y + (otherobj.height);
 
         if (otherobj.obstacleType === "underground") {
-            obstacleLeft += otherobj.width / 3;
-            obstacleRight -= otherobj.width / 3;
+            obstacleLeft += otherobj.width / 3 + 32;
+            obstacleRight -= otherobj.width / 3 + 32;
         }
 
         var crash = true;
@@ -440,7 +440,9 @@ function updateGameArea() {
 
     // manage player-obstacle collision
     for (i = 0; i < myObstacles.length; i++) {
-        if (player.crashWith(myObstacles[i])) {
+        let obstacle = myObstacles[i];
+
+        if (player.crashWith(obstacle) && !obstacle.isDead) {
             gameArea.stop();
             return;
         }
@@ -508,7 +510,8 @@ function updateGameArea() {
 
     // spawn obstacles logic
     if (gameArea.frameNo > 60 && everyinterval(400)) {
-        var index = Math.floor((Math.random() * 10)) % enemies.length;
+        // var index = Math.floor((Math.random() * 10)) % enemies.length;
+        var index = randomNumberBetween(0, enemies.length - 1);
         var currObstacle = enemies[index];
 
         var obstacle = new component(currObstacle[0], currObstacle[1], currObstacle[2], 0, 0, "image");
@@ -523,14 +526,18 @@ function updateGameArea() {
         } else if (currObstacle[3] === "airship") {
             enemiesCount++;
 
+            obstacle.x = gameArea.canvas.width;
             obstacle.y = 60;
+
             obstacle.speedX = -1;
+            obstacle.destinationPoint = randomNumberBetween(100, 500);
         } else if (currObstacle[3] === "bomber") {
             enemiesCount++;
 
             obstacle.y = 100;
 
-            let startingPoint = Math.floor((Math.random() * 10) + 1);
+            // let startingPoint = Math.floor((Math.random() * 10) + 1);
+            let startingPoint = randomNumberBetween(1, 10);
             if (startingPoint <= 5) {
                 obstacle.x = 0;
                 obstacle.speedX = 3;
@@ -564,30 +571,16 @@ function updateGameArea() {
     for (i = 0; i < myObstacles.length; i += 1) {
         if (myObstacles[i].isDead === true) {
             if (everyinterval(3)) {
-                if (myObstacles[i].currFrame > 15) {
 
-                    // add score when destroying obstacles
-                    switch (myObstacles[i].obstacleType) {
-                        case "bomber":
-                            addScore(50);
-                            enemiesCount--;
-                            break;
-                        case "tank":
-                            addScore(40);
-                            enemiesCount--;
-                            break;
-                        case "airship":
-                            addScore(30);
-                            enemiesCount--;
-                            break;
-                        case "ground":
-                            addScore(20);
-                            break;
-                    }
+                if (myObstacles[i].currFrame > 15) {
 
                     myObstacles.splice(i, 1);
                     continue;
                 } else {
+                    if (myObstacles[i].obstacleType === "ground") {
+                        myObstacles[i].x += -2;
+                    }
+
                     myObstacles[i].image.src = explosionArr[myObstacles[i].currFrame];
                     myObstacles[i].currFrame++;
                 }
@@ -616,30 +609,24 @@ function updateGameArea() {
             }
 
             if (myObstacles[i].obstacleType === "airship") {
-                if (myObstacles[i].speedX != 0) {
-                    if (myObstacles[i].x <= gameArea.canvas.width / 2) {
-                        myObstacles[i].speedX = 0;
+                let airship = myObstacles[i];
+
+                if (airship.speedX != 0) {
+                    if (airship.x <= airship.destinationPoint) {
+                        airship.speedX = 0;
                     }
                 } else if (everyinterval(150)) {
-                    let bulletX = myObstacles[i].x + myObstacles[i].width / 2 - 10;
-                    let bulletY = myObstacles[i].y + 48;
+                    let bulletX = airship.x + airship.width / 2 - 10;
+                    let bulletY = airship.y + 48;
+
+                    let distanceX = bulletX - (player.x + player.width / 2);
+                    let distanceY = gameArea.canvas.height - bulletY - groundLine.height - player.height;
+                    let ratio = distanceX / distanceY;
 
                     let newBullet = new component(24, 24, "resources/images/objects/bullet4.png", bulletX, bulletY, "image");
 
-                    let distanceX = bulletX - player.x;
-                    if (distanceX > 0) {
-                        distanceX += player.width / 2;
-                    } else {
-                        distanceX -= player.width / 2;
-                    }
-
-                    let distanceY = gameArea.canvas.height - bulletY;
-
-                    let ratio = distanceX / distanceY;
-
                     newBullet.speedY = 1;
                     newBullet.speedX = newBullet.speedY * ratio;
-
 
                     airshipBullets.push(newBullet);
                 }
@@ -693,6 +680,9 @@ function updateGameArea() {
                 myObstacles[j].isDead = true;
                 myObstacles[j].width = 48;
                 myObstacles[j].height = 48;
+                myObstacles[j].currFrame = 0;
+
+                addDeathScore();
 
                 bullets.splice(i, 1);
                 break;
@@ -747,6 +737,9 @@ function updateGameArea() {
                 myObstacles[j].isDead = true;
                 myObstacles[j].width = 48;
                 myObstacles[j].height = 48;
+                myObstacles[j].currFrame = 0;
+
+                addDeathScore();
 
                 upBullets.splice(i, 1);
                 break;
@@ -862,6 +855,27 @@ function addScore(n) {
     score.text = "SCORE: " + newScore;
 }
 
+function addDeathScore() {
+    // add score when destroying obstacles
+    switch (myObstacles[i].obstacleType) {
+        case "bomber":
+            addScore(50);
+            enemiesCount--;
+            break;
+        case "tank":
+            addScore(40);
+            enemiesCount--;
+            break;
+        case "airship":
+            addScore(30);
+            enemiesCount--;
+            break;
+        case "ground":
+            addScore(20);
+            break;
+    }
+}
+
 function initHighScoreTable() {
     highScoreTable = highScoreTable = document.createElement("TABLE");
 
@@ -901,4 +915,8 @@ function initHighScoreTable() {
         tableCells2.innerText = highScoreArr[i];
 
     }
+}
+
+function randomNumberBetween(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) ) + min;
 }
