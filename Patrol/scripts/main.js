@@ -394,8 +394,8 @@ function component(width, height, color, x, y, type) {
         var obstacleBottom = otherobj.y + (otherobj.height);
 
         if (otherobj.obstacleType === "underground") {
-            obstacleLeft += otherobj.width / 3;
-            obstacleRight -= otherobj.width / 3;
+            obstacleLeft += otherobj.width / 3 + 32;
+            obstacleRight -= otherobj.width / 3 + 32;
         }
 
         var crash = true;
