@@ -591,6 +591,10 @@ function updateGameArea() {
                     myObstacles.splice(i, 1);
                     continue;
                 } else {
+                    if (myObstacles[i].obstacleType === "ground") {
+                        myObstacles[i].x += -2;
+                    }
+
                     myObstacles[i].image.src = explosionArr[myObstacles[i].currFrame];
                     myObstacles[i].currFrame++;
                 }
