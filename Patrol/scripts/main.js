@@ -440,7 +440,9 @@ function updateGameArea() {
 
     // manage player-obstacle collision
     for (i = 0; i < myObstacles.length; i++) {
-        if (player.crashWith(myObstacles[i])) {
+        let obstacle = myObstacles[i];
+
+        if (player.crashWith(obstacle) && !obstacle.isDead) {
             gameArea.stop();
             return;
         }
@@ -565,27 +567,6 @@ function updateGameArea() {
         if (myObstacles[i].isDead === true) {
             if (everyinterval(3)) {
 
-                if (myObstacles[i].currFrame == 0) {
-                    // add score when destroying obstacles
-                    switch (myObstacles[i].obstacleType) {
-                        case "bomber":
-                            addScore(50);
-                            enemiesCount--;
-                            break;
-                        case "tank":
-                            addScore(40);
-                            enemiesCount--;
-                            break;
-                        case "airship":
-                            addScore(30);
-                            enemiesCount--;
-                            break;
-                        case "ground":
-                            addScore(20);
-                            break;
-                    }
-                }
-
                 if (myObstacles[i].currFrame > 15) {
 
                     myObstacles.splice(i, 1);
@@ -702,6 +683,8 @@ function updateGameArea() {
                 myObstacles[j].height = 48;
                 myObstacles[j].currFrame = 0;
 
+                addDeathScore();
+
                 bullets.splice(i, 1);
                 break;
             }
@@ -755,6 +738,9 @@ function updateGameArea() {
                 myObstacles[j].isDead = true;
                 myObstacles[j].width = 48;
                 myObstacles[j].height = 48;
+                myObstacles[j].currFrame = 0;
+
+                addDeathScore();
 
                 upBullets.splice(i, 1);
                 break;
@@ -868,6 +854,27 @@ function shoot() {
 function addScore(n) {
     var newScore = parseInt(score.text.substring(7)) + n;
     score.text = "SCORE: " + newScore;
+}
+
+function addDeathScore() {
+    // add score when destroying obstacles
+    switch (myObstacles[i].obstacleType) {
+        case "bomber":
+            addScore(50);
+            enemiesCount--;
+            break;
+        case "tank":
+            addScore(40);
+            enemiesCount--;
+            break;
+        case "airship":
+            addScore(30);
+            enemiesCount--;
+            break;
+        case "ground":
+            addScore(20);
+            break;
+    }
 }
 
 function initHighScoreTable() {
