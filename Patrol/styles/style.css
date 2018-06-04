@@ -91,6 +91,81 @@ tr{
 }
 
 
+/*credits table*/
+
+#creditsTable{
+    outline: none;
+    position: absolute;
+    background: transparent url('../resources/images/UI/highScoreTable.png') no-repeat;
+    opacity: 0.95;
+    overflow: scroll;
+    width: 560px;
+    height: 340px;
+    margin-top: 40px;
+    margin-left: 40px;
+    margin-right: 40px;
+    font-family: kenvector_future;
+    padding-top: 16px;
+    padding-left: 12px;
+    padding-right: 12px;
+    padding-bottom: 50px;
+    mso-cellspacing: 50px;
+    font-size: 14px;
+    cursor: url(../resources/images/UI/cursor_pointer3D_shadow.png),pointer;
+}
+
+#creditsTable th{
+    color: white;
+    height: 60px;
+    text-align: center;
+    font-size: 30px;
+    padding-top: 22px;
+}
+
+#creditsTable tr{
+    width: 528px;
+    height: 190px;
+    color:#e86a17;
+}
+#creditsTd {
+    padding-left: 5px;
+}
+#creditText {
+    height: 190px;
+    overflow: auto;
+}
+
+#textFirstRow {
+    text-align: left;
+    padding-right: 20px;
+}
+
+#textSecondRow {
+    text-align: right;
+    padding-left: 20px;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #d6dde7;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #fa8132;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #e86a17;
+}
+
+
 /* game over table */
 
 #gameOverTable{
@@ -178,5 +253,53 @@ input[type=submit]:hover {
 input[type=submit]:active{
     background: transparent url('../resources/images/UI/yellow_button01.png') no-repeat;
 }
+
+#tooltip {
+    display: inline-block;
+    outline: none;
+    border: none;
+    width: 50px;
+    height: 50px;
+    font-size: 18px;
+    color: #fff;
+    text-align: center;
+    font-family: kenvector_future;
+    background: transparent url('../resources/images/UI/question.png') no-repeat;
+    position: absolute;
+    border-radius: 15px;
+    margin-top: 10px;
+    margin-left: 10px;
+    cursor: url(../resources/images/UI/cursor_hand.png),pointer;
+}
+
+
+/* tooltip and tootipText */
+#tooltip #toolText {
+    visibility: hidden;
+    width: 520px;
+    height: 220px;
+    background: transparent url('../resources/images/UI/gameControls.png') no-repeat;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    position: absolute;
+    z-index: 1;
+    margin-left: 25px;
+    margin-top: 50px;
+
+    /* Fade in tooltip - takes 1 second to go from 0% to 100% opac: */
+    opacity: 0;
+    transition: opacity 1s;
+}
+
+#tooltip:hover {
+    background: transparent url('../resources/images/UI/question2.png') no-repeat;
+}
+#tooltip:hover #toolText {
+    visibility: visible;
+    opacity: 1;
+    border-radius: 15px;
+}
+
 
 

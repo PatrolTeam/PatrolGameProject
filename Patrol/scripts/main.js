@@ -31,7 +31,7 @@ var tankBullets = [];
 //start menu buttons
 var startBtn = document.createElement("button");
 var highScoreBtn = document.createElement("button");
-var exitBtn = document.createElement("button");
+var creditsBtn = document.createElement("button");
 
 //high score menu
 var backBtn = document.createElement("button");
@@ -47,11 +47,13 @@ var localStorageHighScoreArr = ["first score","second score","third score","four
 var gameOver;
 var restartBtn = document.createElement("button");
 
+var creditsTable;
+
 function startGame() {
     gameArea.start();
     startBtn.remove();
     highScoreBtn.remove();
-    exitBtn.remove();
+    creditsBtn.remove();
     backBtn.remove();
     restartBtn.remove();
     //restartBtn.remove();
@@ -76,7 +78,6 @@ function startGame() {
 
 var gameArea = {
     canvas : document.createElement("canvas"),
-
     startMenu: function(){
 
         for (var i = 0; i < localStorageHighScoreArr.length; i++){
@@ -104,6 +105,17 @@ var gameArea = {
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
         var marginTop = "300px";
 
+        //question sign
+        var tooltip = document.createElement("div");
+        document.body.insertBefore(tooltip, document.body.childNodes[0]);
+        tooltip.setAttribute("id", "tooltip");
+
+        var toolText = document.createElement("span");
+        tooltip.appendChild(toolText);
+        toolText.setAttribute("id", "toolText");
+        //toolText.innerText = "Tooltip text";
+
+
         //start button
         document.body.insertBefore(startBtn,document.body.childNodes[0]);
         startBtn.innerHTML = "START";
@@ -116,8 +128,8 @@ var gameArea = {
         highScoreBtn.addEventListener("click",function highScore() {
             startBtn.remove();
             highScoreBtn.remove();
-            exitBtn.remove();
-
+            creditsBtn.remove();
+            tooltip.remove();
             //high score table
             initHighScoreTable();
 
@@ -145,16 +157,27 @@ var gameArea = {
             resetBtn.style.marginTop = "420px";
             resetBtn.style.marginLeft = "229px";
         });
-
         highScoreBtn.style.marginTop = "360px";
 
-        //exit button
-        document.body.insertBefore(exitBtn,document.body.childNodes[0]);
-        exitBtn.innerHTML = "EXIT";
-        exitBtn.addEventListener("click",function () {
-            window.close();
+        //credits button
+        document.body.insertBefore(creditsBtn,document.body.childNodes[0]);
+        creditsBtn.innerHTML = "Credits";
+        creditsBtn.addEventListener("click", function () {
+            tooltip.remove();
+            startBtn.remove();
+            highScoreBtn.remove();
+            creditsBtn.remove();
+
+            creditsPage();
+
+            //back button
+            document.body.insertBefore(backBtn,document.body.childNodes[0]);
+            backBtn.innerHTML = "BACK";
+            backBtn.addEventListener("click", restartGame);
+            backBtn.style.marginTop = "420px";
+            backBtn.style.marginLeft = "430px";
         });
-        exitBtn.style.marginTop = "420px";
+        creditsBtn.style.marginTop = "420px";
     },
 
     start : function() {
@@ -954,6 +977,56 @@ function initHighScoreTable() {
         tableCells2.innerText = highScoreArr[i];
 
     }
+}
+
+function creditsPage() {
+
+    creditsTable = document.createElement("TABLE");
+    creditsTable.style.height = "340px";
+    document.body.insertBefore(creditsTable,document.body.childNodes[0]);
+    creditsTable.setAttribute("id", "creditsTable");
+
+
+    var tableTitle = document.createElement("TH");
+    tableTitle.setAttribute('colSpan', '2');
+    tableTitle.innerText = "Credits";
+    creditsTable.appendChild(tableTitle);
+
+    var tableBody = document.createElement("tbody");
+    creditsTable.appendChild(tableBody);
+
+    var tableRows;
+    var tableCells;
+    //var tableCells2;
+
+    tableRows = document.createElement("TR");
+    tableBody.appendChild(tableRows);
+
+    //cell
+    tableCells = document.createElement("td");
+    tableCells.setAttribute("id", "creditsTd");
+    tableRows.appendChild(tableCells);
+
+    var creditsText = document.createElement("div");
+    creditsText.setAttribute("id","creditText");
+    tableCells.appendChild(creditsText);
+
+    var textTable = document.createElement("TABLE");
+    creditsText.appendChild(textTable);
+
+    var textTr = document.createElement("td");
+    textTable.appendChild(textTr);
+    textTr.setAttribute("id", "textTr");
+
+    var textFirstRow = document.createElement("td");
+    textTr.appendChild(textFirstRow);
+    textFirstRow.setAttribute("id", "textFirstRow");
+    textFirstRow.innerText = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+
+    var textSecondRow = document.createElement("td");
+    textTr.appendChild(textSecondRow);
+    textSecondRow.setAttribute("id", "textSecondRow");
+    textSecondRow.innerText = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
 }
 
 function randomNumberBetween(min, max) {
