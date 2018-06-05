@@ -4,7 +4,32 @@ canvas {
     cursor: url(../resources/images/UI/cursor_pointer3D_shadow.png),pointer;
 }
 
+#musicDiv {
+    position: absolute;
+    visibility: hidden;
+
+}
 /* buttons */
+
+#musicBtn {
+    display: inline-block;
+    outline: none;
+    border: none;
+    width: 50px;
+    height: 50px;
+    font-size: 18px;
+    color: #fff;
+    text-align: center;
+    font-family: kenvector_future;
+    background: transparent url('../resources/images/UI/musicOn.png') no-repeat;
+    position: absolute;
+    border-radius: 15px;
+    margin-top: 10px;
+    margin-left: 10px;
+    cursor: url(../resources/images/UI/cursor_hand.png),pointer;
+}
+
+
 
 #mainMenuBtn{
     margin-top: 400px;

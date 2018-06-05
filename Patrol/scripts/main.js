@@ -49,6 +49,8 @@ var restartBtn = document.createElement("button");
 
 var creditsTable;
 
+var soundtrack = document.createElement("audio");
+
 function startGame() {
     gameArea.start();
     startBtn.remove();
@@ -119,7 +121,60 @@ var gameArea = {
         //start button
         document.body.insertBefore(startBtn,document.body.childNodes[0]);
         startBtn.innerHTML = "START";
-        startBtn.addEventListener("click", startGame);
+        startBtn.addEventListener("click", function () {
+            startGame();
+
+            //music
+            var musicDiv = document.createElement("div");
+            document.body.insertBefore(musicDiv, document.body.childNodes[0]);
+            musicDiv.setAttribute("id", "musicDiv");
+            var isMusicOn;
+
+            musicDiv.appendChild(soundtrack);
+            soundtrack.setAttribute("controls", "");
+            soundtrack.setAttribute("autoplay", "");
+            soundtrack.setAttribute("src", "resources/sounds/GreatBoss.ogg");
+
+            //music button
+            var musicOnBtn = document.createElement("button");
+            document.body.insertBefore(musicOnBtn,document.body.childNodes[0]);
+            musicOnBtn.setAttribute("id", "musicBtn");
+            isMusicOn = true;
+            console.log(isMusicOn);
+            
+            musicOnBtn.addEventListener("click", function music() {
+                if (isMusicOn === true) {
+                    isMusicOn = false;
+                    soundtrack.pause();
+                    document.getElementById("musicBtn").style.backgroundImage = "url('resources/images/UI/musicOff.png')";
+                    console.log(isMusicOn);
+                }
+                else if (isMusicOn === false) {
+                    isMusicOn = true;
+                    soundtrack.play();
+                    document.getElementById("musicBtn").style.backgroundImage = "url('resources/images/UI/musicOn.png')";
+                    console.log(isMusicOn);
+                }
+            })
+
+
+
+
+
+            /*musicOnBtn.addEventListener("click", function () {
+                isMusicOn = false;
+                console.log(isMusicOn);
+                soundtrack.pause();
+                document.getElementById("musicBtn").style.backgroundImage = "url('resources/images/UI/musicOff.png')";
+            })
+            musicOnBtn.addEventListener("click", function () {
+                isMusicOn = true;
+                console.log(isMusicOn);
+                soundtrack.play();
+                document.getElementById("musicBtn").style.backgroundImage = "url('resources/images/UI/musicOn.png')";
+            })*/
+
+        });
 
         //high score button
         document.body.insertBefore(highScoreBtn,document.body.childNodes[0]);
@@ -207,6 +262,7 @@ var gameArea = {
     },
     stop : function () {
         clearInterval(this.interval);
+        soundtrack.src = "";
 
         //take score
         scoreCount = parseInt(score.text.substring(7));
