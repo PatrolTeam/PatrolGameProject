@@ -141,18 +141,20 @@ var gameArea = {
             musicOnBtn.setAttribute("id", "musicBtn");
             isMusicOn = true;
             console.log(isMusicOn);
-            
+
             musicOnBtn.addEventListener("click", function music() {
                 if (isMusicOn === true) {
                     isMusicOn = false;
-                    soundtrack.pause();
+                    soundtrack.muted = true;
                     document.getElementById("musicBtn").style.backgroundImage = "url('resources/images/UI/musicOff.png')";
+                    document.getElementById("musicBtn").blur();
                     console.log(isMusicOn);
                 }
                 else if (isMusicOn === false) {
                     isMusicOn = true;
-                    soundtrack.play();
+                    soundtrack.muted = false;
                     document.getElementById("musicBtn").style.backgroundImage = "url('resources/images/UI/musicOn.png')";
+                    document.getElementById("musicBtn").blur();
                     console.log(isMusicOn);
                 }
             })
