@@ -121,50 +121,11 @@ tr{
     font-size: 30px;
     padding-top: 22px;
 }
-
-#creditsTable tr{
-    width: 528px;
-    height: 190px;
-    color:#e86a17;
-}
-#creditsTd {
-    padding-left: 5px;
-}
-#creditText {
-    height: 190px;
-    overflow: auto;
-}
-
-#textFirstRow {
-    text-align: left;
-    padding-right: 20px;
-}
-
-#textSecondRow {
-    text-align: right;
-    padding-left: 20px;
-}
-
-/* width */
-::-webkit-scrollbar {
-    width: 10px;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-    background: #d6dde7;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-    background: #fa8132;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-    background: #e86a17;
-}
-
+ iframe{
+     border: none;
+     width: 530px;
+     height: 180px;
+ }
 
 /* game over table */
 
