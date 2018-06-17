@@ -141,7 +141,7 @@ var gameArea = {
         document.body.insertBefore(startBtn,document.body.childNodes[0]);
         startBtn.innerHTML = "START";
         startBtn.addEventListener("click", function () {
-            clickButtonSound.play();
+            playSound("click");
             startGame();
 
             //music
@@ -160,7 +160,7 @@ var gameArea = {
         highScoreBtn.innerHTML = "HIGH SCORE";
 
         highScoreBtn.addEventListener("click",function highScore() {
-            clickButtonSound.play();
+            playSound("click");
 
             startBtn.remove();
             highScoreBtn.remove();
@@ -181,7 +181,7 @@ var gameArea = {
             document.body.insertBefore(resetBtn,document.body.childNodes[0]);
             resetBtn.innerHTML = "RESET";
             resetBtn.addEventListener("click", function () {
-                clickButtonSound.play();
+                playSound("click");
                 localStorage.clear();
 
 //ivan
@@ -201,7 +201,7 @@ var gameArea = {
         document.body.insertBefore(creditsBtn,document.body.childNodes[0]);
         creditsBtn.innerHTML = "Credits";
         creditsBtn.addEventListener("click", function () {
-            clickButtonSound.play();
+            playSound("click");
 
             tooltip.remove();
             startBtn.remove();
@@ -333,7 +333,7 @@ var gameArea = {
             secondCell.appendChild(submitBtn);
 
             submitBtn.addEventListener("click", function () {
-                clickButtonSound.play();
+                playSound("click");
                 if (textfield.value === "") {
                     namesArr[indexOfHighScoreArr]= "Martian";
                 } else {
@@ -367,7 +367,7 @@ var gameArea = {
 };
 
 function restartGame() {
-    clickButtonSound.play();
+    playSound("click");
     setTimeout('location.reload()', 100);
 }
 
@@ -1109,5 +1109,14 @@ function music() {
         document.getElementById("musicBtn").blur();
 
         console.log(localStorage.getItem("isMusicOn"));
+    }
+}
+
+function playSound(soundType) {
+    if (localStorage.getItem("isMusicOn") === "true") {
+        switch (soundType) {
+            case "click":
+                clickButtonSound.play();
+        }
     }
 }
