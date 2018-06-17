@@ -153,6 +153,10 @@ var gameArea = {
             musicDiv.appendChild(soundtrack);
             soundtrack.setAttribute("controls", "");
             soundtrack.setAttribute("autoplay", "");
+            soundtrack.addEventListener('ended', function() {
+                this.currentTime = 0;
+                this.play();
+            }, false);
             soundtrack.setAttribute("src", "resources/sounds/GreatBoss.ogg");
         });
 
