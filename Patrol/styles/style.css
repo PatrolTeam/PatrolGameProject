@@ -293,7 +293,7 @@ input[type=submit]:active{
     position: absolute;
     border-radius: 15px;
     margin-top: 10px;
-    margin-left: 10px;
+    margin-left: 580px;
     cursor: url(../resources/images/UI/cursor_hand.png),pointer;
 }
 
@@ -309,7 +309,7 @@ input[type=submit]:active{
     border-radius: 6px;
     position: absolute;
     z-index: 1;
-    margin-left: 25px;
+    margin-left: -545px;
     margin-top: 50px;
 
     /* Fade in tooltip - takes 1 second to go from 0% to 100% opac: */
