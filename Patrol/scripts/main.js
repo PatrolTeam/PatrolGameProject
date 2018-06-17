@@ -690,6 +690,7 @@ function updateGameArea() {
                     newBullet.speedY = 0;
 
                     tankBullets.push(newBullet);
+                    playSound("shoot-enemy");
                 }
             }
 
@@ -714,6 +715,7 @@ function updateGameArea() {
                     newBullet.speedX = newBullet.speedY * ratio;
 
                     airshipBullets.push(newBullet);
+                    playSound("shoot-enemy");
                 }
             }
             if (myObstacles[i].obstacleType === "bomber" && everyinterval(100)) {
@@ -725,6 +727,7 @@ function updateGameArea() {
                 newBullet.speedY = 1;
 
                 bomberBullets.push(newBullet);
+                playSound("shoot-enemy");
             }
         }
 
@@ -774,6 +777,8 @@ function updateGameArea() {
                 addDeathScore(myObstacles[j]);
 
                 bullets.splice(i, 1);
+
+                playSound("explode");
             }
         }
         for (j = 0; j < bomberBullets.length; j++) {
@@ -828,6 +833,7 @@ function updateGameArea() {
 
                 upBullets.splice(i, 1);
 
+                playSound("explode");
             }
         }
         for (j = 0; j < bomberBullets.length; j++) {
@@ -919,6 +925,8 @@ function jump() {
         player.speedX += 3;
         isFlying = true;
         jumpFrame = gameArea.frameNo;
+
+        playSound("jump");
     }
 }
 
@@ -931,6 +939,8 @@ function shoot() {
 
     upBullets.push(upBullet);
     bullets.push(bullet);
+
+    playSound("shoot-player");
 }
 
 function addScore(n) {
@@ -1113,10 +1123,40 @@ function music() {
 }
 
 function playSound(soundType) {
-    if (localStorage.getItem("isMusicOn") === "true") {
+    // if (localStorage.getItem("isMusicOn") === "true") {
         switch (soundType) {
             case "click":
                 clickButtonSound.play();
+                break;
+            case "shoot-player":
+
+                let shootPlayerSound = document.createElement("audio");
+                shootPlayerSound.setAttribute("id", "clickBtnSound");
+                shootPlayerSound.setAttribute("src", "resources/sounds/laserPlayer.mp3");
+
+                shootPlayerSound.play();
+                break;
+            case "shoot-enemy":
+                let shootEnemySound = document.createElement("audio");
+                shootEnemySound.setAttribute("id", "clickBtnSound");
+                shootEnemySound.setAttribute("src", "resources/sounds/laserEnemy.wav");
+
+                shootEnemySound.play();
+                break;
+            case "explode":
+                let explodeSound = document.createElement("audio");
+                explodeSound.setAttribute("id", "clickBtnSound");
+                explodeSound.setAttribute("src", "resources/sounds/explosion.wav");
+
+                explodeSound.play();
+                break;
+            case "jump":
+                let jumpSound = document.createElement("audio");
+                jumpSound.setAttribute("id", "clickBtnSound");
+                jumpSound.setAttribute("src", "resources/sounds/jump.mp3");
+
+                jumpSound.play();
+                break;
         }
-    }
+    // }
 }
