@@ -79,7 +79,6 @@ function startGame() {
     background = new component(960, 480, "resources/images/background/game_background.png", 0, 0, "background");
     groundLine = new component(960, 48, "resources/images/ground/ground.png", 0, 480 - 48, "background");
 
-    //restart = new component("30px", "kenvector_future", "white", 145, 270,"text");
     planets = new component(960,480,"resources/images/background/desertPlanets.png", -150,-15,"background");
 
 }
@@ -639,7 +638,7 @@ function updateGameArea() {
             }
         } else if (currObstacle[3] === "tank") {
             enemiesCount++;
-
+          
             obstacle.y = gameArea.canvas.height - groundLine.height - obstacle.height;
             obstacle.speedX = -1.5;
             obstacle.currFrame = 0;
@@ -740,7 +739,7 @@ function updateGameArea() {
 
             myObstacles.splice(i, 1);
             i--;
-
+          
             // add score when dodging obstacles
             addScore(10);
 
@@ -845,7 +844,6 @@ function updateGameArea() {
             }
         }
     }
-
 
     // manage airship bullets
     for (i = 0; i < airshipBullets.length; i++) {
@@ -1081,4 +1079,9 @@ function music() {
 
         console.log(localStorage.getItem("isMusicOn"));
     }
+}
+
+function addScore(n) {
+    var newScore = parseInt(score.text.substring(7)) + n;
+    score.text = "SCORE: " + newScore;
 }
