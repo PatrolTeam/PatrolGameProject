@@ -52,5 +52,10 @@ hr{
     border-style: solid;
     border-color: #e86a17;
     border-width: 1px;
-
+}
+#title{
+    font-size: 28px;
+}
+#subtitle{
+    font-size: 20px;
 }
