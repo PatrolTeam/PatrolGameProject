@@ -70,6 +70,7 @@ function startGame() {
     player = new component(113, 48, "resources/images/player/1.png", 10, 432, "image");
     player.imgArr = ["resources/images/player/1.png", "resources/images/player/2.png", "resources/images/player/3.png", "resources/images/player/4.png"];
     player.isShooting = false;
+    player.currFrame = 0;
 
     score = new component("30px", "kenvector_future", "white", 400, 40, "text");
     score.text = "SCORE: " + (gameArea.frameNo / 100).toFixed(0);
@@ -140,7 +141,7 @@ var gameArea = {
         document.body.insertBefore(startBtn,document.body.childNodes[0]);
         startBtn.innerHTML = "START";
         startBtn.addEventListener("click", function () {
-            clickButtonSound.play();
+            playSound("click");
             startGame();
 
             //music
@@ -151,7 +152,12 @@ var gameArea = {
             musicDiv.appendChild(soundtrack);
             soundtrack.setAttribute("controls", "");
             soundtrack.setAttribute("autoplay", "");
+            soundtrack.addEventListener('ended', function() {
+                this.currentTime = 0;
+                this.play();
+            }, false);
             soundtrack.setAttribute("src", "resources/sounds/GreatBoss.ogg");
+            soundtrack.volume = 0.1;
         });
 
         //high score button
@@ -159,7 +165,7 @@ var gameArea = {
         highScoreBtn.innerHTML = "HIGH SCORE";
 
         highScoreBtn.addEventListener("click",function highScore() {
-            clickButtonSound.play();
+            playSound("click");
 
             startBtn.remove();
             highScoreBtn.remove();
@@ -180,8 +186,11 @@ var gameArea = {
             document.body.insertBefore(resetBtn,document.body.childNodes[0]);
             resetBtn.innerHTML = "RESET";
             resetBtn.addEventListener("click", function () {
-                clickButtonSound.play();
+                playSound("click");
+
+                let temp = localStorage.getItem("isMusicOn");
                 localStorage.clear();
+                localStorage.setItem("isMusicOn", temp);
 
 //ivan
                 var cells = document.getElementsByTagName("td")
@@ -200,7 +209,7 @@ var gameArea = {
         document.body.insertBefore(creditsBtn,document.body.childNodes[0]);
         creditsBtn.innerHTML = "Credits";
         creditsBtn.addEventListener("click", function () {
-            clickButtonSound.play();
+            playSound("click");
 
             tooltip.remove();
             startBtn.remove();
@@ -255,7 +264,7 @@ var gameArea = {
         //check high score
         var isHighScore = false;
         var indexOfHighScoreArr;
-        if (scoreCount < highScoreArr[4]){
+        if (scoreCount <= highScoreArr[4]){
             gameOver.text = "GAME OVER!";
             gameOver.update();
 
@@ -263,6 +272,8 @@ var gameArea = {
             document.body.insertBefore(restartBtn, document.body.childNodes[0]);
             restartBtn.innerHTML = "MAIN MENU";
             restartBtn.addEventListener("click", restartGame);
+
+            playSound("gameover");
         }
         else{
             for (var i = 0; highScoreArr.length; i++){
@@ -288,6 +299,7 @@ var gameArea = {
                         localStorage.setItem(localStorageHighScoreArr[j], highScoreArr[j]);
                         localStorage.setItem(localStorageName[j], namesArr[j]);
 
+                        playSound("highscore");
                     }
                     break;
                 }
@@ -332,7 +344,7 @@ var gameArea = {
             secondCell.appendChild(submitBtn);
 
             submitBtn.addEventListener("click", function () {
-                clickButtonSound.play();
+                playSound("click");
                 if (textfield.value === "") {
                     namesArr[indexOfHighScoreArr]= "Martian";
                 } else {
@@ -366,7 +378,7 @@ var gameArea = {
 };
 
 function restartGame() {
-    clickButtonSound.play();
+    playSound("click");
     setTimeout('location.reload()', 100);
 }
 
@@ -689,6 +701,7 @@ function updateGameArea() {
                     newBullet.speedY = 0;
 
                     tankBullets.push(newBullet);
+                    playSound("shoot-enemy");
                 }
             }
 
@@ -713,6 +726,7 @@ function updateGameArea() {
                     newBullet.speedX = newBullet.speedY * ratio;
 
                     airshipBullets.push(newBullet);
+                    playSound("shoot-enemy");
                 }
             }
             if (myObstacles[i].obstacleType === "bomber" && everyinterval(100)) {
@@ -724,6 +738,7 @@ function updateGameArea() {
                 newBullet.speedY = 1;
 
                 bomberBullets.push(newBullet);
+                playSound("shoot-enemy");
             }
         }
 
@@ -773,6 +788,8 @@ function updateGameArea() {
                 addDeathScore(myObstacles[j]);
 
                 bullets.splice(i, 1);
+
+                playSound("explode");
             }
         }
         for (j = 0; j < bomberBullets.length; j++) {
@@ -827,6 +844,7 @@ function updateGameArea() {
 
                 upBullets.splice(i, 1);
 
+                playSound("explode");
             }
         }
         for (j = 0; j < bomberBullets.length; j++) {
@@ -917,6 +935,8 @@ function jump() {
         player.speedX += 3;
         isFlying = true;
         jumpFrame = gameArea.frameNo;
+
+        playSound("jump");
     }
 }
 
@@ -929,6 +949,8 @@ function shoot() {
 
     upBullets.push(upBullet);
     bullets.push(bullet);
+
+    playSound("shoot-player");
 }
 
 function addScore(n) {
@@ -1081,7 +1103,56 @@ function music() {
     }
 }
 
-function addScore(n) {
-    var newScore = parseInt(score.text.substring(7)) + n;
-    score.text = "SCORE: " + newScore;
+function playSound(soundType) {
+    if (localStorage.getItem("isMusicOn") === "true") {
+        switch (soundType) {
+            case "click":
+                clickButtonSound.play();
+                break;
+            case "shoot-player":
+
+                let shootPlayerSound = document.createElement("audio");
+                shootPlayerSound.setAttribute("id", "clickBtnSound");
+                shootPlayerSound.setAttribute("src", "resources/sounds/laserPlayer.mp3");
+
+                shootPlayerSound.play();
+                break;
+            case "shoot-enemy":
+                let shootEnemySound = document.createElement("audio");
+                shootEnemySound.setAttribute("id", "clickBtnSound");
+                shootEnemySound.setAttribute("src", "resources/sounds/laserEnemy.wav");
+
+                shootEnemySound.play();
+                break;
+            case "explode":
+                let explodeSound = document.createElement("audio");
+                explodeSound.setAttribute("id", "clickBtnSound");
+                explodeSound.setAttribute("src", "resources/sounds/explosion.wav");
+
+                explodeSound.play();
+                break;
+            case "jump":
+                let jumpSound = document.createElement("audio");
+                jumpSound.setAttribute("id", "clickBtnSound");
+                jumpSound.setAttribute("src", "resources/sounds/jump.mp3");
+
+                jumpSound.play();
+                break;
+            case "gameover":
+                let gameOverSound = document.createElement("audio");
+                gameOverSound.setAttribute("id", "clickBtnSound");
+                gameOverSound.setAttribute("src", "resources/sounds/gameover.wav");
+
+                gameOverSound.play();
+                break;
+            case "highscore":
+                let highScoreSound = document.createElement("audio");
+                highScoreSound.setAttribute("id", "clickBtnSound");
+                highScoreSound.setAttribute("src", "resources/sounds/highscore.wav");
+                highScoreSound.volume = 0.1;
+
+                highScoreSound.play();
+                break;
+        }
+    }
 }
