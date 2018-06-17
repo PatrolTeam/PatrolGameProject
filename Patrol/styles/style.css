@@ -1,4 +1,290 @@
 canvas {
     border: 1px solid #d3d3d3;
     background-color: #f1f1f1;
+    cursor: url(../resources/images/UI/cursor_pointer3D_shadow.png),pointer;
 }
+
+#musicDiv {
+    position: absolute;
+    visibility: hidden;
+
+}
+/* buttons */
+
+#musicBtn {
+    display: inline-block;
+    outline: none;
+    border: none;
+    width: 50px;
+    height: 50px;
+    font-size: 18px;
+    color: #fff;
+    text-align: center;
+    font-family: kenvector_future;
+    position: absolute;
+    border-radius: 15px;
+    margin-top: 10px;
+    margin-left: 10px;
+    cursor: url(../resources/images/UI/cursor_hand.png),pointer;
+}
+
+
+
+#mainMenuBtn{
+    margin-top: 400px;
+}
+button{
+    display: inline-block;
+    outline: none;
+    border: none;
+    width: 190px;
+    height: 49px;
+    font-size: 18px;
+    color: #fff;
+    text-align: center;
+    font-family: kenvector_future;
+    background: transparent url('../resources/images/UI/red_button11.png') no-repeat;
+    position: absolute;
+    border-radius: 15px;
+    margin-top: 300px;
+    margin-left: 230px;
+    cursor: url(../resources/images/UI/cursor_hand.png),pointer;
+}
+@font-face {
+    font-family: kenvector_future;
+    src: url("../resources/fonts/kenvector_future.ttf");
+}
+
+button:hover {
+    background: transparent url('../resources/images/UI/yellow_button00.png') no-repeat;
+}
+button:active{
+
+    background: transparent url('../resources/images/UI/yellow_button01.png') no-repeat;
+}
+
+
+
+/* high score table */
+
+#highScoreTable{
+    /*border: none;*/
+    outline: none;
+    position: absolute;
+    background: transparent url('../resources/images/UI/highScoreTable.png') no-repeat;
+    opacity: 0.95;
+    /*height: 340px;*/
+    margin-top: 40px;
+    margin-left: 40px;
+    margin-right: 40px;
+    font-family: kenvector_future;
+    padding-top: 16px;
+    padding-left: 12px;
+    padding-right: 12px;
+    padding-bottom: 50px;
+    mso-cellspacing: 50px;
+    cursor: url(../resources/images/UI/cursor_pointer3D_shadow.png),pointer;
+}
+tr{
+    color:#e86a17;
+}
+#highScoreTable tr:hover{
+    background: #e86a17;
+    color:white;
+    cursor: url(../resources/images/UI/cursor_hand.png),pointer;
+}
+#highScoreTable th{
+    color: white;
+    width: 528px;
+    padding-top: 25px;
+    text-align: center;
+    font-size: 30px;
+    height: 40px;
+    padding-bottom: 15px;
+}
+
+#highScoreTable td{
+    max-width: 450px;
+    padding-left: 20px;
+    padding-right: 20px;
+    height: 35px;
+
+}
+#highScoreCell{
+    text-align: right;
+}
+
+
+/*credits table*/
+
+#creditsTable{
+    outline: none;
+    position: absolute;
+    background: transparent url('../resources/images/UI/highScoreTable.png') no-repeat;
+    opacity: 0.95;
+    overflow: scroll;
+    width: 560px;
+    height: 340px;
+    margin-top: 40px;
+    margin-left: 40px;
+    margin-right: 40px;
+    font-family: kenvector_future;
+    padding-top: 16px;
+    padding-left: 12px;
+    padding-right: 12px;
+    padding-bottom: 50px;
+    mso-cellspacing: 50px;
+    font-size: 14px;
+    cursor: url(../resources/images/UI/cursor_pointer3D_shadow.png),pointer;
+}
+
+#creditsTable th{
+    color: white;
+    height: 60px;
+    text-align: center;
+    font-size: 30px;
+    padding-top: 22px;
+}
+ iframe{
+     border: none;
+     width: 530px;
+     height: 180px;
+ }
+
+/* game over table */
+
+#gameOverTable{
+    /*border: none;*/
+    outline: none;
+    position: absolute;
+    background: transparent url('../resources/images/UI/gameOverBG.png') no-repeat;
+    opacity: 1;
+    width: 560px;
+    height: 340px;
+    margin-top: 70px;
+    margin-left: 40px;
+    font-family: kenvector_future;
+    color: white;
+    padding-top: 30px;
+    padding-left: 12px;
+    padding-right: 10px;
+    padding-bottom: 50px;
+    cursor: url(../resources/images/UI/cursor_pointer3D_shadow.png),pointer;
+}
+
+#gameOverTable th{
+    padding-top: 25px;
+    text-align: center;
+    font-size: 40px;
+    height: 55px;
+}
+
+#gameOverTable td{
+    padding-left: 20px;
+    padding-right: 20px;
+    color: white;
+    height: 75px;
+}
+
+
+/*text field */
+
+input[type=text], select {
+    width: 100%;
+    height: 50px;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 2px solid #a1cedd;
+    background: linear-gradient(#e5f8ff, #a1cedd);
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-family: kenvector_future;
+    font-size: 24px;
+    color: white;
+    cursor: url(../resources/images/UI/cursor_hand.png),pointer;
+}
+
+input[type=text]:focus {
+    border: 4px solid #a1cedd;
+    outline: none;
+}
+input[type=text]::placeholder{
+    color: white;
+}
+
+
+/* submit button */
+
+input[type=submit] {
+    width: 190px;
+    height: 49px;
+    background: transparent url('../resources/images/UI/red_button11.png') no-repeat;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 150px;
+    border: none;
+    outline: none;
+    border-radius: 4px;
+    cursor: url(../resources/images/UI/cursor_hand.png),pointer;
+    font-family: kenvector_future;
+    font-size: 18px;
+
+
+}
+input[type=submit]:hover {
+    background: transparent url('../resources/images/UI/yellow_button00.png') no-repeat;
+}
+input[type=submit]:active{
+    background: transparent url('../resources/images/UI/yellow_button01.png') no-repeat;
+}
+
+#tooltip {
+    display: inline-block;
+    outline: none;
+    border: none;
+    width: 50px;
+    height: 50px;
+    font-size: 18px;
+    color: #fff;
+    text-align: center;
+    font-family: kenvector_future;
+    background: transparent url('../resources/images/UI/question.png') no-repeat;
+    position: absolute;
+    border-radius: 15px;
+    margin-top: 10px;
+    margin-left: 580px;
+    cursor: url(../resources/images/UI/cursor_hand.png),pointer;
+}
+
+
+/* tooltip and tootipText */
+#tooltip #toolText {
+    visibility: hidden;
+    width: 520px;
+    height: 220px;
+    background: transparent url('../resources/images/UI/gameControls.png') no-repeat;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    position: absolute;
+    z-index: 1;
+    margin-left: -545px;
+    margin-top: 50px;
+
+    /* Fade in tooltip - takes 1 second to go from 0% to 100% opac: */
+    opacity: 0;
+    transition: opacity 1s;
+}
+
+#tooltip:hover {
+    background: transparent url('../resources/images/UI/question2.png') no-repeat;
+}
+#tooltip:hover #toolText {
+    visibility: visible;
+    opacity: 1;
+    border-radius: 15px;
+}
+
+
+

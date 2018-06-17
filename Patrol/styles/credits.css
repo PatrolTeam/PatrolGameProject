@@ -1,0 +1,56 @@
+@font-face {
+    font-family: kenvector_future;
+    src: url("../resources/fonts/kenvector_future.ttf");
+}
+
+#creditsTable{
+    outline: none;
+    position: absolute;
+    opacity: 0.95;
+    overflow: scroll;
+    width: 505px;
+    font-family: kenvector_future;
+    padding-top: 10px;
+    padding-left: 12px;
+    padding-right: 12px;
+    padding-bottom: 10px;
+    font-size: 16px;
+    cursor: url(../resources/images/UI/cursor_pointer3D_shadow.png),pointer;
+}
+
+#creditsTable tr{
+    color:#e86a17;
+}
+
+#creditsTable td {
+
+    text-align: left;
+    padding-left: 5px;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #d6dde7;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #fa8132;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #e86a17;
+}
+
+hr{
+    border-style: solid;
+    border-color: #e86a17;
+    border-width: 1px;
+
+}
