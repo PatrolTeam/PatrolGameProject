@@ -50,6 +50,8 @@ var restartBtn = document.createElement("button");
 var creditsTable;
 
 var soundtrack = document.createElement("audio");
+var musicOnBtn = document.createElement("button");
+var isMusicOn;
 
 function startGame() {
     gameArea.start();
@@ -58,6 +60,11 @@ function startGame() {
     creditsBtn.remove();
     backBtn.remove();
     restartBtn.remove();
+
+    musicOnBtn.removeEventListener("click", music);
+    musicOnBtn.remove();
+
+    createSoundButton();
     //restartBtn.remove();
 
     player = new component(113, 48, "resources/images/player/1.png", 10, 432, "image");
@@ -99,13 +106,15 @@ var gameArea = {
             }
         }
 
+
         //start menu size
         this.canvas.width = 640;
         this.canvas.height = 480;
         this.canvas.style.border = "solid";
         this.canvas.style.backgroundImage = "url('resources/images/background/menu_background_small.png')";
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
-        var marginTop = "300px";
+
+        createSoundButton();
 
         //question sign
         var tooltip = document.createElement("div");
@@ -128,40 +137,11 @@ var gameArea = {
             var musicDiv = document.createElement("div");
             document.body.insertBefore(musicDiv, document.body.childNodes[0]);
             musicDiv.setAttribute("id", "musicDiv");
-            var isMusicOn;
 
             musicDiv.appendChild(soundtrack);
             soundtrack.setAttribute("controls", "");
             soundtrack.setAttribute("autoplay", "");
             soundtrack.setAttribute("src", "resources/sounds/GreatBoss.ogg");
-
-            //music button
-            var musicOnBtn = document.createElement("button");
-            document.body.insertBefore(musicOnBtn,document.body.childNodes[0]);
-            musicOnBtn.setAttribute("id", "musicBtn");
-            isMusicOn = true;
-            console.log(isMusicOn);
-
-            musicOnBtn.addEventListener("click", function music() {
-                if (isMusicOn === true) {
-                    isMusicOn = false;
-                    soundtrack.muted = true;
-                    document.getElementById("musicBtn").style.backgroundImage = "url('resources/images/UI/musicOff.png')";
-                    document.getElementById("musicBtn").blur();
-                    console.log(isMusicOn);
-                }
-                else if (isMusicOn === false) {
-                    isMusicOn = true;
-                    soundtrack.muted = false;
-                    document.getElementById("musicBtn").style.backgroundImage = "url('resources/images/UI/musicOn.png')";
-                    document.getElementById("musicBtn").blur();
-                    console.log(isMusicOn);
-                }
-            })
-
-
-
-
 
             /*musicOnBtn.addEventListener("click", function () {
                 isMusicOn = false;
@@ -187,6 +167,7 @@ var gameArea = {
             highScoreBtn.remove();
             creditsBtn.remove();
             tooltip.remove();
+            musicOnBtn.remove();
             //high score table
             initHighScoreTable();
 
@@ -224,6 +205,7 @@ var gameArea = {
             startBtn.remove();
             highScoreBtn.remove();
             creditsBtn.remove();
+            musicOnBtn.remove();
 
             creditsPage();
 
@@ -1089,4 +1071,32 @@ function creditsPage() {
 
 function randomNumberBetween(min, max) {
     return Math.floor(Math.random() * (max - min + 1) ) + min;
+}
+
+function createSoundButton() {
+    //music button
+
+    document.body.insertBefore(musicOnBtn,document.body.childNodes[0]);
+    musicOnBtn.setAttribute("id", "musicBtn");
+    isMusicOn = true;
+    console.log(isMusicOn);
+
+    musicOnBtn.addEventListener("click", music);
+}
+
+function music() {
+    if (isMusicOn === true) {
+        isMusicOn = false;
+        soundtrack.muted = true;
+        document.getElementById("musicBtn").style.backgroundImage = "url('resources/images/UI/musicOff.png')";
+        document.getElementById("musicBtn").blur();
+        console.log(isMusicOn);
+    }
+    else if (isMusicOn === false) {
+        isMusicOn = true;
+        soundtrack.muted = false;
+        document.getElementById("musicBtn").style.backgroundImage = "url('resources/images/UI/musicOn.png')";
+        document.getElementById("musicBtn").blur();
+        console.log(isMusicOn);
+    }
 }
