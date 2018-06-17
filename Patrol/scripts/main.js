@@ -52,7 +52,6 @@ var creditsTable;
 var clickButtonSound = document.createElement("audio");
 var soundtrack = document.createElement("audio");
 var musicOnBtn = document.createElement("button");
-var isMusicOn;
 
 function startGame() {
     gameArea.start();
@@ -89,6 +88,10 @@ function startGame() {
 var gameArea = {
     canvas : document.createElement("canvas"),
     startMenu: function(){
+
+        if (localStorage.getItem("isMusicOn") === null) {
+            localStorage.setItem("isMusicOn", "false");
+        }
 
         for (var i = 0; i < localStorageHighScoreArr.length; i++){
             if(localStorage.getItem(localStorageHighScoreArr[i]) == null) {
@@ -132,6 +135,9 @@ var gameArea = {
         clickButtonSound.setAttribute("src", "resources/sounds/click.wav");
 
         //start button
+
+        console.log(localStorage.getItem("isMusicOn"));
+
         document.body.insertBefore(startBtn,document.body.childNodes[0]);
         startBtn.innerHTML = "START";
         startBtn.addEventListener("click", function () {
@@ -147,20 +153,6 @@ var gameArea = {
             soundtrack.setAttribute("controls", "");
             soundtrack.setAttribute("autoplay", "");
             soundtrack.setAttribute("src", "resources/sounds/GreatBoss.ogg");
-
-            /*musicOnBtn.addEventListener("click", function () {
-                isMusicOn = false;
-                console.log(isMusicOn);
-                soundtrack.pause();
-                document.getElementById("musicBtn").style.backgroundImage = "url('resources/images/UI/musicOff.png')";
-            })
-            musicOnBtn.addEventListener("click", function () {
-                isMusicOn = true;
-                console.log(isMusicOn);
-                soundtrack.play();
-                document.getElementById("musicBtn").style.backgroundImage = "url('resources/images/UI/musicOn.png')";
-            })*/
-
         });
 
         //high score button
@@ -1089,25 +1081,33 @@ function createSoundButton() {
 
     document.body.insertBefore(musicOnBtn,document.body.childNodes[0]);
     musicOnBtn.setAttribute("id", "musicBtn");
-    isMusicOn = true;
-    console.log(isMusicOn);
+
+    if (localStorage.getItem("isMusicOn") === "true") {
+        musicOnBtn.style.backgroundImage = "url('resources/images/UI/musicOn.png')";
+        soundtrack.muted = false;
+    } else {
+        musicOnBtn.style.backgroundImage = "url('resources/images/UI/musicOff.png')";
+        soundtrack.muted = true;
+    }
+
 
     musicOnBtn.addEventListener("click", music);
 }
 
 function music() {
-    if (isMusicOn === true) {
-        isMusicOn = false;
+    if (localStorage.getItem("isMusicOn") === "true") {
+        localStorage.setItem("isMusicOn", "false");
         soundtrack.muted = true;
         document.getElementById("musicBtn").style.backgroundImage = "url('resources/images/UI/musicOff.png')";
         document.getElementById("musicBtn").blur();
-        console.log(isMusicOn);
-    }
-    else if (isMusicOn === false) {
-        isMusicOn = true;
+
+        console.log(localStorage.getItem("isMusicOn"));
+    } else {
+        localStorage.setItem("isMusicOn", "true");
         soundtrack.muted = false;
         document.getElementById("musicBtn").style.backgroundImage = "url('resources/images/UI/musicOn.png')";
         document.getElementById("musicBtn").blur();
-        console.log(isMusicOn);
+
+        console.log(localStorage.getItem("isMusicOn"));
     }
 }

@@ -21,7 +21,6 @@ canvas {
     color: #fff;
     text-align: center;
     font-family: kenvector_future;
-    background: transparent url('../resources/images/UI/musicOn.png') no-repeat;
     position: absolute;
     border-radius: 15px;
     margin-top: 10px;
