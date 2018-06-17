@@ -70,6 +70,7 @@ function startGame() {
     player = new component(113, 48, "resources/images/player/1.png", 10, 432, "image");
     player.imgArr = ["resources/images/player/1.png", "resources/images/player/2.png", "resources/images/player/3.png", "resources/images/player/4.png"];
     player.isShooting = false;
+    player.currFrame = 0;
 
     score = new component("30px", "kenvector_future", "white", 400, 40, "text");
     score.text = "SCORE: " + (gameArea.frameNo / 100).toFixed(0);
@@ -264,6 +265,8 @@ var gameArea = {
             document.body.insertBefore(restartBtn, document.body.childNodes[0]);
             restartBtn.innerHTML = "MAIN MENU";
             restartBtn.addEventListener("click", restartGame);
+
+            playSound("gameover");
         }
         else{
             for (var i = 0; highScoreArr.length; i++){
@@ -289,6 +292,7 @@ var gameArea = {
                         localStorage.setItem(localStorageHighScoreArr[j], highScoreArr[j]);
                         localStorage.setItem(localStorageName[j], namesArr[j]);
 
+                        playSound("highscore");
                     }
                     break;
                 }
@@ -1156,6 +1160,20 @@ function playSound(soundType) {
                 jumpSound.setAttribute("src", "resources/sounds/jump.mp3");
 
                 jumpSound.play();
+                break;
+            case "gameover":
+                let gameOverSound = document.createElement("audio");
+                gameOverSound.setAttribute("id", "clickBtnSound");
+                gameOverSound.setAttribute("src", "resources/sounds/gameover.wav");
+
+                gameOverSound.play();
+                break;
+            case "highscore":
+                let highScoreSound = document.createElement("audio");
+                highScoreSound.setAttribute("id", "clickBtnSound");
+                highScoreSound.setAttribute("src", "resources/sounds/highscore.wav");
+
+                highScoreSound.play();
                 break;
         }
     // }
