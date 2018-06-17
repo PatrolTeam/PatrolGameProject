@@ -80,7 +80,6 @@ function startGame() {
     background = new component(960, 480, "resources/images/background/game_background.png", 0, 0, "background");
     groundLine = new component(960, 48, "resources/images/ground/ground.png", 0, 480 - 48, "background");
 
-    //restart = new component("30px", "kenvector_future", "white", 145, 270,"text");
     planets = new component(960,480,"resources/images/background/desertPlanets.png", -150,-15,"background");
 
 }
@@ -188,7 +187,10 @@ var gameArea = {
             resetBtn.innerHTML = "RESET";
             resetBtn.addEventListener("click", function () {
                 playSound("click");
+
+                let temp = localStorage.getItem("isMusicOn");
                 localStorage.clear();
+                localStorage.setItem("isMusicOn", temp);
 
 //ivan
                 var cells = document.getElementsByTagName("td")
@@ -648,7 +650,7 @@ function updateGameArea() {
             }
         } else if (currObstacle[3] === "tank") {
             enemiesCount++;
-
+          
             obstacle.y = gameArea.canvas.height - groundLine.height - obstacle.height;
             obstacle.speedX = -1.5;
             obstacle.currFrame = 0;
@@ -752,7 +754,7 @@ function updateGameArea() {
 
             myObstacles.splice(i, 1);
             i--;
-
+          
             // add score when dodging obstacles
             addScore(10);
 
@@ -860,7 +862,6 @@ function updateGameArea() {
             }
         }
     }
-
 
     // manage airship bullets
     for (i = 0; i < airshipBullets.length; i++) {
@@ -1057,38 +1058,9 @@ function creditsPage() {
     var tableBody = document.createElement("tbody");
     creditsTable.appendChild(tableBody);
 
-    var tableRows;
-    var tableCells;
-    //var tableCells2;
-
-    tableRows = document.createElement("TR");
-    tableBody.appendChild(tableRows);
-
-    //cell
-    tableCells = document.createElement("td");
-    tableCells.setAttribute("id", "creditsTd");
-    tableRows.appendChild(tableCells);
-
-    var creditsText = document.createElement("div");
-    creditsText.setAttribute("id","creditText");
-    tableCells.appendChild(creditsText);
-
-    var textTable = document.createElement("TABLE");
-    creditsText.appendChild(textTable);
-
-    var textTr = document.createElement("td");
-    textTable.appendChild(textTr);
-    textTr.setAttribute("id", "textTr");
-
-    var textFirstRow = document.createElement("td");
-    textTr.appendChild(textFirstRow);
-    textFirstRow.setAttribute("id", "textFirstRow");
-    textFirstRow.innerText = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
-
-    var textSecondRow = document.createElement("td");
-    textTr.appendChild(textSecondRow);
-    textSecondRow.setAttribute("id", "textSecondRow");
-    textSecondRow.innerText = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+    var x = document.createElement("IFRAME");
+    x.setAttribute("src", "credits.html");
+    tableBody.appendChild(x);
 }
 
 function randomNumberBetween(min, max) {
