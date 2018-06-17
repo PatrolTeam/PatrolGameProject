@@ -158,6 +158,7 @@ var gameArea = {
                 this.play();
             }, false);
             soundtrack.setAttribute("src", "resources/sounds/GreatBoss.ogg");
+            soundtrack.volume = 0.1;
         });
 
         //high score button
@@ -261,7 +262,7 @@ var gameArea = {
         //check high score
         var isHighScore = false;
         var indexOfHighScoreArr;
-        if (scoreCount < highScoreArr[4]){
+        if (scoreCount <= highScoreArr[4]){
             gameOver.text = "GAME OVER!";
             gameOver.update();
 
@@ -1131,7 +1132,7 @@ function music() {
 }
 
 function playSound(soundType) {
-    // if (localStorage.getItem("isMusicOn") === "true") {
+    if (localStorage.getItem("isMusicOn") === "true") {
         switch (soundType) {
             case "click":
                 clickButtonSound.play();
@@ -1176,9 +1177,10 @@ function playSound(soundType) {
                 let highScoreSound = document.createElement("audio");
                 highScoreSound.setAttribute("id", "clickBtnSound");
                 highScoreSound.setAttribute("src", "resources/sounds/highscore.wav");
+                highScoreSound.volume = 0.1;
 
                 highScoreSound.play();
                 break;
         }
-    // }
+    }
 }
