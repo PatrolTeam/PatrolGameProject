@@ -18,12 +18,12 @@
     cursor: url(../resources/images/UI/cursor_pointer3D_shadow.png),pointer;
 }
 
-
 #creditsTable tr{
-    border: 1px solid orange;
     color:#e86a17;
 }
+
 #creditsTable td {
+
     text-align: left;
     padding-left: 5px;
 }
@@ -46,4 +46,11 @@
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
     background: #e86a17;
+}
+
+hr{
+    border-style: solid;
+    border-color: #e86a17;
+    border-width: 1px;
+
 }
