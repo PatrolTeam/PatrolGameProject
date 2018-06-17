@@ -49,6 +49,7 @@ var restartBtn = document.createElement("button");
 
 var creditsTable;
 
+var clickButtonSound = document.createElement("audio");
 var soundtrack = document.createElement("audio");
 var musicOnBtn = document.createElement("button");
 var isMusicOn;
@@ -126,11 +127,15 @@ var gameArea = {
         toolText.setAttribute("id", "toolText");
         //toolText.innerText = "Tooltip text";
 
+        //Button audio
+        clickButtonSound.setAttribute("id", "clickBtnSound");
+        clickButtonSound.setAttribute("src", "resources/sounds/click.wav");
 
         //start button
         document.body.insertBefore(startBtn,document.body.childNodes[0]);
         startBtn.innerHTML = "START";
         startBtn.addEventListener("click", function () {
+            clickButtonSound.play();
             startGame();
 
             //music
@@ -163,6 +168,8 @@ var gameArea = {
         highScoreBtn.innerHTML = "HIGH SCORE";
 
         highScoreBtn.addEventListener("click",function highScore() {
+            clickButtonSound.play();
+
             startBtn.remove();
             highScoreBtn.remove();
             creditsBtn.remove();
@@ -182,6 +189,7 @@ var gameArea = {
             document.body.insertBefore(resetBtn,document.body.childNodes[0]);
             resetBtn.innerHTML = "RESET";
             resetBtn.addEventListener("click", function () {
+                clickButtonSound.play();
                 localStorage.clear();
 
 //ivan
@@ -201,6 +209,8 @@ var gameArea = {
         document.body.insertBefore(creditsBtn,document.body.childNodes[0]);
         creditsBtn.innerHTML = "Credits";
         creditsBtn.addEventListener("click", function () {
+            clickButtonSound.play();
+
             tooltip.remove();
             startBtn.remove();
             highScoreBtn.remove();
@@ -331,6 +341,7 @@ var gameArea = {
             secondCell.appendChild(submitBtn);
 
             submitBtn.addEventListener("click", function () {
+                clickButtonSound.play();
                 if (textfield.value === "") {
                     namesArr[indexOfHighScoreArr]= "Martian";
                 } else {
@@ -364,8 +375,8 @@ var gameArea = {
 };
 
 function restartGame() {
-
-    location.reload();
+    clickButtonSound.play();
+    setTimeout('location.reload()', 100);
 }
 
 function component(width, height, color, x, y, type) {
