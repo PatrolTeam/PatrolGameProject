@@ -181,7 +181,11 @@ var gameArea = {
             resetBtn.innerHTML = "RESET";
             resetBtn.addEventListener("click", function () {
                 clickButtonSound.play();
+
+
+                let temp = localStorage.getItem("isMusicOn");
                 localStorage.clear();
+                localStorage.setItem("isMusicOn", temp);
 
 //ivan
                 var cells = document.getElementsByTagName("td")
