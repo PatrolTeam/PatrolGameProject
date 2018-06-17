@@ -49,6 +49,10 @@ var restartBtn = document.createElement("button");
 
 var creditsTable;
 
+var clickButtonSound = document.createElement("audio");
+var soundtrack = document.createElement("audio");
+var musicOnBtn = document.createElement("button");
+
 function startGame() {
     gameArea.start();
     startBtn.remove();
@@ -56,6 +60,11 @@ function startGame() {
     creditsBtn.remove();
     backBtn.remove();
     restartBtn.remove();
+
+    musicOnBtn.removeEventListener("click", music);
+    musicOnBtn.remove();
+
+    createSoundButton();
     //restartBtn.remove();
 
     player = new component(113, 48, "resources/images/player/1.png", 10, 432, "image");
@@ -80,6 +89,10 @@ var gameArea = {
     canvas : document.createElement("canvas"),
     startMenu: function(){
 
+        if (localStorage.getItem("isMusicOn") === null) {
+            localStorage.setItem("isMusicOn", "false");
+        }
+
         for (var i = 0; i < localStorageHighScoreArr.length; i++){
             if(localStorage.getItem(localStorageHighScoreArr[i]) == null) {
                 highScoreArr[i] = 0;
@@ -97,13 +110,15 @@ var gameArea = {
             }
         }
 
+
         //start menu size
         this.canvas.width = 640;
         this.canvas.height = 480;
         this.canvas.style.border = "solid";
         this.canvas.style.backgroundImage = "url('resources/images/background/menu_background_small.png')";
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
-        var marginTop = "300px";
+
+        createSoundButton();
 
         //question sign
         var tooltip = document.createElement("div");
@@ -115,21 +130,43 @@ var gameArea = {
         toolText.setAttribute("id", "toolText");
         //toolText.innerText = "Tooltip text";
 
+        //Button audio
+        clickButtonSound.setAttribute("id", "clickBtnSound");
+        clickButtonSound.setAttribute("src", "resources/sounds/click.wav");
 
         //start button
+
+        console.log(localStorage.getItem("isMusicOn"));
+
         document.body.insertBefore(startBtn,document.body.childNodes[0]);
         startBtn.innerHTML = "START";
-        startBtn.addEventListener("click", startGame);
+        startBtn.addEventListener("click", function () {
+            clickButtonSound.play();
+            startGame();
+
+            //music
+            var musicDiv = document.createElement("div");
+            document.body.insertBefore(musicDiv, document.body.childNodes[0]);
+            musicDiv.setAttribute("id", "musicDiv");
+
+            musicDiv.appendChild(soundtrack);
+            soundtrack.setAttribute("controls", "");
+            soundtrack.setAttribute("autoplay", "");
+            soundtrack.setAttribute("src", "resources/sounds/GreatBoss.ogg");
+        });
 
         //high score button
         document.body.insertBefore(highScoreBtn,document.body.childNodes[0]);
         highScoreBtn.innerHTML = "HIGH SCORE";
 
         highScoreBtn.addEventListener("click",function highScore() {
+            clickButtonSound.play();
+
             startBtn.remove();
             highScoreBtn.remove();
             creditsBtn.remove();
             tooltip.remove();
+            musicOnBtn.remove();
             //high score table
             initHighScoreTable();
 
@@ -144,6 +181,7 @@ var gameArea = {
             document.body.insertBefore(resetBtn,document.body.childNodes[0]);
             resetBtn.innerHTML = "RESET";
             resetBtn.addEventListener("click", function () {
+                clickButtonSound.play();
                 localStorage.clear();
 
 //ivan
@@ -163,10 +201,13 @@ var gameArea = {
         document.body.insertBefore(creditsBtn,document.body.childNodes[0]);
         creditsBtn.innerHTML = "Credits";
         creditsBtn.addEventListener("click", function () {
+            clickButtonSound.play();
+
             tooltip.remove();
             startBtn.remove();
             highScoreBtn.remove();
             creditsBtn.remove();
+            musicOnBtn.remove();
 
             creditsPage();
 
@@ -207,6 +248,7 @@ var gameArea = {
     },
     stop : function () {
         clearInterval(this.interval);
+        soundtrack.src = "";
 
         //take score
         scoreCount = parseInt(score.text.substring(7));
@@ -291,6 +333,7 @@ var gameArea = {
             secondCell.appendChild(submitBtn);
 
             submitBtn.addEventListener("click", function () {
+                clickButtonSound.play();
                 if (textfield.value === "") {
                     namesArr[indexOfHighScoreArr]= "Martian";
                 } else {
@@ -324,8 +367,8 @@ var gameArea = {
 };
 
 function restartGame() {
-
-    location.reload();
+    clickButtonSound.play();
+    setTimeout('location.reload()', 100);
 }
 
 function component(width, height, color, x, y, type) {
@@ -1031,4 +1074,40 @@ function creditsPage() {
 
 function randomNumberBetween(min, max) {
     return Math.floor(Math.random() * (max - min + 1) ) + min;
+}
+
+function createSoundButton() {
+    //music button
+
+    document.body.insertBefore(musicOnBtn,document.body.childNodes[0]);
+    musicOnBtn.setAttribute("id", "musicBtn");
+
+    if (localStorage.getItem("isMusicOn") === "true") {
+        musicOnBtn.style.backgroundImage = "url('resources/images/UI/musicOn.png')";
+        soundtrack.muted = false;
+    } else {
+        musicOnBtn.style.backgroundImage = "url('resources/images/UI/musicOff.png')";
+        soundtrack.muted = true;
+    }
+
+
+    musicOnBtn.addEventListener("click", music);
+}
+
+function music() {
+    if (localStorage.getItem("isMusicOn") === "true") {
+        localStorage.setItem("isMusicOn", "false");
+        soundtrack.muted = true;
+        document.getElementById("musicBtn").style.backgroundImage = "url('resources/images/UI/musicOff.png')";
+        document.getElementById("musicBtn").blur();
+
+        console.log(localStorage.getItem("isMusicOn"));
+    } else {
+        localStorage.setItem("isMusicOn", "true");
+        soundtrack.muted = false;
+        document.getElementById("musicBtn").style.backgroundImage = "url('resources/images/UI/musicOn.png')";
+        document.getElementById("musicBtn").blur();
+
+        console.log(localStorage.getItem("isMusicOn"));
+    }
 }
