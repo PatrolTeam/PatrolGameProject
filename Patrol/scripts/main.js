@@ -54,18 +54,19 @@ var soundtrack = document.createElement("audio");
 var musicOnBtn = document.createElement("button");
 
 function startGame() {
+    document.getElementsByTagName("canvas").outerHTML = "";
+    // gameArea.parentNode.removeChild(gameArea);
+    startBtn.parentNode.removeChild(startBtn);
+    highScoreBtn.parentNode.removeChild(highScoreBtn);
+    creditsBtn.parentNode.removeChild(creditsBtn);
+    document.getElementsByTagName("button").outerHTML = "";
+
     gameArea.start();
-    startBtn.remove();
-    highScoreBtn.remove();
-    creditsBtn.remove();
-    backBtn.remove();
-    restartBtn.remove();
 
     musicOnBtn.removeEventListener("click", music);
-    musicOnBtn.remove();
+    musicOnBtn.parentNode.removeChild(musicOnBtn);
 
     createSoundButton();
-    //restartBtn.remove();
 
     player = new component(113, 48, "resources/images/player/1.png", 10, 432, "image");
     player.imgArr = ["resources/images/player/1.png", "resources/images/player/2.png", "resources/images/player/3.png", "resources/images/player/4.png"];
@@ -167,11 +168,12 @@ var gameArea = {
         highScoreBtn.addEventListener("click",function highScore() {
             playSound("click");
 
-            startBtn.remove();
-            highScoreBtn.remove();
-            creditsBtn.remove();
-            tooltip.remove();
-            musicOnBtn.remove();
+            startBtn.parentNode.removeChild(startBtn);
+            highScoreBtn.parentNode.removeChild(highScoreBtn);
+            creditsBtn.parentNode.removeChild(creditsBtn);
+            tooltip.parentNode.removeChild(tooltip);
+            musicOnBtn.parentNode.removeChild(musicOnBtn);
+
             //high score table
             initHighScoreTable();
 
@@ -194,7 +196,7 @@ var gameArea = {
 
 //ivan
                 var cells = document.getElementsByTagName("td")
-                    
+
                 for (var k = 0; k < cells.length; k += 2) {
                     cells[k].innerText = "Martian";
                     cells[k + 1].innerText = 0;
@@ -211,11 +213,11 @@ var gameArea = {
         creditsBtn.addEventListener("click", function () {
             playSound("click");
 
-            tooltip.remove();
-            startBtn.remove();
-            highScoreBtn.remove();
-            creditsBtn.remove();
-            musicOnBtn.remove();
+            tooltip.parentNode.removeChild(tooltip);
+            startBtn.parentNode.removeChild(startBtn);
+            highScoreBtn.parentNode.removeChild(highScoreBtn);
+            creditsBtn.parentNode.removeChild(creditsBtn);
+            musicOnBtn.parentNode.removeChild(musicOnBtn);
 
             creditsPage();
 
@@ -354,7 +356,8 @@ var gameArea = {
                 localStorage.setItem(localStorageName[indexOfHighScoreArr], namesArr[indexOfHighScoreArr]);
 
                 //show high score table
-                gameOverTable.remove();
+                gameOverTable.parentNode.removeChild(gameOverTable);
+
                 initHighScoreTable();
 
                 //buttons to main menu
@@ -422,12 +425,12 @@ function component(width, height, color, x, y, type) {
     };
 
     this.movePlayer = function () {
-        
+
         this.gravitySpeed += this.gravity;
 
         var tempX = this.x + this.speedX;
         var rightBorder = gameArea.canvas.width  - this.width;
-        
+
         if (tempX < 0) {
             this.x = 0;
         } else if (tempX > rightBorder) {
@@ -462,7 +465,7 @@ function component(width, height, color, x, y, type) {
             this.gravitySpeed = 0;
         }
     }
-    
+
 
     this.crashWith = function (otherobj) {
         var playerLeft = this.x;
@@ -650,7 +653,7 @@ function updateGameArea() {
             }
         } else if (currObstacle[3] === "tank") {
             enemiesCount++;
-          
+
             obstacle.y = gameArea.canvas.height - groundLine.height - obstacle.height;
             obstacle.speedX = -1.5;
             obstacle.currFrame = 0;
@@ -754,7 +757,7 @@ function updateGameArea() {
 
             myObstacles.splice(i, 1);
             i--;
-          
+
             // add score when dodging obstacles
             addScore(10);
 
