@@ -331,6 +331,7 @@ var gameArea = {
             textfield.setAttribute("type", "text");
             textfield.setAttribute("placeholder", "Your name...");
             textfield.setAttribute("maxLength", "20");
+            textfield.setAttribute("autofocus", "");
             firstCell.appendChild(textfield);
 
             //second row with buttons
