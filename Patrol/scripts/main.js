@@ -364,6 +364,9 @@ var gameArea = {
                 mainMenuBtn.setAttribute("id","mainMenuBtn");
                 mainMenuBtn.innerHTML = "MAIN MENU";
                 mainMenuBtn.addEventListener("click", restartGame);
+				
+				//send score to LRS
+				send_statement(namesArr[indexOfHighScoreArr], highScoreArr[indexOfHighScoreArr]);
             });
 
         } else {
@@ -1157,3 +1160,36 @@ function playSound(soundType) {
         }
     }
 }
+
+function send_statement(xapi_user, xapi_score){  
+            var conf = {  
+                 "endpoint" : "https://cloud.scorm.com/tc/L0BYMC6HJ2/",  
+                 "auth" : "Basic " + toBase64(" C5bc4_lTBUYVaTn4094: BqJgCqKxhh4m03lZ1s4")  
+                 };  
+      
+            ADL.XAPIWrapper.changeConfig(conf);  
+               
+            //define the xapi statement being sent  
+            var statement = {  
+                "actor": {  
+                    "mbox": "mailto:Tester@example.com",  
+                    "name": xapi_user,  
+                    "objectType": "Agent"  
+                },  
+                "verb": {  
+                    "id": "http://example.com/xapi/scored",  
+                    "display": {"en-US": "scored"}  
+                },  
+                "object": {  
+                    "id": "http://example.com/button_example",  
+                    "definition": {  
+                        "name": {"en-US": xapi_score + " points."},  
+                        "description": {"en-US": "Example xAPI Button"}  
+                    },  
+                    "objectType": "Activity"  
+                }  
+            }; //end statement definition  
+       
+            // Dispatch the statement to the LRS  
+            var result = ADL.XAPIWrapper.sendStatement(statement);  
+            }  
